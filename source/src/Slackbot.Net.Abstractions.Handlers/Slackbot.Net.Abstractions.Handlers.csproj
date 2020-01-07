@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>Slackbot.Net.Abstractions.Handlers</RootNamespace>
+        <PackageId>Slackbot.Net.Abstractions.Handlers</PackageId>
+        <Authors>John Korsnes</Authors>
+        <Description>
+            Abstractions for Slackbot.NET plugins (message handlers, recurring actions)
+        </Description>
+        
+        <PackageTags>slack dotnetcore</PackageTags>
+        <PackageProjectUrl>https://github.com/smarteboka/slackbot.net</PackageProjectUrl>
+        <License>https://github.com/smarteboka/slackbot.net/blob/master/LICENSE</License>
+        <RepositoryUrl>https://github.com/smarteboka/slackbot.net</RepositoryUrl>
+        <PackageIconUrl>images/slack.png</PackageIconUrl>
+        <PackageIcon>slack.png</PackageIcon>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="images/slack.png" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>

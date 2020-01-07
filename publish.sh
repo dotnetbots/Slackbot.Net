@@ -1,0 +1,1 @@
+dotnet cake -target=publish -nugetapikey=$NUGET_API_KEY
