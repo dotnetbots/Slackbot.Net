@@ -30,9 +30,7 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {
-        DotNetCoreTest("./source/test/Slackbot.Net.SlackClients.Rtm.Tests.Unit", new DotNetCoreTestSettings {
-            ArgumentCustomization = args=>args.Append("/p:CollectCoverage=true /p:CoverletOutputFormat=opencover")
-        });
+        DotNetCoreTest("./source/test/Slackbot.Net.SlackClients.Rtm.Tests.Unit", new DotNetCoreTestSettings());
     });
 
 Task("Pack")
