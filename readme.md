@@ -1,5 +1,9 @@
 # Slackbot.NET
 
+
+[![Build](https://github.com/slackbot-net/slackbot.net/workflows/CI/badge.svg)](https://github.com/slackbot.net/slackbot.net/actions) 
+
+
 ## What it is
 A .NET framework for building a Slack bot in a .NET Core host.
 
@@ -30,7 +34,7 @@ services.AddSlackbotWorker(o => { o.Slackbot_SlackApiKey_BotUser = "sometoken"  
     .AddPublisher<SlackPublisher>()
     .AddPublisher<LoggerPublisher>()
     .AddPublisher<MyCustomPublisher>()
-    .AddRecurring<MyEightOClockRecurrer>(c => c.Cron = "0 0 8 * * *")
+    .AddRecurring<MyEightOClockRecurrer>()
     .AddHandler<MyHandlerOfIncomingMessages>()
 })
 ```
