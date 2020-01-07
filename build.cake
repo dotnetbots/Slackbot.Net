@@ -30,8 +30,10 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {
-        Warning("Lacking tests.");
-});
+        DotNetCoreTest("./source/test/Slackbot.Net.SlackClients.Rtm.Tests.Unit", new DotNetCoreTestSettings {
+            ArgumentCustomization = args=>args.Append("/p:CollectCoverage=true /p:CoverletOutputFormat=opencover")
+        });
+    });
 
 Task("Pack")
     .IsDependentOn("Test")
