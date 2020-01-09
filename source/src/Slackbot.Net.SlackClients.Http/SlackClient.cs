@@ -7,6 +7,7 @@ using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
 namespace Slackbot.Net.SlackClients.Http
@@ -69,6 +70,17 @@ namespace Slackbot.Net.SlackClients.Http
         public async Task<UsersListResponse> UsersList()
         {
             return await _client.PostParametersAsForm<UsersListResponse>(null,"users.list", s => _logger.LogTrace(s));
+        }
+
+        /// <inheritdoc/>
+        public async Task<ConversationsListResponse> ConversationsListPublicChannels()
+        {
+            var parameters = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("types", "public_channel"),
+                new KeyValuePair<string, string>("exclude_archived", "true"),
+            };
+            return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.list", s => _logger.LogTrace(s));
         }
     }
 }

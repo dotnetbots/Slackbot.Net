@@ -19,7 +19,7 @@ private string ProjectPath(string name){
     return $"./source/src/{name}/{name}.csproj";
 }
 
-var version = "1.0.1";
+var version = "1.0.2";
 var outputDir = "./output";
 
 Task("Build")
@@ -36,7 +36,7 @@ Task("Test")
 Task("Pack")
     .IsDependentOn("Test")
     .Does(() => {
-        Pack(packageNameWorker);        
+        Pack(packageNameWorker);
         Pack(packageNameEndpoints);
 
         Pack(packageNameHttpClient);

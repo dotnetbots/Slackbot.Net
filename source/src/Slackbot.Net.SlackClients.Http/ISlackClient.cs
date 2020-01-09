@@ -3,6 +3,7 @@ using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
 namespace Slackbot.Net.SlackClients.Http
@@ -41,5 +42,12 @@ namespace Slackbot.Net.SlackClients.Http
         /// </summary>  
         /// <remarks>https://api.slack.com/methods/users.list</remarks>
         Task<UsersListResponse> UsersList();
+
+        /// <summary>
+        /// Scopes required: channels:read
+        /// Only requests `public_channel` types of conversations
+        /// </summary>  
+        /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
+        Task<ConversationsListResponse> ConversationsListPublicChannels();
     }
 }

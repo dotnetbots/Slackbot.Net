@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using Slackbot.Net.Configuration;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.SlackClients.Rtm;
 using Slackbot.Net.SlackClients.Rtm.Configurations;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
 namespace Slackbot.Net.Connections
 {
