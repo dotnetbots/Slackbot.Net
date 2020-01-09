@@ -8,11 +8,11 @@
         <Description>
             Abstractions for Slackbot.NET hosting
         </Description>
-        
+
         <PackageTags>slack dotnetcore</PackageTags>
-        <PackageProjectUrl>https://github.com/smarteboka/slackbot.net</PackageProjectUrl>
-        <License>https://github.com/smarteboka/slackbot.net/blob/master/LICENSE</License>
-        <RepositoryUrl>https://github.com/smarteboka/slackbot.net</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/slackbot-net/slackbot.net</PackageProjectUrl>
+        <License>https://github.com/slackbot-net/slackbot.net/blob/master/LICENSE</License>
+        <RepositoryUrl>https://github.com/slackbot-net/slackbot.net</RepositoryUrl>
         <PackageIconUrl>images/slack.png</PackageIconUrl>
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
