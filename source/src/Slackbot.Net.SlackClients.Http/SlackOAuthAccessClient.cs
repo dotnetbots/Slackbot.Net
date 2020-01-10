@@ -16,7 +16,7 @@ namespace Slackbot.Net.SlackClients.Http
         public SlackOAuthAccessClient(HttpClient client, ILogger<SlackOAuthAccessClient> logger)
         {
             _client = client;
-            _logger = _logger;
+            _logger = logger;
         }
         
         /// <inheritdoc/>
