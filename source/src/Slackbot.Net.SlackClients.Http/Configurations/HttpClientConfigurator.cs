@@ -39,6 +39,15 @@ namespace Slackbot.Net.SlackClients.Http.Configurations
                     c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 });
             }
+            
+            if (name is nameof(SlackOAuthAccessClient))
+            {
+                options.HttpClientActions.Add(c =>
+                {
+                    c.BaseAddress = new Uri("https://slack.com/api/");
+                    c.Timeout = TimeSpan.FromSeconds(15);
+                });
+            }
         }
 
         public void Configure(HttpClientFactoryOptions options)

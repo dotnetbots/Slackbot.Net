@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Xunit.Abstractions;
@@ -12,6 +11,7 @@ namespace Slackbot.Net.Tests
     {
         protected readonly ISearchClient SearchClient;
         protected readonly ISlackClient SlackClient;
+        protected readonly ISlackOAuthAccessClient SlackOAuthClient;
         protected string Channel;
         protected string Text;
 
@@ -28,11 +28,14 @@ namespace Slackbot.Net.Tests
                 c.BotToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
             });
 
+            services.AddSlackbotOauthAccessClient();
+
             services.AddSingleton<ILogger<ISlackClient>>(new XUnitLogger<ISlackClient>(helper));
             
             var provider = services.BuildServiceProvider();
             SearchClient = provider.GetService<ISearchClient>();
             SlackClient = provider.GetService<ISlackClient>();
+            SlackOAuthClient = provider.GetService<ISlackOAuthAccessClient>();
             Channel = "#testss";
             Text = "Test";
         }

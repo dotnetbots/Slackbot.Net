@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Exceptions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.OAuthAccess;
 using Xunit;
@@ -21,7 +22,7 @@ namespace Slackbot.Net.Tests
                 ClientSecret = "troll",
                 Code = "jimbu"
             };
-            var ex = await Assert.ThrowsAsync<SlackApiException>(() => SlackClient.OauthAccess(oauthAccessRequest));
+            var ex = await Assert.ThrowsAsync<SlackApiException>(() => SlackOAuthClient.OAuthAccess(oauthAccessRequest));
             Assert.Equal("invalid_code", ex.Message);
         }
     }

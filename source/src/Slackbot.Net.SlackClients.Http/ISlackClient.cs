@@ -51,8 +51,5 @@ namespace Slackbot.Net.SlackClients.Http
         /// </summary>  
         /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
         Task<ConversationsListResponse> ConversationsListPublicChannels();
-      
-        /// <remarks>https://api.slack.com/methods/oauth.access</remarks>
-        Task<OAuthAccessResponse> OauthAccess(OauthAccessRequest request);
     }
 }
