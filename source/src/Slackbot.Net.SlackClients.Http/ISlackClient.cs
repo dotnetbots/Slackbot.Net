@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Requests.OAuthAccess;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
+using Slackbot.Net.SlackClients.Http.Models.Responses.OAuthAccess;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
 namespace Slackbot.Net.SlackClients.Http
@@ -49,5 +51,8 @@ namespace Slackbot.Net.SlackClients.Http
         /// </summary>  
         /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
         Task<ConversationsListResponse> ConversationsListPublicChannels();
+      
+        /// <remarks>https://api.slack.com/methods/oauth.access</remarks>
+        Task<OAuthAccessResponse> OauthAccess(OauthAccessRequest request);
     }
 }
