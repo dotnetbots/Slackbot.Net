@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Exceptions;
@@ -14,15 +15,19 @@ namespace Slackbot.Net.Tests
         }
         
         [Fact]
-        public async Task OauthAccessTestsThrowsInvalidCodeOnInvalidCodes()
+        public void OauthAccessTestsThrowsInvalidCodeOnInvalidCodes()
         {
             var oauthAccessRequest = new OauthAccessRequest
             {
                 ClientId = "lol",
-                ClientSecret = "troll",
-                Code = "jimbu"
+                ClientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET"),
+                Code = "troll"
             };
-            var ex = await Assert.ThrowsAsync<SlackApiException>(() => SlackOAuthClient.OAuthAccess(oauthAccessRequest));
+            var ex = Assert.Throws<SlackApiException>(() =>
+            {
+                var oAuthAccess = SlackOAuthClient.OAuthAccess(oauthAccessRequest).GetAwaiter().GetResult();
+                return oAuthAccess;
+            });
             Assert.Equal("invalid_code", ex.Message);
         }
     }

@@ -24,9 +24,9 @@ namespace Slackbot.Net.SlackClients.Http
         {
             var parameters = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("client_Id", oauthAccessRequest.ClientId),
-                new KeyValuePair<string, string>("client_Secret", oauthAccessRequest.ClientSecret),
-                new KeyValuePair<string, string>("code", oauthAccessRequest.RedirectUri)
+                new KeyValuePair<string, string>("client_id", oauthAccessRequest.ClientId),
+                new KeyValuePair<string, string>("client_secret", oauthAccessRequest.ClientSecret),
+                new KeyValuePair<string, string>("code", oauthAccessRequest.Code)
             };
 
             if (!string.IsNullOrEmpty(oauthAccessRequest.RedirectUri))
