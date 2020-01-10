@@ -8,13 +8,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
     public abstract class IntegrationTest : IDisposable
     {
         protected IConnection Connection;
-        protected Config Config;
 
         protected IntegrationTest()
         {
-            Config = new ConfigReader().GetConfig();
 
-            var slackConnector = new Connector(new RtmOptions { ApiKey = Config.Slack.ApiToken});
+            var slackConnector = new Connector(new RtmOptions { ApiKey = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser")});
             Connection = Task.Run(() => slackConnector.Connect())
                     .GetAwaiter()
                     .GetResult();

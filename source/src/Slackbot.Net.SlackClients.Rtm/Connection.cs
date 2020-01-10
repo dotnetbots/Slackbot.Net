@@ -95,6 +95,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             var message = new Message
             {
                 User = GetMessageUser(inboundMessage.User),
+                TeamId = inboundMessage.Team,
                 Timestamp = inboundMessage.Timestamp,
                 Text = inboundMessage.Text,
                 ChatHub = GetChatHub(inboundMessage.Channel),
@@ -106,7 +107,7 @@ namespace Slackbot.Net.SlackClients.Rtm
 
             return RaiseMessageReceived(message);
         }
-        
+
         private ChatHub GetChatHub(string channel)
         {
             return channel != null && ConnectedHubs.ContainsKey(channel)

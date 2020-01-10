@@ -17,6 +17,7 @@ namespace Slackbot.Net.Connections
                 RawData = msg.RawData,
                 Timestamp = msg.Timestamp,
                 User = ToUser(msg.User),
+                TeamId = msg.TeamId,
                 MentionsBot = msg.MentionsBot,
                 ChatHub = new Abstractions.Handlers.Models.Rtm.MessageReceived.ChatHub
                 {

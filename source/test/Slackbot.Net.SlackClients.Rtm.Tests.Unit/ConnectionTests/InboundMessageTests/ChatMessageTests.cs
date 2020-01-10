@@ -40,6 +40,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             var inboundMessage = new ChatMessage
             {
                 User = "userABC",
+                Team = "123456",
                 MessageType = MessageType.Message,
                 Text = "amazing-text",
                 RawData = "I am raw data yo",
@@ -61,6 +62,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             {
                 Text = "amazing-text",
                 User = new User { Id = "userABC", Name = "i-have-a-name" },
+                TeamId = "123456",
                 RawData = inboundMessage.RawData,
                 MessageSubType = MessageSubType.BotMessage,
                 Files = Enumerable.Empty<File>()
