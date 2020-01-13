@@ -4,7 +4,7 @@ using Cronos;
 
 namespace Slackbot.Net.Utilities
 {
-    public class Timing
+    internal class Timing
     {
         public TimeZoneInfo TimeZoneInfo;
 
@@ -25,23 +25,6 @@ namespace Slackbot.Net.Utilities
         public DateTimeOffset RelativeNow(DateTimeOffset? nowutc = null)
         {
             return TimeZoneInfo.ConvertTime(nowutc ?? DateTimeOffset.UtcNow, TimeZoneInfo);
-        }
-
-        public bool IsToday(DateTime date)
-        {
-            var nowInOslo = RelativeNow();
-            return nowInOslo.Month == date.Month && nowInOslo.Day == date.Day;
-        }
-
-        public int CalculateAge(DateTime birthDate)
-        {
-            var nowInOsloTime = RelativeNow();
-            var age = nowInOsloTime.Year - birthDate.Year;
-
-            if (nowInOsloTime.Month < birthDate.Month || (nowInOsloTime.Month == birthDate.Month && nowInOsloTime.Day < birthDate.Day))
-                age--;
-
-            return age;
         }
 
         public DateTimeOffset? GetNextOccurenceInRelativeTime(string cron)

@@ -6,7 +6,7 @@
         <PackageId>Slackbot.Net.SlackClients.Rtm</PackageId>
         <Authors>John Korsnes</Authors>
         <Description>
-          A .NET Core Host friendly Slack API client for the Slack HTTP API
+          A .NET Core Host friendly Slack API client for the Slack RTM API
         </Description>
 
         <PackageTags>slack dotnetcore</PackageTags>

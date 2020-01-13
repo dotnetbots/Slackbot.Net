@@ -31,7 +31,7 @@ namespace Slackbot.Net.Hosting
                     var single = allRecurrers.First(r => r.GetType() == recurrer.ImplementationType);
                     var loggerFactory = s.GetService<ILoggerFactory>();
                     var logger = loggerFactory.CreateLogger(single.GetType());
-                    return new RecurringAction(single,logger);
+                    return new CronBackgroundService(single,logger);
                 }); 
             }
         }

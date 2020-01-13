@@ -10,14 +10,13 @@ using Slackbot.Net.Utilities;
 
 namespace Slackbot.Net
 {
-    internal class RecurringAction : BackgroundService
+    internal class CronBackgroundService : BackgroundService
     {
-
         private readonly IRecurringAction _action;
         private readonly ILogger _logger;
         private readonly Timing _timing;
 
-        public RecurringAction(IRecurringAction action, ILogger logger)
+        public CronBackgroundService(IRecurringAction action, ILogger logger)
         {
             var cronOptions = new CronOptions { Cron = action.Cron };
             _timing = new Timing();
