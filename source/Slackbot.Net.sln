@@ -28,6 +28,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Rtm.Tests.Integration", "test\Slackbot.Net.SlackClients.Rtm.Tests.Integration\Slackbot.Net.SlackClients.Rtm.Tests.Integration.csproj", "{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.KitchenSink", "Slackbot.Net.Extensions.KitchenSink\Slackbot.Net.Extensions.KitchenSink.csproj", "{908FAC13-7483-4F5D-9A10-57638948C9D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{10CBAF56-F382-480E-B8BE-CBF270617AD8}"
+ProjectSection(SolutionItems) = preProject
+	..\build.cake = ..\build.cake
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +91,10 @@ Global
 		{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6F703D22-475E-430A-B7D8-B1ECCAB868E4} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
@@ -96,5 +109,6 @@ Global
 		{47C65357-CD26-4FC3-A423-A3BB9D41A607} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
 		{20B32636-F907-4961-9C8A-DFB5DC2BFA87} = {ED8E20FC-B173-40FF-B447-D74B58FC27C6}
 		{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF} = {ED8E20FC-B173-40FF-B447-D74B58FC27C6}
+		{908FAC13-7483-4F5D-9A10-57638948C9D7} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
 	EndGlobalSection
 EndGlobal

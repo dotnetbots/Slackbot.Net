@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <RootNamespace>Slackbot.Net.Endpoints</RootNamespace>
         <PackageId>Slackbot.Net.Endpoints</PackageId>
         <Authors>John Korsnes</Authors>
@@ -19,15 +19,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="images/slack.png" Pack="true" PackagePath="" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+        <None Include="images/slack.png" Pack="true" PackagePath="" />
     </ItemGroup>
+
+  
 
 </Project>

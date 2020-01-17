@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <RootNamespace>Slackbot.Net.Abstractions.Publishers</RootNamespace>
         <PackageId>Slackbot.Net.Abstractions.Publishers</PackageId>
         <Authors>John Korsnes</Authors>

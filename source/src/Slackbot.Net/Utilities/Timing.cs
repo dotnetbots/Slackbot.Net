@@ -1,25 +1,18 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cronos;
 
 namespace Slackbot.Net.Utilities
 {
     internal class Timing
     {
-        public TimeZoneInfo TimeZoneInfo;
+        public readonly TimeZoneInfo TimeZoneInfo;
 
-        private TimeZoneInfo GetTimeZoneInfo(string timeZoneId)
+        public Timing(string timeZoneId)
         {
-            if (!string.IsNullOrEmpty(timeZoneId))
-            {
-                return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            }
-
-            if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
-            {
-                return TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
-            }
-            return TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+            TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
         }
 
         public DateTimeOffset RelativeNow(DateTimeOffset? nowutc = null)
@@ -33,18 +26,31 @@ namespace Slackbot.Net.Utilities
             return expression.GetNextOccurrence(DateTimeOffset.UtcNow, TimeZoneInfo);
         }
 
-        public static IEnumerable<DateTime> GetNextOccurences(string cron, int noOfMonths = 0)
+        public IEnumerable<string> Get10NextOccurrences(string cron)
         {
             var expression = CronExpression.Parse(cron, CronFormat.IncludeSeconds);
             var fromUtc = DateTime.UtcNow;
-            var toUtc = fromUtc.AddMonths(noOfMonths != 0 ? noOfMonths : 6);
-            var nexts = expression.GetOccurrences(fromUtc,toUtc);
-            return nexts;
+            var upcoming = new List<DateTime>();
+            upcoming.AddRange(Get10Occurrences(upcoming, expression, fromUtc, fromUtc.AddMonths(1)));
+            return upcoming.Select(u => $"{u.ToLongDateString()} {u.ToLongTimeString()}");
         }
 
-        public void SetTimeZone(string timeZoneId)
+        private IEnumerable<DateTime> Get10Occurrences(List<DateTime> upcoming, CronExpression expression, DateTime fromUtc, DateTime toUtc)
         {
-            TimeZoneInfo = GetTimeZoneInfo(timeZoneId);
+            while (true)
+            {
+                toUtc = toUtc.AddMonths(1);
+                var occurrences = expression.GetOccurrences(fromUtc, toUtc);
+                upcoming = occurrences.ToList();
+
+                if (upcoming.Count < 10)
+                {
+                    continue;
+                }
+                break;
+            }
+            return upcoming.Take(10);
+
         }
     }
 }

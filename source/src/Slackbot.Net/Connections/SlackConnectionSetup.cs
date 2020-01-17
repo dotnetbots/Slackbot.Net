@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,11 +8,10 @@ using Slackbot.Net.Configuration;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.SlackClients.Rtm;
 using Slackbot.Net.SlackClients.Rtm.Configurations;
-using Slackbot.Net.SlackClients.Rtm.Models;
 
 namespace Slackbot.Net.Connections
 {
-    internal class SlackConnectionSetup
+    internal class SlackConnectionSetup : IGetConnectionDetails
     {
         private readonly IServiceProvider _services;
 
@@ -30,11 +28,11 @@ namespace Slackbot.Net.Connections
             {
                 ApiKey = options.Value.Slackbot_SlackApiKey_BotUser
             });
-            
+
             var handlerSelector = _services.GetService<HandlerSelector>();
             Connection = await slackConnector.Connect();
             Connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
-            
+
             if (Connection.IsConnected)
                 logger.LogInformation("Connected");
 
@@ -42,13 +40,17 @@ namespace Slackbot.Net.Connections
 
         private IConnection Connection { get; set; }
 
-        public BotDetails GetBotDetails()
+        public BotDetails GetConnectionBotDetails()
         {
-            return new BotDetails
+            if (Connection != null && Connection.IsConnected)
             {
-                Id = Connection.Self.Id,
-                Name = Connection.Self.Name
-            };
+                return new BotDetails
+                {
+                    Id = Connection.Self.Id,
+                    Name = Connection?.Self.Name
+                };  
+            }
+            throw new NotConnectedException("Cannot fetch botdetails at this time. Connection was not yet established.");
         }
     }
 }

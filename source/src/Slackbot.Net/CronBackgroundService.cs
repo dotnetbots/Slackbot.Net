@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Configuration;
 using Slackbot.Net.Utilities;
 
 namespace Slackbot.Net
@@ -18,9 +17,7 @@ namespace Slackbot.Net
 
         public CronBackgroundService(IRecurringAction action, ILogger logger)
         {
-            var cronOptions = new CronOptions { Cron = action.Cron };
-            _timing = new Timing();
-            _timing.SetTimeZone(cronOptions.TimeZoneId);
+            _timing = new Timing(action.GetTimeZoneId());
             _action = action;
             _logger = logger;
             Cron = action.Cron;
@@ -40,16 +37,22 @@ namespace Slackbot.Net
                 if (next == null)
                 {
                     next = _timing.GetNextOccurenceInRelativeTime(Cron);
-
-                    var upcoming = Timing.GetNextOccurences(Cron);
-                    var uText = upcoming.Select(u => $"{u.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}").Take(10);
-                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}\n" +
-                                           $"Upcoming:\n{uText.Aggregate((x,y) => x + "\n" + y)}");
+                    var uText = _timing.Get10NextOccurrences(Cron);
+                    var logText = $"Ten next occurrences :\n{uText.Aggregate((x,y) => x + "\n" + y)}";
+                    _logger.LogInformation(logText);
                 }
 
                 if (now > next)
                 {
-                    await _action.Process();
+                    try
+                    {
+                        await _action.Process();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e.Message, e);
+                    }
+                    
                     next = _timing.GetNextOccurenceInRelativeTime(Cron);
                     _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
                 }
