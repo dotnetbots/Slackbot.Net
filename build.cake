@@ -19,7 +19,7 @@ private string ProjectPath(string name){
     return $"./source/src/{name}/{name}.csproj";
 }
 
-var version = "2.0.0";
+var version = "2.0.1";
 var outputDir = "./output";
 
 Task("Build")

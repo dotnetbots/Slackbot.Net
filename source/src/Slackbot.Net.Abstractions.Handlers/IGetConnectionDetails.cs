@@ -1,6 +1,4 @@
-using Slackbot.Net.Abstractions.Handlers;
-
-namespace Slackbot.Net.Connections
+namespace Slackbot.Net.Abstractions.Handlers
 {
     public interface IGetConnectionDetails
     {
