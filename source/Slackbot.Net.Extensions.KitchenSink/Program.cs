@@ -36,13 +36,11 @@ namespace Slackbot.Net.Extensions.KitchenSink
     {
         private readonly IPublisher _publisher;
         private readonly IGetConnectionDetails _connDetailsFetcher;
-        private readonly ILogger<HelloWorldRecurrer> _logger;
 
-        public HelloWorldRecurrer(IPublisher publisher, IGetConnectionDetails connDetailsFetcher, ILogger<HelloWorldRecurrer> logger)
+        public HelloWorldRecurrer(IPublisher publisher, IGetConnectionDetails connDetailsFetcher)
         {
             _publisher = publisher;
             _connDetailsFetcher = connDetailsFetcher;
-            _logger = logger;
         }
         
         public async Task Process()
@@ -56,7 +54,5 @@ namespace Slackbot.Net.Extensions.KitchenSink
         }
 
         public string Cron { get; } = "*/1 * * * * *";
-        
-        
     }
 }
