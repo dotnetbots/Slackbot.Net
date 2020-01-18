@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.R
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.KitchenSink", "Slackbot.Net.Extensions.KitchenSink\Slackbot.Net.Extensions.KitchenSink.csproj", "{908FAC13-7483-4F5D-9A10-57638948C9D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.KitchenSink", "src\Samples\Slackbot.Net.Extensions.KitchenSink\Slackbot.Net.Extensions.KitchenSink.csproj", "{908FAC13-7483-4F5D-9A10-57638948C9D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{10CBAF56-F382-480E-B8BE-CBF270617AD8}"
 ProjectSection(SolutionItems) = preProject

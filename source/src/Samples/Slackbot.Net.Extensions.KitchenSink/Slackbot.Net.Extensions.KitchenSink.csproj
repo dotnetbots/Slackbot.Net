@@ -8,8 +8,8 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\src\Slackbot.Net.Extensions.Publishers.Logger\Slackbot.Net.Extensions.Publishers.Logger.csproj" />
-      <ProjectReference Include="..\src\Slackbot.Net\Slackbot.Net.csproj" />
+      <ProjectReference Include="..\..\Slackbot.Net.Extensions.Publishers.Logger\Slackbot.Net.Extensions.Publishers.Logger.csproj" />
+      <ProjectReference Include="..\..\Slackbot.Net\Slackbot.Net.csproj" />
     </ItemGroup>
 
 </Project>
