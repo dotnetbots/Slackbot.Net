@@ -1,4 +1,5 @@
 using System;
+using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.SlackClients.Rtm.Models;
 using ChatHub = Slackbot.Net.SlackClients.Rtm.Models.ChatHub;
@@ -17,8 +18,9 @@ namespace Slackbot.Net.Connections
                 RawData = msg.RawData,
                 Timestamp = msg.Timestamp,
                 User = ToUser(msg.User),
-                TeamId = msg.TeamId,
                 MentionsBot = msg.MentionsBot,
+                Bot = new BotDetails { Id = msg.Self.Id, Name = msg.Self.Name},
+                Team = new TeamDetails { Id = msg.Team.Id, Name = msg.Team.Name},
                 ChatHub = new Abstractions.Handlers.Models.Rtm.MessageReceived.ChatHub
                 {
                     Id = msg.ChatHub?.Id,

@@ -95,12 +95,13 @@ namespace Slackbot.Net.SlackClients.Rtm
             var message = new Message
             {
                 User = GetMessageUser(inboundMessage.User),
-                TeamId = inboundMessage.Team,
                 Timestamp = inboundMessage.Timestamp,
                 Text = inboundMessage.Text,
                 ChatHub = GetChatHub(inboundMessage.Channel),
                 RawData = inboundMessage.RawData,
                 MentionsBot = WasBotMentioned(Self.Name, Self.Id, inboundMessage.Text),
+                Self = Self,
+                Team = Team,
                 MessageSubType = inboundMessage.MessageSubType.ToSlackMessageSubType(),
                 Files = inboundMessage.Files.ToSlackFiles()
             };

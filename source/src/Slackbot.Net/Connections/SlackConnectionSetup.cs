@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.SlackClients.Rtm;
@@ -11,7 +10,7 @@ using Slackbot.Net.SlackClients.Rtm.Configurations;
 
 namespace Slackbot.Net.Connections
 {
-    internal class SlackConnectionSetup : IGetConnectionDetails
+    internal class SlackConnectionSetup
     {
         private readonly IServiceProvider _services;
 
@@ -21,36 +20,27 @@ namespace Slackbot.Net.Connections
         }
 
         public async Task Connect()
-        {
+        { 
             var options = _services.GetService<IOptions<SlackOptions>>();
+            await Connect(options.Value.Slackbot_SlackApiKey_BotUser);
+        }
+
+        public async Task<IConnection> Connect(string apiKey)
+        {
             var logger = _services.GetService<ILogger<Connector>>();
             var slackConnector = new Connector(new RtmOptions
             {
-                ApiKey = options.Value.Slackbot_SlackApiKey_BotUser
+                ApiKey = apiKey
             });
-
+            
             var handlerSelector = _services.GetService<HandlerSelector>();
-            Connection = await slackConnector.Connect();
-            Connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
+            var connection = await slackConnector.Connect();
+            connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
 
-            if (Connection.IsConnected)
+            if (connection.IsConnected)
                 logger.LogInformation("Connected");
-
-        }
-
-        private IConnection Connection { get; set; }
-
-        public BotDetails GetConnectionBotDetails()
-        {
-            if (Connection != null && Connection.IsConnected)
-            {
-                return new BotDetails
-                {
-                    Id = Connection.Self.Id,
-                    Name = Connection?.Self.Name
-                };  
-            }
-            throw new NotConnectedException("Cannot fetch botdetails at this time. Connection was not yet established.");
+            
+            return connection;
         }
     }
 }

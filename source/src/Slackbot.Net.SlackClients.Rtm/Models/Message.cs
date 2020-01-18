@@ -6,10 +6,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
     {
         public ChatHub ChatHub { get; set; }
         public bool MentionsBot { get; set; }
+        
+        public ContactDetails Self { get; set; }
+        
+        public ContactDetails Team { get; set; }
+
         public string RawData { get; set; }
         public string Text { get; set; }
         public User User { get; set; }
-        public string TeamId { get; set; }
         public double Timestamp { get; set; }
         public MessageSubType MessageSubType { get; set; }
         public IEnumerable<File> Files { get; set; }

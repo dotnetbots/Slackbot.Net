@@ -33,6 +33,16 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
                 Users =
                 {
                     { "userABC", new User { Id = "userABC", Name = "i-have-a-name" } }
+                },
+                Self = new ContactDetails
+                {
+                    Id = "1337",
+                    Name = "BotName"
+                },
+                Team = new ContactDetails
+                {
+                    Id = "123456",
+                    Name = "TeamName"
                 }
             };
             await slackConnection.Initialise(connectionInfo);
@@ -62,7 +72,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             {
                 Text = "amazing-text",
                 User = new User { Id = "userABC", Name = "i-have-a-name" },
-                TeamId = "123456",
+                Self = new ContactDetails { Id = "1337", Name = "BotName"},
+                Team = new ContactDetails { Id = "123456", Name = "TeamName"},
                 RawData = inboundMessage.RawData,
                 MessageSubType = MessageSubType.BotMessage,
                 Files = Enumerable.Empty<File>()
@@ -103,7 +114,9 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             receivedMessage.ShouldLookLike(new Message
             {
                 User = new User { Id = "userABC", Name = string.Empty },
-                Files = Enumerable.Empty<File>()
+                Files = Enumerable.Empty<File>(),
+                Self = new ContactDetails(),
+                Team = new ContactDetails()
         });
         }
 
