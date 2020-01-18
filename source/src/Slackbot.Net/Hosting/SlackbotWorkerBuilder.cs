@@ -19,7 +19,7 @@ namespace Slackbot.Net.Hosting
             get;
         }
 
-        public void BuildRecurrers()
+        public ISlackbotWorkerBuilder BuildRecurrers()
         {
             var recurrers = Services.Where(s => s.ServiceType == typeof(IRecurringAction)).ToList();
 
@@ -34,6 +34,8 @@ namespace Slackbot.Net.Hosting
                     return new CronBackgroundService(single,logger);
                 }); 
             }
+
+            return this;
         }
     }
 }

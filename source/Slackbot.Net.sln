@@ -30,13 +30,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.R
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.KitchenSink", "src\Samples\Slackbot.Net.Extensions.KitchenSink\Slackbot.Net.Extensions.KitchenSink.csproj", "{908FAC13-7483-4F5D-9A10-57638948C9D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Samples.Standalone", "src\Samples\Slackbot.Net.Samples.Standalone\Slackbot.Net.Samples.Standalone.csproj", "{908FAC13-7483-4F5D-9A10-57638948C9D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{10CBAF56-F382-480E-B8BE-CBF270617AD8}"
 ProjectSection(SolutionItems) = preProject
 	..\build.cake = ..\build.cake
-  ..\CI.yml = ..\.github\workflows\CI.yml
+		..\CI.yml = ..\.github\workflows\CI.yml
 EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Samples.Distributed", "src\Samples\Slackbot.Net.Samples.Distributed\Slackbot.Net.Samples.Distributed.csproj", "{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.Samples.HelloWorld", "Slackbot.Net.Extensions.Samples.HelloWorld\Slackbot.Net.Extensions.Samples.HelloWorld.csproj", "{8253A399-F856-42A2-A275-2CE30EEA2044}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +100,14 @@ Global
 		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8253A399-F856-42A2-A275-2CE30EEA2044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8253A399-F856-42A2-A275-2CE30EEA2044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8253A399-F856-42A2-A275-2CE30EEA2044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8253A399-F856-42A2-A275-2CE30EEA2044}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6F703D22-475E-430A-B7D8-B1ECCAB868E4} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
@@ -111,5 +123,7 @@ Global
 		{20B32636-F907-4961-9C8A-DFB5DC2BFA87} = {ED8E20FC-B173-40FF-B447-D74B58FC27C6}
 		{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF} = {ED8E20FC-B173-40FF-B447-D74B58FC27C6}
 		{908FAC13-7483-4F5D-9A10-57638948C9D7} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
+		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
+		{8253A399-F856-42A2-A275-2CE30EEA2044} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
 	EndGlobalSection
 EndGlobal

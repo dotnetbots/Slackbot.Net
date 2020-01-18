@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\Slackbot.Net.Abstractions.Handlers\Slackbot.Net.Abstractions.Handlers.csproj" />
+      <ProjectReference Include="..\src\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
+      <ProjectReference Include="..\src\Slackbot.Net.Extensions.Publishers.Logger\Slackbot.Net.Extensions.Publishers.Logger.csproj" />
+    </ItemGroup>
+
+</Project>
