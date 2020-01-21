@@ -15,7 +15,7 @@ using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 namespace Slackbot.Net.SlackClients.Http
 {
     /// <inheritdoc/>
-    internal class SlackClient : ISlackClient
+    public class SlackClient : ISlackClient
     {
         private readonly HttpClient _client;
         private readonly ILogger<ISlackClient> _logger;

@@ -20,12 +20,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake
             var uri = $"https://slack.com/api/rtm.start?token={slackKey}";
             var httpResponse = await _httpClient.GetAsync(uri);
             var content = await httpResponse.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<HandshakeResponse>(content);
-            if (!response.Ok)
-            {
-                throw new CommunicationException($"Error occured while posting message '{response.Error}'");
-            }
-            return response;
+            return JsonConvert.DeserializeObject<HandshakeResponse>(content);
         }
     }
 }

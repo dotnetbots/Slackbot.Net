@@ -7,6 +7,7 @@ using Slackbot.Net.Configuration;
 using Slackbot.Net.Connections;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.Hosting;
+using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Slackbot.Net.Validations;
 
@@ -16,9 +17,20 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SlackbotWorkerBuilderExtensions
     {
+        public static ISlackbotWorkerBuilder AddSlackbotWorker<T>(this IServiceCollection services) where T: class, ITokenStore
+        {
+            services.Configure<SlackOptions>(o => {});
+            services.AddSingleton<ITokenStore, T>();
+            var builder = new SlackbotWorkerBuilder(services);
+            builder.Services.AddSingleton<SlackClientFactory>();
+            builder.AddRtmConnections();
+            return builder;
+        }
+        
         public static ISlackbotWorkerBuilder AddSlackbotWorker(this IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureAndValidate<SlackOptions>(configuration);
+            services.AddSingleton<ITokenStore, ConfigurationTokenStore>();
             var builder = new SlackbotWorkerBuilder(services);
             builder.AddWorkerDependencies(configuration);
             return builder;
@@ -27,6 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static ISlackbotWorkerBuilder AddSlackbotWorker(this IServiceCollection services, Action<SlackOptions> action)
         {
             services.ConfigureAndValidate(action);
+            services.AddSingleton<ITokenStore, ConfigurationTokenStore>();
             var builder = new SlackbotWorkerBuilder(services);
             builder.AddWorkerDependencies(action);
             return builder;
@@ -37,8 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var slackOptions = new SlackOptions();
             configuration.Bind(slackOptions);
             builder.Services.AddSlackbotClient(o => o.BotToken = slackOptions.Slackbot_SlackApiKey_BotUser);
-            builder.Services.AddSlackbotOauthClient(o => o.OauthToken = slackOptions.Slackbot_SlackApiKey_SlackApp);
-            AddWorker(builder);
+            builder.AddRtmConnections();
         }
         
         private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder, Action<SlackOptions> configuration)
@@ -53,14 +65,15 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 c.OauthToken = slackOptions.Slackbot_SlackApiKey_SlackApp;
             });
-            AddWorker(builder);
+            builder.AddRtmConnections();
         }
 
-        private static void AddWorker(ISlackbotWorkerBuilder builder)
+        private static ISlackbotWorkerBuilder AddRtmConnections(this ISlackbotWorkerBuilder builder)
         {
             builder.Services.AddSingleton<SlackConnectionSetup>();
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackRtmConnectionHostedService>();
+            return builder;
         }
     }
 }

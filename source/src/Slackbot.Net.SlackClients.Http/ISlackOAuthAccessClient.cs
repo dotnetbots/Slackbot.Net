@@ -6,6 +6,11 @@ namespace Slackbot.Net.SlackClients.Http
 {
     public interface ISlackOAuthAccessClient
     {
+        /// <summary>
+        /// https://api.slack.com/methods/oauth.access
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         Task<OAuthAccessResponse> OAuthAccess(OauthAccessRequest req);
     }
 }

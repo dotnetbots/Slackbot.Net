@@ -54,7 +54,7 @@ namespace Slackbot.Net
                     }
                     
                     next = _timing.GetNextOccurenceInRelativeTime(Cron);
-                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
+                    _logger.LogTrace($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
                 }
                 else
                 {

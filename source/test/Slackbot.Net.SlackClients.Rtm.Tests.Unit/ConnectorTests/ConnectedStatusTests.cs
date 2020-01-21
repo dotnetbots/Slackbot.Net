@@ -26,29 +26,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
             
         }
 
-        [Fact]
-        public async Task should_throw_exception_when_handshake_is_not_ok()
-        {
-            // given
-            var handshakeResponse = new HandshakeResponse
-            {
-                Ok = false,
-                Error = "I AM A ERROR"
-            };
-
-            _handshakeClient
-                .Setup(x => x.FirmShake(_slackKey))
-                .ReturnsAsync(handshakeResponse);
-            
-            var slackConnector = new Connector(_handshakeClient.Object, _webSocketClient.Object, _pingPong.Object, _slackKey);
-
-            // when
-            var exception = await Assert.ThrowsAsync<HandshakeException>(() => slackConnector.Connect());
-
-            // then
-            exception.Message.ShouldBe(handshakeResponse.Error);
-        }
-
         [Theory]
         [InlineData("")]
         [InlineData(null)]

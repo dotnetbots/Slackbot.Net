@@ -6,31 +6,31 @@ using Slackbot.Net.SlackClients.Http.Configurations.Options;
 
 namespace Slackbot.Net.SlackClients.Http.Configurations
 {
-    internal class HttpClientConfigurator : IConfigureNamedOptions<HttpClientFactoryOptions>
+    internal class SearchClientConfigurator : IConfigureNamedOptions<HttpClientFactoryOptions>
     {
-        private readonly IOptions<BotTokenClientOptions> _botOptions;
         private readonly IOptions<OauthTokenClientOptions> _humanOptions;
 
-        public HttpClientConfigurator(IOptions<BotTokenClientOptions> botOptions, IOptions<OauthTokenClientOptions> humanOptions)
+        public SearchClientConfigurator(IOptions<OauthTokenClientOptions> humanOptions)
         {
-            _botOptions = botOptions;
             _humanOptions = humanOptions;
+
         }
         
+        public void Configure(HttpClientFactoryOptions options)
+        {
+        }
+
         public void Configure(string name, HttpClientFactoryOptions options)
         {
             var token = "";
 
-            if (name is nameof(SlackClient))
-                token = _botOptions.Value.BotToken;
-
             if (name is nameof(SearchClient))
                 token = _humanOptions.Value.OauthToken;
-
-            if ((name is nameof(SlackClient) || name is nameof(SearchClient)) && string.IsNullOrEmpty(token))
+            
+            if (name is nameof(SearchClient) && string.IsNullOrEmpty(token))
                 throw new Exception("Missing token. Check configuration!");
             
-            if (name is nameof(SlackClient) || name is nameof(SearchClient))
+            if (name is nameof(SearchClient))
             {
                 options.HttpClientActions.Add(c =>
                 {
@@ -40,19 +40,6 @@ namespace Slackbot.Net.SlackClients.Http.Configurations
                 });
             }
             
-            if (name is nameof(SlackOAuthAccessClient))
-            {
-                options.HttpClientActions.Add(c =>
-                {
-                    c.BaseAddress = new Uri("https://slack.com/api/");
-                    c.Timeout = TimeSpan.FromSeconds(15);
-                });
-            }
-        }
-
-        public void Configure(HttpClientFactoryOptions options)
-        {
-           
         }
     }
 }

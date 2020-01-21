@@ -21,6 +21,6 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
             });
         }
 
-        public string Cron { get; } = "*/10 * * * * *";
+        public string Cron { get; } = "0 */1 * * * *";
     }
 }

@@ -28,4 +28,8 @@
         <None Include="images/slack.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Factories" />
+    </ItemGroup>
+
 </Project>

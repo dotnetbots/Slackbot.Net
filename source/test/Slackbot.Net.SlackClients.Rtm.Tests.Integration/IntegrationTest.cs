@@ -12,7 +12,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
         protected IntegrationTest()
         {
 
-            var slackConnector = new Connector(new RtmOptions { ApiKey = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser")});
+            var slackConnector = new Connector(new RtmOptions { Token = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser")});
             Connection = Task.Run(() => slackConnector.Connect())
                     .GetAwaiter()
                     .GetResult();

@@ -10,6 +10,7 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
             return builder
                 .AddPublisher<LoggerPublisher>()
                 .AddHandler<HelloWorldHandler>()
+                .AddRecurring<WorkspacesAction>()
                 .AddRecurring<HelloWorldRecurrer>()
                 .BuildRecurrers();
         }

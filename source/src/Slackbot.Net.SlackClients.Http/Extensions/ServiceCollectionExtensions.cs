@@ -23,7 +23,7 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
         }
         private static void BuildSlackClient(this IServiceCollection services)
         {
-            services.ConfigureOptions<HttpClientConfigurator>();
+            services.ConfigureOptions<SlackClientConfigurator>();
             services.AddHttpClient(nameof(SlackClient)).AddTypedClient<ISlackClient, SlackClient>();
         }
 
@@ -43,14 +43,14 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
         
         public static IServiceCollection AddSlackbotOauthAccessClient(this IServiceCollection services)
         {
-            services.ConfigureOptions<HttpClientConfigurator>();
+            services.ConfigureOptions<SlackClientConfigurator>();
             services.AddHttpClient(nameof(SlackOAuthAccessClient)).AddTypedClient<ISlackOAuthAccessClient, SlackOAuthAccessClient>();
             return services;
         }
 
         private static void BuildSearchClient(this IServiceCollection services)
         {
-            services.ConfigureOptions<HttpClientConfigurator>();
+            services.ConfigureOptions<SearchClientConfigurator>();
             services.AddHttpClient(nameof(SearchClient)).AddTypedClient<ISearchClient, SearchClient>();
         }
     }

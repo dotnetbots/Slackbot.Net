@@ -27,7 +27,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             this(new HandshakeClient(new HttpClient()),
                 new WebSocketClientLite(new MessageInterpreter()),
                 new PingPongMonitor(new Timer(), new DateTimeKeeper()),
-                options.ApiKey)
+                options.Token)
         {
         }
 

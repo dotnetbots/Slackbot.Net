@@ -8,14 +8,16 @@ namespace Slackbot.Net.Configuration
         /// <summary>
         /// Only required if you call Slack APIs that only are for Bot Users, for example `search.messages`
         /// https://api.slack.com/methods/search.messages
-        /// </summary>       
+        /// </summary>
         public string Slackbot_SlackApiKey_SlackApp
         {
             get;
             set;
         }
-
-        [Required]
+        
+        /// <summary>
+        /// Required for Single-workspace apps
+        /// </summary>
         public string Slackbot_SlackApiKey_BotUser
         {
             get;
