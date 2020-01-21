@@ -9,7 +9,7 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
     internal class HelloWorldHandler : IHandleMessages
     {
         private readonly IPublisher _publisher;
-        public bool ShouldShowInHelp { get; }
+        public bool ShouldShowInHelp { get; } = true;
         public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("hw", "hw");
 
         public HelloWorldHandler(IPublisher publisher)

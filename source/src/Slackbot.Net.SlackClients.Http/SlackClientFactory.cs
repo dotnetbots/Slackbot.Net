@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Slackbot.Net.SlackClients.Http
 {
-    public class SlackClientFactory
+    public class SlackClientFactory : ISlackClientFactory
     {
         private readonly ILoggerFactory _loggerFactory;
 
@@ -24,5 +24,10 @@ namespace Slackbot.Net.SlackClients.Http
             c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return new SlackClient(c,_loggerFactory.CreateLogger<ISlackClient>());
         }
+    }
+
+    public interface ISlackClientFactory
+    {
+        ISlackClient Create(string token);
     }
 }

@@ -22,7 +22,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<SlackOptions>(o => {});
             services.AddSingleton<ITokenStore, T>();
             var builder = new SlackbotWorkerBuilder(services);
-            builder.Services.AddSingleton<SlackClientFactory>();
             builder.AddRtmConnections();
             return builder;
         }
@@ -70,6 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static ISlackbotWorkerBuilder AddRtmConnections(this ISlackbotWorkerBuilder builder)
         {
+            builder.Services.AddSingleton<ISlackClientFactory, SlackClientFactory>();
             builder.Services.AddSingleton<SlackConnectionSetup>();
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackRtmConnectionHostedService>();

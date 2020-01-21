@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Handlers
 {
@@ -28,8 +29,6 @@ namespace Slackbot.Net.Handlers
             try
             {
                 allHandlers = _provider.GetServices<IHandleMessages>();
-                publishers = _provider.GetServices<IPublisher>();
-
             }
             catch (Exception e)
             {
@@ -41,9 +40,12 @@ namespace Slackbot.Net.Handlers
                 throw new Exception("No handlers registred");
 
             allHandlers = allHandlers.ToList();
-            publishers = publishers.ToList();
-            
-            var helpHandler = new HelpHandler(publishers, allHandlers);
+
+            var tokenStore = _provider.GetService<ITokenStore>();
+            var clientFactory = _provider.GetService<ISlackClientFactory>();
+            var tokenForTeam = await tokenStore.GetTokenByTeamId(message.Team.Id);
+            var slackClient = clientFactory.Create(tokenForTeam);
+            var helpHandler = new HelpHandler(allHandlers, slackClient);
 
             if (helpHandler.ShouldHandle(message))
             {

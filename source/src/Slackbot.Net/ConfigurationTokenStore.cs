@@ -9,13 +9,12 @@ namespace Slackbot.Net
 {
     internal class ConfigurationTokenStore : ITokenStore
     {
-        private string _token;
+        private readonly string _token;
 
         public ConfigurationTokenStore(IOptions<SlackOptions> options)
         {
             _token = options.Value.Slackbot_SlackApiKey_BotUser;
         }
-
 
         public Task<IEnumerable<string>> GetTokens()
         {
@@ -23,5 +22,9 @@ namespace Slackbot.Net
             return Task.FromResult(strings.AsEnumerable());
         }
 
+        public Task<string> GetTokenByTeamId(string teamId)
+        {
+            return Task.FromResult(_token);
+        }
     }
 }

@@ -15,16 +15,20 @@ namespace Slackbot.Net.Connections
     internal class SlackConnectionSetup
     {
         private readonly IServiceProvider _services;
-        private readonly ILogger<Connector> _logger;
+        private readonly ILoggerFactory _loggerFactory;
         private readonly Dictionary<string,ConnectedWorkspace> _connectedWorkspaces;
         private readonly ITokenStore _tokenStore;
+        private ILogger<SlackConnectionSetup> _logger;
+        private ILogger<Connector> _loggerConnector;
 
         public SlackConnectionSetup(IServiceProvider services)
         {
             _services = services;
-            _logger = _services.GetService<ILogger<Connector>>();
+            _loggerFactory = _services.GetService<ILoggerFactory>();
             _connectedWorkspaces = new Dictionary<string, ConnectedWorkspace>();
             _tokenStore = _services.GetService<ITokenStore>();
+            _logger = _loggerFactory.CreateLogger<SlackConnectionSetup>();
+            _loggerConnector = _loggerFactory.CreateLogger<Connector>();
         }
         
         public async Task TryConnectWorkspaces()
@@ -48,10 +52,11 @@ namespace Slackbot.Net.Connections
         
         private async Task<IConnection> Connect(string token)
         {
+            
             var slackConnector = new Connector(new RtmOptions
             {
                 Token = token
-            });
+            },_loggerConnector);
 
             var handlerSelector = _services.GetService<HandlerSelector>();
             IConnection connection = null;

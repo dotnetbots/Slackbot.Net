@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slackbot.Net.SlackClients.Rtm.Configurations;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
@@ -13,22 +14,24 @@ namespace Slackbot.Net.SlackClients.Rtm
 {
     public class Connector : IConnector
     {
+        private readonly ILogger<Connector> _logger;
 
         private readonly IHandshakeClient _handshakeClient;
         private readonly IWebSocketClient _webSocket;
         private readonly IPingPongMonitor _pingPongMonitor;
         private readonly string _slackKey;
 
-        public Connector(IOptions<RtmOptions> options) : this(options.Value)
+        public Connector(IOptions<RtmOptions> options, ILogger<Connector> logger = null) : this(options.Value, logger)
         {
         }
         
-        public Connector(RtmOptions options) :
+        public Connector(RtmOptions options, ILogger<Connector> logger = null) :
             this(new HandshakeClient(new HttpClient()),
                 new WebSocketClientLite(new MessageInterpreter()),
                 new PingPongMonitor(new Timer(), new DateTimeKeeper()),
                 options.Token)
         {
+            _logger = logger;
         }
 
         internal Connector(
@@ -41,6 +44,9 @@ namespace Slackbot.Net.SlackClients.Rtm
             _webSocket = webSocket;
             _pingPongMonitor = pingPongMonitor;
             _slackKey = slackKey;
+            
+            if (_logger == null)
+                _logger = new NoOpLogger();
         }
 
         public async Task<IConnection> Connect()
@@ -68,5 +74,28 @@ namespace Slackbot.Net.SlackClients.Rtm
         }
 
       
+    }
+
+    public class NoOpLogger : ILogger<Connector>, IDisposable
+    {
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+            
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            return false;
+        }
+
+        public IDisposable BeginScope<TState>(TState state)
+        {
+            return this;
+        }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

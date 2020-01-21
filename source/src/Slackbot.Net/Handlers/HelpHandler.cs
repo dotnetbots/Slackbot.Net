@@ -4,18 +4,19 @@ using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Handlers
 {
     internal class HelpHandler
     {
-        private readonly IEnumerable<IPublisher> _publishers;
         private readonly IEnumerable<IHandleMessages> _handlers;
+        private readonly ISlackClient _slackClient;
 
-        public HelpHandler(IEnumerable<IPublisher> publishers, IEnumerable<IHandleMessages> handlers)
+        public HelpHandler(IEnumerable<IHandleMessages> handlers, ISlackClient slackClient)
         {
-            _publishers = publishers;
             _handlers = handlers;
+            _slackClient = slackClient;
         }
 
         public async Task<HandleResponse> Handle(SlackMessage message)
@@ -30,10 +31,8 @@ namespace Slackbot.Net.Handlers
                 Msg = text
             };
 
-            foreach(var publisher in _publishers)
-            {
-                await publisher.Publish(helpText);
-            }
+            await _slackClient.ChatPostMessage(message.ChatHub.Id, text);
+            
             return new HandleResponse("OK");
         }
 

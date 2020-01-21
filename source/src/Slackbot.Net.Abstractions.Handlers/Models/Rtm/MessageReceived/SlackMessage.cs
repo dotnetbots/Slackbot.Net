@@ -8,11 +8,9 @@ namespace Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived
         
         public bool MentionsBot { get; set; }
         public User User { get; set; }
-        public string TeamId { get; set; }
         public double Timestamp { get; set; }
         public string RawData { get; set; }
         public BotDetails Bot { get; set; }
-        
         public TeamDetails Team { get; set; }
     }
 
