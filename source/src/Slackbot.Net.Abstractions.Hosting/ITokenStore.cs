@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Slackbot.Net.Abstractions.Handlers
+namespace Slackbot.Net.Abstractions.Hosting
 {
     /// <summary>
     /// Provider of tokens from all workspaces that have installed your distributed Slack app

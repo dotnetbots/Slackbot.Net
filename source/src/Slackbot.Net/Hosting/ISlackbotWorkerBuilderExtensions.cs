@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Slackbot.Net;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Abstractions.Publishers;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Connections;
+using Slackbot.Net.Dynamic;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.Hosting;
 using Slackbot.Net.SlackClients.Http;
@@ -48,7 +50,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var slackOptions = new SlackOptions();
             configuration.Bind(slackOptions);
-            builder.Services.AddSlackbotClient(o => o.BotToken = slackOptions.Slackbot_SlackApiKey_BotUser);
             builder.AddRtmConnections();
         }
         
@@ -56,20 +57,13 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var slackOptions = new SlackOptions();
             configuration(slackOptions);
-            builder.Services.AddSlackbotClient(c =>
-            {
-                c.BotToken = slackOptions.Slackbot_SlackApiKey_BotUser;
-            });
-            builder.Services.AddSlackbotOauthClient(c =>
-            {
-                c.OauthToken = slackOptions.Slackbot_SlackApiKey_SlackApp;
-            });
             builder.AddRtmConnections();
         }
 
         private static ISlackbotWorkerBuilder AddRtmConnections(this ISlackbotWorkerBuilder builder)
         {
-            builder.Services.AddSingleton<ISlackClientFactory, SlackClientFactory>();
+            builder.Services.AddSingleton<ISlackClientService, SlackClientService>();
+            builder.Services.AddSlackClientBuilder();
             builder.Services.AddSingleton<SlackConnectionSetup>();
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackRtmConnectionHostedService>();

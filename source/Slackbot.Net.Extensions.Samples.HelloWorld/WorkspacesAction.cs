@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Slackbot.Net.Abstractions.Handlers;
+using Slackbot.Net.Abstractions.Hosting;
 
 namespace Slackbot.Net.Extensions.Samples.HelloWorld
 {
@@ -21,7 +22,7 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
         public async Task Process()
         {
             var ws = await _workspaceService.GetTokens();
-            _logger.LogInformation(string.Join("\n", ws.Select(c => $"Token: {Scrambled(c)}")));
+            _logger.LogTrace(string.Join("\n", ws.Select(c => $"Token: {Scrambled(c)}")));
         }
 
         private string Scrambled(string token)

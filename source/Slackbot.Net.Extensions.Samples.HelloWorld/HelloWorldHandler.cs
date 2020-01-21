@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
@@ -8,22 +9,29 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
 {
     internal class HelloWorldHandler : IHandleMessages
     {
-        private readonly IPublisher _publisher;
+        private readonly IEnumerable<IPublisherBuilder> _publishers;
         public bool ShouldShowInHelp { get; } = true;
         public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("hw", "hw");
 
-        public HelloWorldHandler(IPublisher publisher)
+        public HelloWorldHandler(IEnumerable<IPublisherBuilder> publishers)
         {
-            _publisher = publisher;
+            _publishers = publishers;
         }
         
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            await _publisher.Publish(new Notification
+            foreach (var p in _publishers)
             {
-                Msg = $"Hello world, {message.User.Name} ({message.User.FirstName} {message.User.LastName})\n" +
-                      $"I am {message.Bot.Name}"
-            });
+                var publisher = await p.Build(message.Team.Id);
+
+                await publisher.Publish(new Notification
+                {
+                    Msg = $"Hello world, {message.User.Name} ({message.User.FirstName} {message.User.LastName})\n" +
+                          $"I am {message.Bot.Name}",
+                    Recipient = message.ChatHub.Id
+                });   
+            }
+            
             return new HandleResponse("Responded");
         }
 

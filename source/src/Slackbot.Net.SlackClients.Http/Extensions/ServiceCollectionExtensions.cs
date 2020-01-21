@@ -8,19 +8,26 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddSlackbotClient(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSlackHttpClient(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<BotTokenClientOptions>(configuration);
             services.BuildSlackClient();
             return services;
         }
         
-        public static IServiceCollection AddSlackbotClient(this IServiceCollection services, Action<BotTokenClientOptions> configAction)
+        public static IServiceCollection AddSlackHttpClient(this IServiceCollection services, Action<BotTokenClientOptions> configAction)
         {
             services.Configure<BotTokenClientOptions>(configAction);
             services.BuildSlackClient();
             return services;
         }
+
+        public static IServiceCollection AddSlackClientBuilder(this IServiceCollection services)
+        {
+            services.AddSingleton<ISlackClientBuilder, SlackClientBuilder>();
+            return services;
+        }
+        
         private static void BuildSlackClient(this IServiceCollection services)
         {
             services.ConfigureOptions<SlackClientConfigurator>();
@@ -47,7 +54,7 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
             services.AddHttpClient(nameof(SlackOAuthAccessClient)).AddTypedClient<ISlackOAuthAccessClient, SlackOAuthAccessClient>();
             return services;
         }
-
+        
         private static void BuildSearchClient(this IServiceCollection services)
         {
             services.ConfigureOptions<SearchClientConfigurator>();

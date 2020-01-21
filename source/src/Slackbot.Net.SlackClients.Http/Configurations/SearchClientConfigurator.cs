@@ -32,12 +32,8 @@ namespace Slackbot.Net.SlackClients.Http.Configurations
             
             if (name is nameof(SearchClient))
             {
-                options.HttpClientActions.Add(c =>
-                {
-                    c.BaseAddress = new Uri("https://slack.com/api/");
-                    c.Timeout = TimeSpan.FromSeconds(15);
-                    c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                });
+                options.HttpClientActions.Add(c => CommonHttpClientConfiguration.ConfigureHttpClient(c, token));
+
             }
             
         }

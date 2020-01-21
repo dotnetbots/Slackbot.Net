@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
+using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.SlackClients.Rtm;
 using Slackbot.Net.SlackClients.Rtm.Configurations;

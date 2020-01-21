@@ -33,6 +33,9 @@ namespace Slackbot.Net.SlackClients.Http
             {
                 new KeyValuePair<string, string>("channel", channel),
                 new KeyValuePair<string, string>("text", text),
+                new KeyValuePair<string, string>("as_user", "true"),
+                new KeyValuePair<string, string>("link_names", "true")
+                
             };
             return await _client.PostParametersAsForm<ChatPostMessageResponse>(parameters, "chat.postMessage", s => _logger.LogTrace(s));
         }

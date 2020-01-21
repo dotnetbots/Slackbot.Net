@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Slackbot.Net.Abstractions.Handlers;
+using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Configuration;
 
 namespace Slackbot.Net

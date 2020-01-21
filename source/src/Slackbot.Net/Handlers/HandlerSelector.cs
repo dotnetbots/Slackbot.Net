@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
+using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.Dynamic;
 using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Handlers
@@ -25,7 +27,6 @@ namespace Slackbot.Net.Handlers
         public async Task HandleIncomingMessage(SlackMessage message)
         {
             IEnumerable<IHandleMessages> allHandlers = null;
-            IEnumerable<IPublisher> publishers = null;
             try
             {
                 allHandlers = _provider.GetServices<IHandleMessages>();
@@ -41,10 +42,8 @@ namespace Slackbot.Net.Handlers
 
             allHandlers = allHandlers.ToList();
 
-            var tokenStore = _provider.GetService<ITokenStore>();
-            var clientFactory = _provider.GetService<ISlackClientFactory>();
-            var tokenForTeam = await tokenStore.GetTokenByTeamId(message.Team.Id);
-            var slackClient = clientFactory.Create(tokenForTeam);
+            var service = _provider.GetService<ISlackClientService>();
+            var slackClient = await service.CreateClient(message.Team.Id);
             var helpHandler = new HelpHandler(allHandlers, slackClient);
 
             if (helpHandler.ShouldHandle(message))
