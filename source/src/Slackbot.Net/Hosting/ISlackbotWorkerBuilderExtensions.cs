@@ -19,6 +19,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SlackbotWorkerBuilderExtensions
     {
+        /// <summary>
+        /// For distributed apps
+        /// </summary>
         public static ISlackbotWorkerBuilder AddSlackbotWorker<T>(this IServiceCollection services) where T: class, ITokenStore
         {
             services.Configure<SlackOptions>(o => {});
@@ -28,12 +31,15 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
         
+        /// <summary>
+        /// For single workspace apps using a pre-configured token 
+        /// </summary>
         public static ISlackbotWorkerBuilder AddSlackbotWorker(this IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureAndValidate<SlackOptions>(configuration);
             services.AddSingleton<ITokenStore, ConfigurationTokenStore>();
             var builder = new SlackbotWorkerBuilder(services);
-            builder.AddWorkerDependencies(configuration);
+            builder.AddRtmConnections();
             return builder;
         }
 
@@ -42,22 +48,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.ConfigureAndValidate(action);
             services.AddSingleton<ITokenStore, ConfigurationTokenStore>();
             var builder = new SlackbotWorkerBuilder(services);
-            builder.AddWorkerDependencies(action);
+            builder.AddRtmConnections();
             return builder;
-        }
-
-        private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder, IConfiguration configuration)
-        {
-            var slackOptions = new SlackOptions();
-            configuration.Bind(slackOptions);
-            builder.AddRtmConnections();
-        }
-        
-        private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder, Action<SlackOptions> configuration)
-        {
-            var slackOptions = new SlackOptions();
-            configuration(slackOptions);
-            builder.AddRtmConnections();
         }
 
         private static ISlackbotWorkerBuilder AddRtmConnections(this ISlackbotWorkerBuilder builder)

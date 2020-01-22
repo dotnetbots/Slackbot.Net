@@ -4,7 +4,7 @@ using Slackbot.Net.Abstractions.Publishers;
 
 namespace Slackbot.Net.Extensions.Publishers.Logger
 {
-    public class LoggerPublisherBuilder : IPublisherBuilder
+    internal class LoggerPublisherBuilder : IPublisherBuilder
     {
         private readonly ILogger<LoggerPublisher> _logger;
 

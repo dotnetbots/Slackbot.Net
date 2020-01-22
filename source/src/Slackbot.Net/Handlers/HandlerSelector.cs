@@ -31,6 +31,26 @@ namespace Slackbot.Net.Handlers
             {
                 allHandlers = _provider.GetServices<IHandleMessages>();
             }
+            catch (InvalidOperationException ioe)
+            {
+                if (ioe.Message.Contains("Unable to resolve") && ioe.Message.Contains("IPublisherBuilder"))
+                {
+                    _logger.LogError("Attempted to use IPublisherBuilderFactory in a IHandleMessages implementation, but none were registered.\n" +
+                                     "Install one via NuGet, and add it using `AddSlackbotWorker().AddXXPublisher`\n" +
+                                     "Examples: AddLoggerPublisher, AddSlackPublisher");
+                }
+                if (ioe.Message.Contains("Unable to resolve") && ioe.Message.Contains("IPublisher"))
+                {
+                    _logger.LogError("Attempted to use IPublisher in a IHandleMessages implementation, but this type is deprecated.\n" +
+                                     "Use IPublisherBuilderFactory instead.");
+                }
+                else
+                {
+                    _logger.LogError(ioe.Message, ioe);
+                }
+
+                throw ioe;
+            }
             catch (Exception e)
             {
                 _logger.LogError(e.Message, e);
@@ -75,6 +95,13 @@ namespace Slackbot.Net.Handlers
             }
 
             yield return new NoOpHandler();
+        }
+    }
+
+    internal class SlackbotNetSetupException : Exception
+    {
+        public SlackbotNetSetupException(string msg, Exception ioe) : base(msg, ioe)
+        {
         }
     }
 }

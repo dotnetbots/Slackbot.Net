@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Rtm.Configurations;
-using Slackbot.Net.SlackClients.Rtm.Tests.Integration.Configuration;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
 {
     public abstract class IntegrationTest : IDisposable
     {
         protected IConnection Connection;
+        protected string Token;
 
         protected IntegrationTest()
         {
-
-            var slackConnector = new Connector(new RtmOptions { Token = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser")});
+            Token = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
+            var slackConnector = new Connector(new RtmOptions { Token = Token});
             Connection = Task.Run(() => slackConnector.Connect())
                     .GetAwaiter()
                     .GetResult();

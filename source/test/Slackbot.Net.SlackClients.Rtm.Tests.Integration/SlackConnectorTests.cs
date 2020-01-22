@@ -18,7 +18,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
             _helper = helper;
         }
         
-        [Fact]
+        [Fact(Skip = "Only run on demand!")]
         public async Task should_connect_and_stuff()
         {
             // given
@@ -29,7 +29,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
 
             // then
             Connection.IsConnected.ShouldBeTrue();
-            Thread.Sleep(TimeSpan.FromMinutes(5));
+            Thread.Sleep(TimeSpan.FromSeconds(30));
 
             // when
             await Connection.Close();

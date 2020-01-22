@@ -5,7 +5,7 @@ namespace Slackbot.Net.Extensions.Publishers.Slack
 {
     public static class SlackbotWorkerBuilderExtensions
     {
-        public static ISlackbotWorkerBuilder AddSlackPublisherFactory(this ISlackbotWorkerBuilder builder)
+        public static ISlackbotWorkerBuilder AddSlackPublisher(this ISlackbotWorkerBuilder builder)
         {
             builder.Services.AddSlackClientBuilder();
             builder.AddPublisherFactory<SlackPublisherBuilder>();
