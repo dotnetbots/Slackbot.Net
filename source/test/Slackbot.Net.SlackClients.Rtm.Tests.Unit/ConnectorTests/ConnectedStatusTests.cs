@@ -4,16 +4,13 @@ using Moq;
 using Shouldly;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
-using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
-using Slackbot.Net.SlackClients.Rtm.Exceptions;
 using Xunit;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
 {
     public class ConnectedStatusTests
     {
-        private string _slackKey = "slacKing-off-ey?";
         private readonly Mock<IHandshakeClient> _handshakeClient;
         private readonly Mock<IWebSocketClient> _webSocketClient;
         private readonly Mock<IPingPongMonitor> _pingPong;

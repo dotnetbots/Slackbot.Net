@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.Abstractions.Publishers;
-using Slackbot.Net.Dynamic;
 
 namespace Slackbot.Net.Extensions.Samples.HelloWorld
 {
@@ -12,8 +10,6 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
     {
         // private readonly IEnumerable<IPublisher> _publishers;
         private readonly IPublisher _publishers;
-        private readonly ISlackClientService _clientService;
-        private readonly IPublisherBuilder _publisherFactory;
         public bool ShouldShowInHelp { get; } = true;
         public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("derp", "derp");
 
