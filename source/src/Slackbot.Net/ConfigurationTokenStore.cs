@@ -27,5 +27,10 @@ namespace Slackbot.Net
         {
             return Task.FromResult(_token);
         }
+
+        public Task Delete(string token)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

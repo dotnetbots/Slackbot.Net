@@ -28,7 +28,7 @@ namespace Slackbot.Net.Tests
                 c.BotToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
             });
 
-            services.AddSlackbotOauthAccessClient();
+            services.AddSlackbotOauthAccessHttpClient();
 
             services.AddSingleton<ILogger<ISlackClient>>(new XUnitLogger<ISlackClient>(helper));
             

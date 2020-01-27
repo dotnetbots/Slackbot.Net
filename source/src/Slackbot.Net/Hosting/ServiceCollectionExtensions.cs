@@ -26,9 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.Configure<SlackOptions>(o => {});
             services.AddSingleton<ITokenStore, T>();
-            var builder = new SlackbotWorkerBuilder(services);
-            builder.AddRtmConnections();
-            return builder;
+            return new SlackbotWorkerBuilder(services);
         }
         
         /// <summary>
@@ -38,28 +36,14 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.ConfigureAndValidate<SlackOptions>(configuration);
             services.AddSingleton<ITokenStore, ConfigurationTokenStore>();
-            var builder = new SlackbotWorkerBuilder(services);
-            builder.AddRtmConnections();
-            return builder;
+            return new SlackbotWorkerBuilder(services);
         }
 
         public static ISlackbotWorkerBuilder AddSlackbotWorker(this IServiceCollection services, Action<SlackOptions> action)
         {
             services.ConfigureAndValidate(action);
             services.AddSingleton<ITokenStore, ConfigurationTokenStore>();
-            var builder = new SlackbotWorkerBuilder(services);
-            builder.AddRtmConnections();
-            return builder;
-        }
-
-        private static ISlackbotWorkerBuilder AddRtmConnections(this ISlackbotWorkerBuilder builder)
-        {
-            builder.Services.AddSingleton<ISlackClientService, SlackClientService>();
-            builder.Services.AddSlackClientBuilder();
-            builder.Services.AddSingleton<SlackConnectionSetup>();
-            builder.Services.AddSingleton<HandlerSelector>();
-            builder.Services.AddHostedService<SlackRtmConnectionHostedService>();
-            return builder;
-        }
+            return new SlackbotWorkerBuilder(services);
+        }        
     }
 }

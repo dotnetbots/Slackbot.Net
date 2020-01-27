@@ -10,5 +10,6 @@ namespace Slackbot.Net.Abstractions.Hosting
     {
         Task<IEnumerable<string>> GetTokens();
         Task<string> GetTokenByTeamId(string teamId);
+        Task Delete(string token);
     }
-}
+}   

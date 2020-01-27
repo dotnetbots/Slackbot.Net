@@ -60,6 +60,16 @@ namespace Slackbot.Net.SlackClients.Rtm
 
             if (!handshakeResponse.Ok)
             {
+                if (handshakeResponse.Error == "token_revoked")
+                {
+                    throw new TokenRevokedException(handshakeResponse.Error);
+                }
+
+                if (handshakeResponse.Error == "missing_scope")
+                {
+                    throw new MissingScopeException(handshakeResponse.Error);
+
+                }
                 throw new HandshakeException(handshakeResponse.Error);
             }
 

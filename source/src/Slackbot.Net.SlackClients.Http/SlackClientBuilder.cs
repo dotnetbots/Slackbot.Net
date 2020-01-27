@@ -1,5 +1,6 @@
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Slackbot.Net.SlackClients.Http.Configurations;
 
 namespace Slackbot.Net.SlackClients.Http
@@ -12,7 +13,12 @@ namespace Slackbot.Net.SlackClients.Http
         {
             _loggerFactory = loggerFactory;
         }
-        
+
+        public ISlackClient BuildFromConfiguration()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public ISlackClient Build(string token)
         {
             var c = new HttpClient();

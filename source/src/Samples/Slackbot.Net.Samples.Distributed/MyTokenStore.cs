@@ -8,11 +8,11 @@ namespace Slackbot.Net.Samples.Distributed
 {
     internal class MyTokenStore : ITokenStore
     {
-        private readonly List<Workspace> _tokens;
+        private readonly List<Workspace> _workspaces;
 
         public MyTokenStore()
         {
-            _tokens = new List<Workspace>()
+            _workspaces = new List<Workspace>()
             {
                 new Workspace { 
                     Token = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser"),
@@ -27,12 +27,19 @@ namespace Slackbot.Net.Samples.Distributed
         
         public Task<IEnumerable<string>> GetTokens()
         {
-            return Task.FromResult(_tokens.Select(c => c.Token));
+            return Task.FromResult(_workspaces.Select(c => c.Token));
         }
 
         public Task<string> GetTokenByTeamId(string teamId)
         {
-            return Task.FromResult(_tokens.First(t => t.TeamId == teamId).Token);
+            return Task.FromResult(_workspaces.First(t => t.TeamId == teamId).Token);
+        }
+
+        public Task Delete(string token)
+        {
+            var workspaceToRemove = _workspaces.First(w => w.Token == token);
+            _workspaces.Remove(workspaceToRemove);
+            return Task.CompletedTask;
         }
 
         private class Workspace

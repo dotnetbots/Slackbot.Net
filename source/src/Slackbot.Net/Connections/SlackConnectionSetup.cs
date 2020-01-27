@@ -63,6 +63,18 @@ namespace Slackbot.Net.Connections
             {
                 connection = await slackConnector.Connect();
             }
+            catch (TokenRevokedException tre)
+            {
+                _logger.LogWarning($"Token was revoked, and will be deleted. {LastSectionOf(token)}\n{tre.Message}");
+                await _tokenStore.Delete(token);
+                _logger.LogInformation($"Token deleted. {LastSectionOf(token)}");
+            }
+            catch (MissingScopeException mse)
+            {
+                _logger.LogWarning($"Token was lacking scopes, and will be deleted. {LastSectionOf(token)}\n{mse.Message}");
+                await _tokenStore.Delete(token);
+                _logger.LogInformation($"Token deleted. {LastSectionOf(token)}");
+            }
             catch (HandshakeException he)
             {
                 _logger.LogError($"Could not connect using token ending in {LastSectionOf(token)}\n{he.Message}");
