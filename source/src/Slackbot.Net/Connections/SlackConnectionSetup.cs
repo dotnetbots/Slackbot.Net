@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.SlackClients.Rtm;
@@ -16,7 +15,6 @@ namespace Slackbot.Net.Connections
     internal class SlackConnectionSetup
     {
         private readonly IServiceProvider _services;
-        private readonly ILoggerFactory _loggerFactory;
         private readonly Dictionary<string,ConnectedWorkspace> _connectedWorkspaces;
         private readonly ITokenStore _tokenStore;
         private ILogger<SlackConnectionSetup> _logger;
@@ -25,11 +23,11 @@ namespace Slackbot.Net.Connections
         public SlackConnectionSetup(IServiceProvider services)
         {
             _services = services;
-            _loggerFactory = _services.GetService<ILoggerFactory>();
+            var loggerFactory = _services.GetService<ILoggerFactory>();
             _connectedWorkspaces = new Dictionary<string, ConnectedWorkspace>();
             _tokenStore = _services.GetService<ITokenStore>();
-            _logger = _loggerFactory.CreateLogger<SlackConnectionSetup>();
-            _loggerConnector = _loggerFactory.CreateLogger<Connector>();
+            _logger = loggerFactory.CreateLogger<SlackConnectionSetup>();
+            _loggerConnector = loggerFactory.CreateLogger<Connector>();
         }
         
         public async Task TryConnectWorkspaces()

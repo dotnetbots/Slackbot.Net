@@ -4,7 +4,7 @@ using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Extensions.Publishers.Slack
 {
-    internal class SlackPublisher : IPublisher
+    public class SlackPublisher : IPublisher
     {
         private readonly ISlackClient _sender;
 

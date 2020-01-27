@@ -11,14 +11,14 @@ namespace Slackbot.Net
 {
     internal class CronBackgroundService : BackgroundService
     {
-        private readonly IRecurringAction _action;
+        protected readonly IRecurringAction Action;
         private readonly ILogger _logger;
         private readonly Timing _timing;
 
         public CronBackgroundService(IRecurringAction action, ILogger logger)
         {
             _timing = new Timing(action.GetTimeZoneId());
-            _action = action;
+            Action = action;
             _logger = logger;
             Cron = action.Cron;
             _logger.LogDebug($"Using {Cron} and timezone '{_timing.TimeZoneInfo.Id}. The time in this timezone: {_timing.RelativeNow()}'");
@@ -46,7 +46,7 @@ namespace Slackbot.Net
                 {
                     try
                     {
-                        await _action.Process();
+                        await Action.Process();
                     }
                     catch (Exception e)
                     {
