@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
@@ -10,6 +11,12 @@ namespace Slackbot.Net
         public SlackRtmConnectionHostedService(SlackConnectionSetup setup, ILoggerFactory loggerFactory)
         : base(new WorkspaceConnectorRecurringAction(setup), loggerFactory.CreateLogger<WorkspaceConnectorRecurringAction>())
         {
+        }
+
+        public override async Task StartAsync(CancellationToken cancellationToken)
+        {
+            // execute on startup in addition to every X as by CRON expr.
+            await Action.Process();
         }
     }
 
@@ -27,6 +34,6 @@ namespace Slackbot.Net
             await _setup.TryConnectWorkspaces();
         }
 
-        public string Cron { get; } = "*/5 * * * * *";
+        public string Cron { get; } = "0 */1 * * * *";
     }
 }
