@@ -49,7 +49,7 @@ namespace Slackbot.Net.Connections
             }
         }
         
-        private async Task<IConnection> Connect(string token)
+        private async Task Connect(string token)
         {
             
             var slackConnector = new Connector(new RtmOptions
@@ -68,17 +68,24 @@ namespace Slackbot.Net.Connections
                 _logger.LogWarning($"Token was revoked, and will be deleted. {LastSectionOf(token)}\n{tre.Message}");
                 await _tokenStore.Delete(token);
                 _logger.LogInformation($"Token deleted. {LastSectionOf(token)}");
+                return;
             }
             catch (MissingScopeException mse)
             {
                 _logger.LogWarning($"Token was lacking scopes, and will be deleted. {LastSectionOf(token)}\n{mse.Message}");
                 await _tokenStore.Delete(token);
                 _logger.LogInformation($"Token deleted. {LastSectionOf(token)}");
+                return;
             }
             catch (HandshakeException he)
             {
                 _logger.LogError($"Could not connect using token ending in {LastSectionOf(token)}\n{he.Message}");
-                return connection;
+                return;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Could not connect using token ending in {LastSectionOf(token)}\n{e.Message}");
+                return;
             }
 
             connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
@@ -94,7 +101,6 @@ namespace Slackbot.Net.Connections
             if (conn.IsConnected)
                 _logger.LogInformation($"Connected to workspace {workspace.TeamName}");
            
-            return conn;
         }
 
         private string LastSectionOf(string token)

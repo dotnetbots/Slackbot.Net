@@ -19,7 +19,13 @@ namespace Slackbot.Net.Samples.Standalone
                 .ConfigureServices((c,s) =>
                 {
                     s.AddSlackbotWorker(c.Configuration)
-                        .AddLoggerPublisher()
+                        .AddSlackPublisher(p =>
+                        {
+                            var botToken = c.Configuration.GetValue<string>(nameof(SlackOptions.Slackbot_SlackApiKey_BotUser));
+                            p.BotToken = botToken;
+                        })
+                        .AddSlackPublisherBuilder()
+                        .AddLoggerPublisherBuilder()
                         .AddSamples();
                 })
                 .ConfigureLogging(c => c.AddConsole().SetMinimumLevel(LogLevel.Debug))

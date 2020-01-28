@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
@@ -9,22 +10,22 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
     internal class DeprecatedHandler : IHandleMessages
     {
         // private readonly IEnumerable<IPublisher> _publishers;
-        private readonly IPublisher _publishers;
+        private readonly IEnumerable<IPublisher> _publishers;
         public bool ShouldShowInHelp { get; } = true;
         public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("derp", "derp");
 
-        public DeprecatedHandler(IPublisher publishers)
+        public DeprecatedHandler(IEnumerable<IPublisher> publishers)
         {
             _publishers = publishers;
         }
         
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            // foreach (var publisher in _publishers)
-            // {
-                await _publishers.Publish(new Notification {Recipient = message.ChatHub.Id, Msg = "Publisher Pong"});
-
-            // }
+            foreach (var publisher in _publishers)
+            {
+                await publisher.Publish(new Notification {Recipient = message.ChatHub.Id, Msg = "Publisher Pong"});
+            
+            }
             return new HandleResponse("Responded");
         }
 

@@ -15,7 +15,7 @@ namespace Slackbot.Net.Samples.Distributed
                 .ConfigureServices((c, s) =>
                 {
                     s.AddSlackbotWorker<MyTokenStore>()
-                        .AddSlackPublisher()
+                        .AddSlackPublisherBuilder()
                         .AddSamples();
                 })
                 .ConfigureLogging(c => c.AddConsole().SetMinimumLevel(LogLevel.Debug))
