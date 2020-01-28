@@ -17,11 +17,6 @@ namespace Slackbot.Net.SlackClients.Http
             _options = options;
         }
 
-        public ISlackClient BuildFromConfiguration()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public ISlackClient Build(string token)
         {
             var c = new HttpClient();

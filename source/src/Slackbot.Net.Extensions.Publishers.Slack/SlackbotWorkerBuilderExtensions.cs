@@ -9,6 +9,9 @@ namespace Slackbot.Net.Extensions.Publishers.Slack
 {
     public static class SlackbotWorkerBuilderExtensions
     {
+        /// <summary>
+        /// For distributed apps
+        /// </summary>
         public static ISlackbotWorkerBuilder AddSlackPublisherBuilder(this ISlackbotWorkerBuilder builder)
         {
             builder.Services.AddSlackClientBuilder();
@@ -16,6 +19,10 @@ namespace Slackbot.Net.Extensions.Publishers.Slack
             return builder;
         }
         
+        /// <summary>
+        /// For standalone apps
+        /// NB: Also registers ISlackClient for use via DI. No need to register SlackClient seperately
+        /// </summary>
         public static ISlackbotWorkerBuilder AddSlackPublisher(this ISlackbotWorkerBuilder builder, Action<BotTokenClientOptions> config)
         {
             builder.Services.AddSlackHttpClient(config);

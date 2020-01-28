@@ -8,6 +8,10 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Registers a config-based SlackClient 
+        /// Provide token at startup
+        /// </summary>
         public static IServiceCollection AddSlackHttpClient(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<BotTokenClientOptions>(configuration);
@@ -15,6 +19,11 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
             return services;
         }
         
+        
+        /// <summary>
+        /// Registers a config-based SlackClient 
+        /// Provide token at startup
+        /// </summary>
         public static IServiceCollection AddSlackHttpClient(this IServiceCollection services, Action<BotTokenClientOptions> configAction)
         {
             services.Configure<BotTokenClientOptions>(configAction);
@@ -22,12 +31,16 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
             return services;
         }
 
+        /// <summary>
+        /// Registers a config-less builder for creating a SlackClient runtime.
+        /// Provide token to build a SlackClient runtime.
+        /// </summary>
         public static IServiceCollection AddSlackClientBuilder(this IServiceCollection services)
         {
             services.AddSingleton<ISlackClientBuilder, SlackClientBuilder>();
             return services;
         }
-        
+    
         private static void BuildSlackClient(this IServiceCollection services)
         {
             services.ConfigureOptions<SlackClientConfigurator>();

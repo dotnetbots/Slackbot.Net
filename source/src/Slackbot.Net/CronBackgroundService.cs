@@ -21,7 +21,7 @@ namespace Slackbot.Net
             Action = action;
             _logger = logger;
             Cron = action.Cron;
-            _logger.LogDebug($"Using {Cron} and timezone '{_timing.TimeZoneInfo.Id}. The time in this timezone: {_timing.RelativeNow()}'");
+            _logger.LogTrace($"Using {Cron} and timezone '{_timing.TimeZoneInfo.Id}. The time in this timezone: {_timing.RelativeNow()}'");
         }
 
         private string Cron { get; }
@@ -39,7 +39,7 @@ namespace Slackbot.Net
                     next = _timing.GetNextOccurenceInRelativeTime(Cron);
                     var uText = _timing.Get10NextOccurrences(Cron);
                     var logText = $"Ten next occurrences :\n{uText.Aggregate((x,y) => x + "\n" + y)}";
-                    _logger.LogInformation(logText);
+                    _logger.LogTrace(logText);
                 }
 
                 if (now > next)
