@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Extensions.Publishers.Logger;
 using Slackbot.Net.Extensions.Publishers.Slack;
