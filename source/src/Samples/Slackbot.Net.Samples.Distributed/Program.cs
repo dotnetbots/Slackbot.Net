@@ -18,7 +18,11 @@ namespace Slackbot.Net.Samples.Distributed
                         .AddSlackPublisherBuilder()
                         .AddSamples();
                 })
-                .ConfigureLogging(c => c.AddConsole().SetMinimumLevel(LogLevel.Debug))
+                .ConfigureLogging(c =>
+                {
+                    c.AddFilter("Slackbot.Net.SlackClients.Http",level => level == LogLevel.Information);
+                    c.AddConsole().SetMinimumLevel(LogLevel.Trace);
+                })
                 .Build();
 
             using (host)

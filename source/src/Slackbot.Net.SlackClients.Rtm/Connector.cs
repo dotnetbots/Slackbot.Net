@@ -60,7 +60,7 @@ namespace Slackbot.Net.SlackClients.Rtm
 
             if (!handshakeResponse.Ok)
             {
-                if (handshakeResponse.Error == "token_revoked")
+                if (handshakeResponse.Error == "token_revoked" || handshakeResponse.Error == "account_inactive")
                 {
                     throw new TokenRevokedException(handshakeResponse.Error);
                 }

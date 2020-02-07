@@ -17,6 +17,7 @@ namespace Slackbot.Net
         {
             // execute on startup in addition to every X as by CRON expr.
             await Action.Process();
+            await base.StartAsync(cancellationToken);
         }
     }
 
@@ -34,6 +35,6 @@ namespace Slackbot.Net
             await _setup.TryConnectWorkspaces();
         }
 
-        public string Cron { get; } = "0 */1 * * * *";
+        public string Cron { get; } = "*/10 * * * * *";
     }
 }

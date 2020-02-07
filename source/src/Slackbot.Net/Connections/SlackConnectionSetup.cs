@@ -33,6 +33,11 @@ namespace Slackbot.Net.Connections
         public async Task TryConnectWorkspaces()
         {
             var tokens = await _tokenStore.GetTokens();
+
+            if (tokens == null || !tokens.Any())
+            {
+                _logger.LogInformation("No tokens returned from token store. Skipping connects.");
+            }
         
             foreach (var token in tokens)
             {
