@@ -50,7 +50,7 @@ namespace Slackbot.Net
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(e.Message, e);
+                        _logger.LogError(e, e.Message);
                     }
                     
                     next = _timing.GetNextOccurenceInRelativeTime(Cron);

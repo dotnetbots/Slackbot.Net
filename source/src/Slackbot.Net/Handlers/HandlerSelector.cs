@@ -53,7 +53,7 @@ namespace Slackbot.Net.Handlers
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message, e);
+                _logger.LogError(e, e.Message);
                 throw e;
             }
             
