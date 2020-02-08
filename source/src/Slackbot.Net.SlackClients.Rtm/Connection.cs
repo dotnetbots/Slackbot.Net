@@ -24,7 +24,7 @@ namespace Slackbot.Net.SlackClients.Rtm
         public ContactDetails Team { get; private set; }
         public ContactDetails Self { get; private set; }
         
-        public IReadOnlyDictionary<string, ChatHub> ConnectedHubs { get; private set; }
+        public IDictionary<string, ChatHub> ConnectedHubs { get; private set; }
         public DateTime? ConnectedSince { get; private set; }
 
         public string SlackKey { get; private set; }
@@ -79,8 +79,20 @@ namespace Slackbot.Net.SlackClients.Rtm
             {
                 case MessageType.Message: return HandleMessage((ChatMessage)inboundMessage);
                 case MessageType.Pong: return HandlePong((PongMessage)inboundMessage);
+                case MessageType.Channel_Joined: return HandleChannelJoined((ChannelJoinedMessage)inboundMessage);
+
             }
 
+            return Task.CompletedTask;
+        }
+        
+        private Task HandleChannelJoined(ChannelJoinedMessage inboundMessage)
+        {
+            string channelId = inboundMessage?.Channel?.Id;
+            if (channelId == null) return Task.CompletedTask;
+
+            var hub = inboundMessage.Channel.ToChatHub();
+            ConnectedHubs[channelId] = hub;
             return Task.CompletedTask;
         }
 

@@ -24,6 +24,9 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
                     case MessageType.Message:
                         message = GetChatMessage(json);
                         break;
+                    case MessageType.Channel_Joined:
+                        message = JsonConvert.DeserializeObject<ChannelJoinedMessage>(json);
+                        break;
                     case MessageType.Pong:
                         message = JsonConvert.DeserializeObject<PongMessage>(json);
                         break;

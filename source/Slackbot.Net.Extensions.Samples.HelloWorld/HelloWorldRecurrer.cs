@@ -33,7 +33,7 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
                     var user = users.Members.FirstOrDefault(IsMySelf);
                     if (user != null)
                     {
-                        await slackClient.ChatPostMessage(user.Id, $"Hi, @{user.Name}!");
+                        //await slackClient.ChatPostMessage(user.Id, $"Hi, @{user.Name}!");
                     }
                     else
                     {

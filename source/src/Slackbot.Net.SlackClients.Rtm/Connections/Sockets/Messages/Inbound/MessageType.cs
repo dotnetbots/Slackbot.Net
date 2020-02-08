@@ -4,6 +4,7 @@
     {
         Unknown = 0,
         Message,
-        Pong,
+        Channel_Joined,
+        Pong
     }
 }
