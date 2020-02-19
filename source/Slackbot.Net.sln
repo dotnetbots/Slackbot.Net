@@ -36,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{10CBAF56
 ProjectSection(SolutionItems) = preProject
 	..\build.cake = ..\build.cake
 		..\CI.yml = ..\.github\workflows\CI.yml
+	..\tools\packages.config = ..\tools\packages.config
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Samples.Distributed", "src\Samples\Slackbot.Net.Samples.Distributed\Slackbot.Net.Samples.Distributed.csproj", "{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}"
