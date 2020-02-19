@@ -10,8 +10,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
             MessageType = MessageType.Pong;
         }
 
-        [JsonProperty("time")]
         public DateTime Timestamp { get; set; }
+
         [JsonProperty("reply_to")]
         public int ReplyTo { get; set; }
     }

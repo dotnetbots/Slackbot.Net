@@ -44,7 +44,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
                 {
                     _isReconnecting = true;
                     _reconnectMethod()
-                        .ContinueWith(task => _isReconnecting = false)
+                        .ContinueWith(task =>
+                        {
+                            return _isReconnecting = false;
+                        })
                         .ConfigureAwait(false)
                         .GetAwaiter()
                         .GetResult();

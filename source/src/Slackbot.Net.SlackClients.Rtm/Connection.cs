@@ -60,20 +60,22 @@ namespace Slackbot.Net.SlackClients.Rtm
 
         private async Task Reconnect()
         {
-            var reconnectingEvent = RaiseOnReconnecting();
+            await RaiseOnReconnecting();
 
-            var handshake = await _handshakeClient.FirmShake(SlackKey);
-            if (handshake.Ok)
+            if (!_webSocketClient.IsAlive)
             {
-                await _webSocketClient.Connect(handshake.WebSocketUrl);    
-            }
-            else
-            {
-                Console.WriteLine($"Handshake error in Reconnect: {handshake.Error}");
+                var handshake = await _handshakeClient.FirmShake(SlackKey);
+                if (handshake.Ok)
+                {
+                    await _webSocketClient.Connect(handshake.WebSocketUrl);    
+                }
+                else
+                {
+                    Console.WriteLine($"Handshake error in Reconnect: {handshake.Error}");
+                }
             }
             
-
-            await Task.WhenAll(reconnectingEvent, RaiseOnReconnect());
+            await RaiseOnReconnect();
         }
 
         private Task ListenTo(InboundMessage inboundMessage)
