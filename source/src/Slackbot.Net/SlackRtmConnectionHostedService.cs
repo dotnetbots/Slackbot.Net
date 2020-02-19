@@ -16,7 +16,7 @@ namespace Slackbot.Net
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             // execute on startup in addition to every X as by CRON expr.
-            await Action.Process();
+            // await Action.Process();
             await base.StartAsync(cancellationToken);
         }
     }

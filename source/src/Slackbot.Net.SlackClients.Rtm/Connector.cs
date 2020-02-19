@@ -73,12 +73,17 @@ namespace Slackbot.Net.SlackClients.Rtm
                 throw new HandshakeException(handshakeResponse.Error);
             }
 
-            var connectionInfo = ConnectionInformationMapper.CreateConnectionInformation(_slackKey, handshakeResponse);
+            if (handshakeResponse != null)
+            {
+                var connectionInfo = ConnectionInformationMapper.CreateConnectionInformation(_slackKey, handshakeResponse);
 
-            var connection =  new Connection(_pingPongMonitor, _handshakeClient, _webSocket);
-            await connection.Initialise(connectionInfo);
+                var connection =  new Connection(_pingPongMonitor, _handshakeClient, _webSocket);
+                await connection.Initialise(connectionInfo);
             
-            return connection;
+                return connection;
+            }
+
+            return null;
         }
 
       

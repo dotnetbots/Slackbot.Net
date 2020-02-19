@@ -30,6 +30,13 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
             if (string.IsNullOrEmpty(token))
                 return "<empty> Check config/source?";
             
+            if (token.Length > 5)
+            {
+                var last5 = token.Substring(token.Length - 5);
+                var stars = new string('*', token.Length - 5);
+                return $"{stars}{last5}";
+            }
+            
             return new string('*', token.Length);
         }
 

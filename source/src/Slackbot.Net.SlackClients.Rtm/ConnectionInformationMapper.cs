@@ -21,6 +21,7 @@ namespace Slackbot.Net.SlackClients.Rtm
                 Team = new ContactDetails {Id = handshakeResponse.Team.Id, Name = handshakeResponse.Team.Name},
                 Users = users,
                 SlackChatHubs = slackChatHubs,
+                WebSocketUrl = handshakeResponse.WebSocketUrl
             };
             return connectionInfo;
         }

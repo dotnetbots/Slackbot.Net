@@ -87,11 +87,6 @@ namespace Slackbot.Net.Connections
                 _logger.LogError($"Could not connect using token ending in {LastSectionOf(token)}\n{he.Message}");
                 return;
             }
-            catch (Exception e)
-            {
-                _logger.LogError($"Could not connect using token ending in {LastSectionOf(token)}\n{e.Message}");
-                return;
-            }
 
             connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
             connection.OnDisconnect += () => Log("disconnecting", connection.Team?.Name);
@@ -105,10 +100,10 @@ namespace Slackbot.Net.Connections
                 Connection = connection
             };
             _connectedWorkspaces.Add(workspace.TeamId, workspace);
-           
+       
             if (connection.IsConnected)
-                _logger.LogInformation($"Connected to workspace {workspace.TeamName}");
-           
+                _logger.LogInformation($"Connected to workspace {workspace.TeamName}"); 
+            
         }
 
         private Task Log(string action, string teamName)

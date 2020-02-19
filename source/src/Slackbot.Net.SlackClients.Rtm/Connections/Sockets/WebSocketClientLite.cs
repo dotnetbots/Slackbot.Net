@@ -16,7 +16,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
         private IMessageWebSocketRx _webSocket;
         private int _currentMessageId;
 
-        public bool IsAlive => _webSocket.IsConnected;
+        public bool IsAlive => _webSocket?.IsConnected ?? false;
 
         public WebSocketClientLite(IMessageInterpreter interpreter)
         {
@@ -44,7 +44,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
             message.Id = _currentMessageId;
             var json = JsonConvert.SerializeObject(message);
 
-            await _webSocket.SendTextAsync(json);
+            if (_webSocket == null)
+            {
+                Console.WriteLine("WebSocket was null");
+            }
+            else
+            {
+                await _webSocket.SendTextAsync(json);
+            }
         }
 
         public async Task Close()

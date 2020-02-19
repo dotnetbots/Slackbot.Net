@@ -9,5 +9,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
         public ContactDetails Team { get; set; } = new ContactDetails();
         public Dictionary<string, User> Users { get; set; } = new Dictionary<string, User>();
         public Dictionary<string, ChatHub> SlackChatHubs { get; set; } = new Dictionary<string, ChatHub>();
+        
+        public string WebSocketUrl { get; set; }
     }
 }

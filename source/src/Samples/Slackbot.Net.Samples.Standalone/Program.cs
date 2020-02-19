@@ -9,6 +9,7 @@ using Slackbot.Net.Configuration;
 using Slackbot.Net.Extensions.Publishers.Logger;
 using Slackbot.Net.Extensions.Publishers.Slack;
 using Slackbot.Net.Extensions.Samples.HelloWorld;
+using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Samples.Standalone
 {
@@ -29,7 +30,10 @@ namespace Slackbot.Net.Samples.Standalone
                         .AddLoggerPublisherBuilder()
                         .AddSamples();
                 })
-                .ConfigureLogging(c => c.AddConsole().SetMinimumLevel(LogLevel.Debug))
+                .ConfigureLogging(c =>
+                {
+                    c.AddConsole().SetMinimumLevel(LogLevel.Trace).AddFilter("Slackbot.Net.SlackClients.Http", LogLevel.Information);
+                })
                 .Build();
 
             using (host)

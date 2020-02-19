@@ -45,7 +45,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             Self = connectionInformation.Self;
             _userCache = connectionInformation.Users;
             ConnectedHubs = connectionInformation.SlackChatHubs;
-
+            await _webSocketClient.Connect(connectionInformation.WebSocketUrl);
             _webSocketClient.OnClose += (sender, args) =>
             {
                 ConnectedSince = null;
@@ -63,7 +63,15 @@ namespace Slackbot.Net.SlackClients.Rtm
             var reconnectingEvent = RaiseOnReconnecting();
 
             var handshake = await _handshakeClient.FirmShake(SlackKey);
-            await _webSocketClient.Connect(handshake.WebSocketUrl);
+            if (handshake.Ok)
+            {
+                await _webSocketClient.Connect(handshake.WebSocketUrl);    
+            }
+            else
+            {
+                Console.WriteLine($"Handshake error in Reconnect: {handshake.Error}");
+            }
+            
 
             await Task.WhenAll(reconnectingEvent, RaiseOnReconnect());
         }
