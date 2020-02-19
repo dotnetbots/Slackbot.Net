@@ -94,18 +94,27 @@ namespace Slackbot.Net.Connections
             }
 
             connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
-            var conn = connection;
+            connection.OnDisconnect += () => Log("disconnecting", connection.Team?.Name);
+            connection.OnReconnect += () => Log("reconnect", connection.Team?.Name);
+            connection.OnReconnecting += () => Log("reconnecting", connection.Team?.Name);
             var workspace = new ConnectedWorkspace
             {
                 Token = token, 
-                TeamId = conn.Team.Id, 
-                TeamName = conn.Team.Name
+                TeamId = connection.Team.Id, 
+                TeamName = connection.Team.Name,
+                Connection = connection
             };
             _connectedWorkspaces.Add(workspace.TeamId, workspace);
            
-            if (conn.IsConnected)
+            if (connection.IsConnected)
                 _logger.LogInformation($"Connected to workspace {workspace.TeamName}");
            
+        }
+
+        private Task Log(string action, string teamName)
+        {
+            _logger.LogWarning($"{action} '{teamName}'");
+            return Task.CompletedTask;
         }
 
         private string LastSectionOf(string token)
