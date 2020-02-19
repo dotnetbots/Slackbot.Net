@@ -73,8 +73,6 @@ namespace Slackbot.Net.SlackClients.Rtm
                 throw new HandshakeException(handshakeResponse.Error);
             }
 
-            await _webSocket.Connect(handshakeResponse.WebSocketUrl);
-            
             var connectionInfo = ConnectionInformationMapper.CreateConnectionInformation(_slackKey, handshakeResponse);
 
             var connection =  new Connection(_pingPongMonitor, _handshakeClient, _webSocket);
