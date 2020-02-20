@@ -45,7 +45,8 @@ namespace Slackbot.Net.SlackClients.Rtm
             Self = connectionInformation.Self;
             _userCache = connectionInformation.Users;
             ConnectedHubs = connectionInformation.SlackChatHubs;
-            await _webSocketClient.Connect(connectionInformation.WebSocketUrl);
+            _webSocketClient.Connect(connectionInformation.WebSocketUrl).GetAwaiter().GetResult();
+            
             _webSocketClient.OnClose += (sender, args) =>
             {
                 ConnectedSince = null;

@@ -20,7 +20,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
             _dateTimeKeeper = dateTimeKeeper;
         }
 
-        public async Task StartMonitor(Func<Task> pingMethod, Func<Task> reconnectMethod, TimeSpan pongTimeout)
+        public Task StartMonitor(Func<Task> pingMethod, Func<Task> reconnectMethod, TimeSpan pongTimeout)
         {
             if (_dateTimeKeeper.HasDateTime())
             {
@@ -31,7 +31,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
             _reconnectMethod = reconnectMethod;
             _pongTimeout = pongTimeout;
 
-            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(20));
+            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(5));
+            return Task.CompletedTask;
         }
 
         private void TimerTick()
@@ -57,7 +58,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
 
         private bool NeedsToReconnect()
         {
-            return _dateTimeKeeper.HasDateTime() && _dateTimeKeeper.TimeSinceDateTime() > _pongTimeout;
+            var shouldReconnect = _dateTimeKeeper.HasDateTime() && _dateTimeKeeper.TimeSinceDateTime() > _pongTimeout;
+            if(shouldReconnect)
+                Console.WriteLine($"Time since last pong: {_dateTimeKeeper.TimeSinceDateTime()}");
+            
+            return shouldReconnect;
         }
 
         public void Pong()
