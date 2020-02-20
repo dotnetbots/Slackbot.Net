@@ -15,9 +15,13 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
         private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
         private IMessageWebSocketRx _webSocket;
         private int _currentMessageId;
+        private bool _isAlive;
+        private Uri _uri;
 
-        public bool IsAlive => _webSocket?.IsConnected ?? false;
-
+        public bool IsAlive
+        {
+            get { return _isAlive; }
+        }
         public WebSocketClientLite(IMessageInterpreter interpreter)
         {
             _interpreter = interpreter;
@@ -30,12 +34,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
                 await Close();
             }
 
-            _webSocket = new MessageWebSocketRx();
-            _subscriptions.Add(_webSocket.ObserveConnectionStatus.Subscribe(OnConnectionChange));
-
-            var uri = new Uri(webSockerUrl);
-            var messageObserver = await _webSocket.CreateObservableMessageReceiver(uri, excludeZeroApplicationDataInPong: true);
-            _subscriptions.Add(messageObserver.Subscribe(OnWebSocketOnMessage));
+            _webSocket = new MessageWebSocketRx
+            {
+                ExcludeZeroApplicationDataInPong = true
+            };
+            _uri = new Uri(webSockerUrl);
+            _webSocket.ConnectionStatusObservable.Subscribe(OnConnectionChange);
+            _webSocket.MessageReceiverObservable.Subscribe(OnWebSocketOnMessage);
+            await _webSocket.ConnectAsync(_uri);
         }
 
         public async Task SendMessage(BaseMessage message)
@@ -64,7 +70,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
                 }
                 _subscriptions.Clear();
 
-                await _webSocket.CloseAsync();
+                await _webSocket.DisconnectAsync();
             }
         }
 
@@ -79,12 +85,18 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
         public event EventHandler OnClose;
         private void OnConnectionChange(ConnectionStatus connectionStatus)
         {
+            System.Console.WriteLine(connectionStatus.ToString());
+
             switch (connectionStatus)
             {
+                case ConnectionStatus.WebsocketConnected:
+                    _isAlive = true;
+                    break;
                 case ConnectionStatus.Aborted:
                 case ConnectionStatus.ConnectionFailed:
                 case ConnectionStatus.Disconnected:
                     OnClose?.Invoke(this, null);
+                    _isAlive = false;
                     break;
             }
         }

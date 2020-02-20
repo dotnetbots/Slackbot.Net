@@ -31,9 +31,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
             _reconnectMethod = reconnectMethod;
             _pongTimeout = pongTimeout;
 
-            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(5));
-
-            await pingMethod().ConfigureAwait(false);
+            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(20));
         }
 
         private void TimerTick()

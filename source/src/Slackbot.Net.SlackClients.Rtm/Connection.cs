@@ -67,7 +67,7 @@ namespace Slackbot.Net.SlackClients.Rtm
                 var handshake = await _handshakeClient.FirmShake(SlackKey);
                 if (handshake.Ok)
                 {
-                    await _webSocketClient.Connect(handshake.WebSocketUrl);    
+                    await _webSocketClient.Connect(handshake.WebSocketUrl);
                 }
                 else
                 {
