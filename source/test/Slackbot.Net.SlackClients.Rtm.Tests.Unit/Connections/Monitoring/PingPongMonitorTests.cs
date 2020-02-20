@@ -13,7 +13,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
     public class PingPongMonitorTests
     {
         [Theory, AutoMoqData]
-        private async Task should_call_ping_when_start_monitor_is_called(PingPongMonitor monitor)
+        private async Task should_not_call_ping_when_start_monitor_is_called(PingPongMonitor monitor)
         {
             // given
             bool pingCalled = false;
@@ -23,7 +23,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             await monitor.StartMonitor(pingMethod, null, TimeSpan.MinValue);
 
             // then
-            pingCalled.ShouldBeTrue();
+            pingCalled.ShouldBeFalse();
         }
 
         [Theory, AutoMoqData]
@@ -61,7 +61,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             timerStub.RunEvery_Action();
 
             // then
-            pingCalls.ShouldBe(2);
+            pingCalls.ShouldBe(1);
             reconnectCalled.ShouldBeFalse();
         }
 
@@ -75,11 +75,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
                 .Returns(true);
 
             // when
-            var exception = Assert.Throws<AggregateException>(() =>
+            var exception = Assert.Throws<MonitorAlreadyStartedException>(() =>
                                 monitor.StartMonitor(() => Task.CompletedTask, () => Task.CompletedTask, TimeSpan.MinValue).Wait());
 
             // then
-            Assert.IsType<MonitorAlreadyStartedException>(exception.InnerExceptions[0]);
+            Assert.IsType<MonitorAlreadyStartedException>(exception);
         }
 
         [Theory, AutoMoqData]
