@@ -31,7 +31,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
             _reconnectMethod = reconnectMethod;
             _pongTimeout = pongTimeout;
 
-            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(5));
+            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(10));
             return Task.CompletedTask;
         }
 
@@ -42,9 +42,12 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
                 lock (_reconnectLock)
                 {
                     _isReconnecting = true;
+                    Console.WriteLine($"1. Is reconnecting {_isReconnecting}");
+
                     _reconnectMethod()
                         .ContinueWith(task =>
                         {
+                            Console.WriteLine($"2. Is reconnecting {_isReconnecting}");
                             return _isReconnecting = false;
                         })
                         .ConfigureAwait(false)

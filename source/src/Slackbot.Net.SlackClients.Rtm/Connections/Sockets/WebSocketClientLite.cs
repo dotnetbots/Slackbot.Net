@@ -18,10 +18,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
         private bool _isAlive;
         private Uri _uri;
 
-        public bool IsAlive
-        {
-            get { return _isAlive; }
-        }
+        public bool IsAlive => _isAlive;
+
         public WebSocketClientLite(IMessageInterpreter interpreter)
         {
             _interpreter = interpreter;
@@ -85,11 +83,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
         public event EventHandler OnClose;
         private void OnConnectionChange(ConnectionStatus connectionStatus)
         {
-            System.Console.WriteLine(connectionStatus.ToString());
 
             switch (connectionStatus)
             {
                 case ConnectionStatus.WebsocketConnected:
+                    Console.WriteLine(connectionStatus.ToString());
                     _isAlive = true;
                     break;
                 case ConnectionStatus.Aborted:
@@ -97,6 +95,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
                 case ConnectionStatus.Disconnected:
                     OnClose?.Invoke(this, null);
                     _isAlive = false;
+                    Console.WriteLine(connectionStatus.ToString());
                     break;
             }
         }

@@ -35,8 +35,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             await monitor.StartMonitor(() => Task.CompletedTask, () => Task.CompletedTask, TimeSpan.MinValue);
 
             // then
-            timerMock
-                .Verify(x => x.RunEvery(It.IsAny<Action>(), TimeSpan.FromSeconds(5)), Times.Once);
+            timerMock.Verify(x => x.RunEvery(It.IsAny<Action>(), TimeSpan.FromSeconds(10)), Times.Once);
         }
 
         [Theory, AutoMoqData]
@@ -123,7 +122,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
                 reconnectCalls++;
                 if (reconnectCalls == 1)
                 {
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
                 }
                 return Task.CompletedTask;
             };
