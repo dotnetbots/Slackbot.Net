@@ -8,7 +8,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration.Connections.Clients
 {
     public class HandshakeClientTests : IntegrationTest
     {
-        [Fact]
+        [Fact(Skip = "Run on demand")]
         public async Task should_perform_handshake()
         {
             // given

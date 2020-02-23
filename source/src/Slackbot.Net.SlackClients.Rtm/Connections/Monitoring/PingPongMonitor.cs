@@ -11,7 +11,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
         private TimeSpan _pongTimeout;
         private Func<Task> _pingMethod;
         private Func<Task> _reconnectMethod;
-        private bool _isReconnecting;
+        public bool IsReconnecting;
         private readonly object _reconnectLock = new object();
 
         public PingPongMonitor(ITimer timer, IDateTimeKeeper dateTimeKeeper)
@@ -31,28 +31,21 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
             _reconnectMethod = reconnectMethod;
             _pongTimeout = pongTimeout;
 
-            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(10));
+            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(5));
             return Task.CompletedTask;
         }
 
         private void TimerTick()
         {
-            if (NeedsToReconnect() && !_isReconnecting)
+            if (NeedsToReconnect() && !IsReconnecting)
             {
                 lock (_reconnectLock)
                 {
-                    _isReconnecting = true;
-                    Console.WriteLine($"1. Is reconnecting {_isReconnecting}");
-
-                    _reconnectMethod()
-                        .ContinueWith(task =>
-                        {
-                            Console.WriteLine($"2. Is reconnecting {_isReconnecting}");
-                            return _isReconnecting = false;
-                        })
-                        .ConfigureAwait(false)
-                        .GetAwaiter()
-                        .GetResult();
+                    IsReconnecting = true;
+                    Console.WriteLine($"1. Is reconnecting {IsReconnecting}");
+                    _reconnectMethod().GetAwaiter().GetResult();
+                    IsReconnecting = false;
+                    Console.WriteLine($"2. Is reconnecting {IsReconnecting}");
                 }
             }
 

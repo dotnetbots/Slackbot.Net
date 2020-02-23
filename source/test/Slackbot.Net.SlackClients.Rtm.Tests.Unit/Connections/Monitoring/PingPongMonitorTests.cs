@@ -13,7 +13,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
     public class PingPongMonitorTests
     {
         [Theory, AutoMoqData]
-        private async Task should_not_call_ping_when_start_monitor_is_called(PingPongMonitor monitor)
+        private async Task should_call_ping_when_start_monitor_is_called(PingPongMonitor monitor)
         {
             // given
             bool pingCalled = false;
@@ -23,7 +23,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             await monitor.StartMonitor(pingMethod, null, TimeSpan.MinValue);
 
             // then
-            pingCalled.ShouldBeFalse();
+            pingCalled.ShouldBeTrue();
         }
 
         [Theory, AutoMoqData]
@@ -35,7 +35,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             await monitor.StartMonitor(() => Task.CompletedTask, () => Task.CompletedTask, TimeSpan.MinValue);
 
             // then
-            timerMock.Verify(x => x.RunEvery(It.IsAny<Action>(), TimeSpan.FromSeconds(10)), Times.Once);
+            timerMock.Verify(x => x.RunEvery(It.IsAny<Action>(), TimeSpan.FromSeconds(5)), Times.Once);
         }
 
         [Theory, AutoMoqData]
@@ -60,7 +60,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             timerStub.RunEvery_Action();
 
             // then
-            pingCalls.ShouldBe(1);
+            pingCalls.ShouldBe(2);
             reconnectCalled.ShouldBeFalse();
         }
 
@@ -74,11 +74,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
                 .Returns(true);
 
             // when
-            var exception = Assert.Throws<MonitorAlreadyStartedException>(() =>
+            var exception = Assert.Throws<AggregateException>(() =>
                                 monitor.StartMonitor(() => Task.CompletedTask, () => Task.CompletedTask, TimeSpan.MinValue).Wait());
 
             // then
-            Assert.IsType<MonitorAlreadyStartedException>(exception);
+            Assert.IsType<MonitorAlreadyStartedException>(exception.InnerExceptions[0]);
         }
 
         [Theory, AutoMoqData]
@@ -112,20 +112,22 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             // given
             var monitor = new PingPongMonitor(timerStub, dateTimeKeeperMock.Object);
 
-            dateTimeKeeperMock
-                .Setup(x => x.TimeSinceDateTime())
-                .Returns(TimeSpan.FromMinutes(2));
-
             int reconnectCalls = 0;
             Func<Task> reconnect = () =>
             {
                 reconnectCalls++;
                 if (reconnectCalls == 1)
                 {
-                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                    Thread.Sleep(TimeSpan.FromSeconds(5));
                 }
                 return Task.CompletedTask;
             };
+            
+            dateTimeKeeperMock
+                .Setup(x => x.TimeSinceDateTime())
+                .Returns(TimeSpan.FromMinutes(2));
+     
+            
             await monitor.StartMonitor(() => Task.CompletedTask, reconnect, TimeSpan.FromMinutes(1));
 
             dateTimeKeeperMock
@@ -133,10 +135,18 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
                 .Returns(true);
 
             // when
-            var thing = Task.Factory.StartNew(() => timerStub.RunEvery_Action());
+            var someUnawaitedTask = Task.Factory.StartNew(() =>
+            {
+                timerStub.RunEvery_Action();
+                monitor.IsReconnecting.ShouldBe(true);
+            });
+
             Thread.Sleep(TimeSpan.FromSeconds(1));
+
             timerStub.RunEvery_Action();
-            
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            monitor.IsReconnecting.ShouldBe(false);
+
             // then
             reconnectCalls.ShouldBe(1);
         }
