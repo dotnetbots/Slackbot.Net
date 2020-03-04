@@ -1,103 +1,89 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using IWebsocketClientLite.PCL;
 using Newtonsoft.Json;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Outbound;
-using WebsocketClientLite.PCL;
+using Slackbot.Net.SlackClients.Rtm.Exceptions;
+using Websocket.Client;
+using Websocket.Client.Models;
 
 namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
 {
-    internal class WebSocketClientLite : IWebSocketClient
+   internal class WebSocketClient : IWebSocketClient
     {
         private readonly IMessageInterpreter _interpreter;
-        private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
-        private IMessageWebSocketRx _webSocket;
+        private WebsocketClient _client;
+        private readonly TimeSpan _reconnectTimeout = TimeSpan.FromSeconds(30);
         private int _currentMessageId;
-        private bool _isAlive;
-        private Uri _uri;
 
-        public bool IsAlive => _isAlive;
-
-        public WebSocketClientLite(IMessageInterpreter interpreter)
+        public WebSocketClient(IMessageInterpreter interpreter)
         {
             _interpreter = interpreter;
         }
 
-        public async Task Connect(string webSockerUrl)
+        public bool IsAlive => _client.IsRunning;
+
+        public async Task Connect(string webSocketUrl)
         {
-            if (_webSocket != null)
+            if (_client != null)
             {
                 await Close();
             }
 
-            _webSocket = new MessageWebSocketRx
+            var uri = new Uri(webSocketUrl);
+            _client = new WebsocketClient(uri)
             {
-                ExcludeZeroApplicationDataInPong = true
+                ReconnectTimeout = _reconnectTimeout,
+                IsReconnectionEnabled = true
             };
-            _uri = new Uri(webSockerUrl);
-            _webSocket.ConnectionStatusObservable.Subscribe(OnConnectionChange);
-            _webSocket.MessageReceiverObservable.Subscribe(OnWebSocketOnMessage);
-            await _webSocket.ConnectAsync(_uri);
+
+            _client.MessageReceived.Subscribe(MessageReceived);
+            _client.DisconnectionHappened.Subscribe(Disconnected);
+            _client.ReconnectionHappened.Subscribe(Reconnected);
+
+            await _client.Start();
         }
 
-        public async Task SendMessage(BaseMessage message)
+        public void Reconnected(ReconnectionInfo info)
         {
+            Console.WriteLine($"Reconnected {info.Type}");
+        }
+
+        public Task SendMessage(BaseMessage message)
+        {
+            if (!IsAlive)
+            {
+                throw new CommunicationException("Connection not Alive");
+            }
+
             System.Threading.Interlocked.Increment(ref _currentMessageId);
             message.Id = _currentMessageId;
             var json = JsonConvert.SerializeObject(message);
 
-            if (_webSocket == null)
-            {
-                Console.WriteLine("WebSocket was null");
-            }
-            else
-            {
-                await _webSocket.SendTextAsync(json);
-            }
+            _client.Send(json);
+
+            return Task.CompletedTask;
         }
 
-        public async Task Close()
+        public Task Close()
         {
-            using (_webSocket)
-            {
-                foreach (var subscription in _subscriptions)
-                {
-                    subscription.Dispose();
-                }
-                _subscriptions.Clear();
-
-                await _webSocket.DisconnectAsync();
-            }
-        }
-
-        public event EventHandler<InboundMessage> OnMessage;
-        private void OnWebSocketOnMessage(string message)
-        {
-            string messageJson = message ?? "";
-            var inboundMessage = _interpreter.InterpretMessage(messageJson);
-            OnMessage?.Invoke(this, inboundMessage);
+            _client.Dispose();
+            return Task.CompletedTask;
         }
 
         public event EventHandler OnClose;
-        private void OnConnectionChange(ConnectionStatus connectionStatus)
+        private void Disconnected(DisconnectionInfo obj)
         {
+            Console.WriteLine($"Reconnected {obj.Type}");
+            OnClose?.Invoke(this, null);
+        }
 
-            switch (connectionStatus)
-            {
-                case ConnectionStatus.WebsocketConnected:
-                    Console.WriteLine(connectionStatus.ToString());
-                    _isAlive = true;
-                    break;
-                case ConnectionStatus.Aborted:
-                case ConnectionStatus.ConnectionFailed:
-                case ConnectionStatus.Disconnected:
-                    OnClose?.Invoke(this, null);
-                    _isAlive = false;
-                    Console.WriteLine(connectionStatus.ToString());
-                    break;
-            }
+        public event EventHandler<InboundMessage> OnMessage;
+        private void MessageReceived(ResponseMessage message)
+        {
+            string messageJson = message.Text ?? "";
+            var inboundMessage = _interpreter.InterpretMessage(messageJson);
+            OnMessage?.Invoke(this, inboundMessage);
         }
     }
 }

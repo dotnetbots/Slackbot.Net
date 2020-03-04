@@ -24,10 +24,10 @@ namespace Slackbot.Net.SlackClients.Rtm
         public Connector(IOptions<RtmOptions> options, ILogger<Connector> logger = null) : this(options.Value, logger)
         {
         }
-        
+
         public Connector(RtmOptions options, ILogger<Connector> logger = null) :
             this(new HandshakeClient(new HttpClient()),
-                new WebSocketClientLite(new MessageInterpreter()),
+                new WebSocketClient(new MessageInterpreter()),
                 new PingPongMonitor(new Timer(), new DateTimeKeeper()),
                 options.Token)
         {
@@ -35,7 +35,7 @@ namespace Slackbot.Net.SlackClients.Rtm
         }
 
         internal Connector(
-            IHandshakeClient handshakeClient, 
+            IHandshakeClient handshakeClient,
             IWebSocketClient webSocket,
             IPingPongMonitor pingPongMonitor,
             string slackKey)
@@ -44,7 +44,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             _webSocket = webSocket;
             _pingPongMonitor = pingPongMonitor;
             _slackKey = slackKey;
-            
+
             if (_logger == null)
                 _logger = new NoOpLogger();
         }
@@ -79,21 +79,21 @@ namespace Slackbot.Net.SlackClients.Rtm
 
                 var connection =  new Connection(_pingPongMonitor, _handshakeClient, _webSocket);
                 await connection.Initialise(connectionInfo);
-            
+
                 return connection;
             }
 
             return null;
         }
 
-      
+
     }
 
     public class NoOpLogger : ILogger<Connector>, IDisposable
     {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            
+
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -108,7 +108,7 @@ namespace Slackbot.Net.SlackClients.Rtm
 
         public void Dispose()
         {
-            
+
         }
     }
 }
