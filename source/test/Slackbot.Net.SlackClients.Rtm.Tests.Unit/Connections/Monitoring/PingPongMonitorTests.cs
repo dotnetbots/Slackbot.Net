@@ -35,7 +35,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
             await monitor.StartMonitor(() => Task.CompletedTask, () => Task.CompletedTask, TimeSpan.MinValue);
 
             // then
-            timerMock.Verify(x => x.RunEvery(It.IsAny<Action>(), TimeSpan.FromSeconds(5)), Times.Once);
+            timerMock.Verify(x => x.RunEvery(It.IsAny<Action>(), TimeSpan.FromSeconds(20)), Times.Once);
         }
 
         [Theory, AutoMoqData]

@@ -79,7 +79,7 @@ namespace Slackbot.Net.SlackClients.Rtm
 
                 var connection =  new Connection(_pingPongMonitor, _handshakeClient, _webSocket);
                 await connection.Initialise(connectionInfo);
-
+                
                 return connection;
             }
 

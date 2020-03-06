@@ -31,7 +31,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
             _reconnectMethod = reconnectMethod;
             _pongTimeout = pongTimeout;
 
-            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(5));
+            _timer.RunEvery(TimerTick, TimeSpan.FromSeconds(20));
             return Task.CompletedTask;
         }
 

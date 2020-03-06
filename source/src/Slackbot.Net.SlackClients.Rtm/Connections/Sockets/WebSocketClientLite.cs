@@ -27,6 +27,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
         {
             if (_client != null)
             {
+                Console.WriteLine($"Connect called, closing current connection. IsAlive {IsAlive}");
                 await Close();
             }
 
@@ -34,9 +35,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
             _client = new WebsocketClient(uri)
             {
                 ReconnectTimeout = _reconnectTimeout,
-                IsReconnectionEnabled = true
+                IsReconnectionEnabled = false
             };
-
             _client.MessageReceived.Subscribe(MessageReceived);
             _client.DisconnectionHappened.Subscribe(Disconnected);
             _client.ReconnectionHappened.Subscribe(Reconnected);

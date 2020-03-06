@@ -29,7 +29,7 @@ namespace Slackbot.Net.Connections
             _logger = loggerFactory.CreateLogger<SlackConnectionSetup>();
             _loggerConnector = loggerFactory.CreateLogger<Connector>();
         }
-        
+
         public async Task TryConnectWorkspaces()
         {
             var tokens = await _tokenStore.GetTokens();
@@ -38,7 +38,7 @@ namespace Slackbot.Net.Connections
             {
                 _logger.LogInformation("No tokens returned from token store. Skipping connects.");
             }
-        
+
             foreach (var token in tokens)
             {
                 var existingConnection = _connectedWorkspaces.Values.FirstOrDefault(w => w.Token == token);
@@ -53,20 +53,29 @@ namespace Slackbot.Net.Connections
                 }
             }
         }
-        
+
         private async Task Connect(string token)
         {
-            
+
             var slackConnector = new Connector(new RtmOptions
             {
                 Token = token
             },_loggerConnector);
 
             var handlerSelector = _services.GetService<HandlerSelector>();
-            IConnection connection = null;
+            IConnection connection;
             try
             {
                 connection = await slackConnector.Connect();
+                connection.OnReconnectFailure += async failure =>
+                {
+                    if (failure == "token_revoked" || failure == "account_inactive")
+                    {
+                        _logger.LogWarning($"OnReconnectFailure: Token was revoked, and will be deleted. {LastSectionOf(token)}\n{failure}");
+                        await _tokenStore.Delete(token);
+                        _logger.LogInformation($"OnReconnectFailure: Token deleted. {LastSectionOf(token)}");
+                    }
+                };
             }
             catch (TokenRevokedException tre)
             {
@@ -94,16 +103,16 @@ namespace Slackbot.Net.Connections
             connection.OnReconnecting += () => Log("reconnecting", connection.Team?.Name);
             var workspace = new ConnectedWorkspace
             {
-                Token = token, 
-                TeamId = connection.Team.Id, 
+                Token = token,
+                TeamId = connection.Team.Id,
                 TeamName = connection.Team.Name,
                 Connection = connection
             };
             _connectedWorkspaces.Add(workspace.TeamId, workspace);
-       
+
             if (connection.IsConnected)
-                _logger.LogInformation($"Connected to workspace {workspace.TeamName}"); 
-            
+                _logger.LogInformation($"Connected to workspace {workspace.TeamName}");
+
         }
 
         private Task Log(string action, string teamName)

@@ -56,6 +56,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
         }
 
         public string SlackKey { get; }
+        public event ReconnectFailureEventHandler OnReconnectFailure;
 
         public event PongEventHandler OnPong;
 

@@ -56,5 +56,10 @@ namespace Slackbot.Net.SlackClients.Rtm
         /// Slack Authentication Key.
         /// </summary>
         string SlackKey { get; }
+        
+        /// <summary>
+        /// Raised when handshake error occured during reconnect
+        /// </summary>
+        event ReconnectFailureEventHandler OnReconnectFailure;
     }
 }

@@ -70,11 +70,15 @@ namespace Slackbot.Net.SlackClients.Rtm
             }
             else
             {
+                RaiseErrorOnReconnect(handshake.Error);
                 Console.WriteLine($"Handshake error in Reconnect: {handshake.Error}");
+                
             }
 
             await RaiseOnReconnect();
         }
+
+   
 
         private Task ListenTo(InboundMessage inboundMessage)
         {
@@ -240,6 +244,23 @@ namespace Slackbot.Net.SlackClients.Rtm
                 {
                 }
             }
+        }
+        
+        public event ReconnectFailureEventHandler OnReconnectFailure;
+        
+        private async Task RaiseErrorOnReconnect(string handshakeError)
+        {
+            var e = OnReconnectFailure;
+            if (e != null)
+            {
+                try
+                {
+                    await e(handshakeError);
+                }
+                catch
+                {
+                }
+            }        
         }
         
         public bool WasBotMentioned(string username, string userId, string messageText)
