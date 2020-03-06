@@ -65,5 +65,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
         {
             _dateTimeKeeper.SetDateTimeToNow();
         }
+
+        public void StopMonitor()
+        {
+            _timer.Dispose();
+        }
     }
 }

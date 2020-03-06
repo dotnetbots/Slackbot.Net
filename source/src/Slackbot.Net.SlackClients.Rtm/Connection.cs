@@ -70,7 +70,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             }
             else
             {
-                RaiseErrorOnReconnect(handshake.Error);
+                await RaiseErrorOnReconnect(handshake.Error);
                 Console.WriteLine($"Handshake error in Reconnect: {handshake.Error}");
                 
             }
@@ -262,7 +262,12 @@ namespace Slackbot.Net.SlackClients.Rtm
                 }
             }
 
-            await Close();
+            if (handshakeError == "token_revoked" || handshakeError == "account_inactive")
+            {
+                _pingPongMonitor.StopMonitor();
+                await Close();
+            }
+            
         }
         
         public bool WasBotMentioned(string username, string userId, string messageText)

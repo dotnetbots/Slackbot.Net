@@ -7,5 +7,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
     {
         Task StartMonitor(Func<Task> pingMethod, Func<Task> reconnectMethod, TimeSpan pongTimeout);
         void Pong();
+        void StopMonitor();
     }
 }
