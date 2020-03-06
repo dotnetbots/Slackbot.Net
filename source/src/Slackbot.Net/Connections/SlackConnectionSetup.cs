@@ -67,13 +67,14 @@ namespace Slackbot.Net.Connections
             try
             {
                 connection = await slackConnector.Connect();
-                connection.OnReconnectFailure += async failure =>
+                connection.OnReconnectFailure += async (failure, teamId, teamName) =>
                 {
                     if (failure == "token_revoked" || failure == "account_inactive")
                     {
                         _logger.LogWarning($"OnReconnectFailure: Token was revoked, and will be deleted. {LastSectionOf(token)}\n{failure}");
                         await _tokenStore.Delete(token);
                         _logger.LogInformation($"OnReconnectFailure: Token deleted. {LastSectionOf(token)}");
+                        _connectedWorkspaces.Remove(teamId);
                     }
                 };
             }

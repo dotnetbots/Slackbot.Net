@@ -255,12 +255,12 @@ namespace Slackbot.Net.SlackClients.Rtm
             {
                 try
                 {
-                    await e(handshakeError);
+                    await e(handshakeError, Team.Id, Team.Name);
                 }
                 catch
                 {
                 }
-            }        
+            }
         }
         
         public bool WasBotMentioned(string username, string userId, string messageText)
