@@ -261,6 +261,8 @@ namespace Slackbot.Net.SlackClients.Rtm
                 {
                 }
             }
+
+            await Close();
         }
         
         public bool WasBotMentioned(string username, string userId, string messageText)

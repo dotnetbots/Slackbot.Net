@@ -67,16 +67,6 @@ namespace Slackbot.Net.Connections
             try
             {
                 connection = await slackConnector.Connect();
-                connection.OnReconnectFailure += async (failure, teamId, teamName) =>
-                {
-                    if (failure == "token_revoked" || failure == "account_inactive")
-                    {
-                        _logger.LogWarning($"OnReconnectFailure: Token was revoked, and will be deleted. {LastSectionOf(token)}\n{failure}");
-                        await _tokenStore.Delete(token);
-                        _logger.LogInformation($"OnReconnectFailure: Token deleted. {LastSectionOf(token)}");
-                        _connectedWorkspaces.Remove(teamId);
-                    }
-                };
             }
             catch (TokenRevokedException tre)
             {
@@ -97,17 +87,40 @@ namespace Slackbot.Net.Connections
                 _logger.LogError($"Could not connect using token ending in {LastSectionOf(token)}\n{he.Message}");
                 return;
             }
-
-            connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
-            connection.OnDisconnect += () => Log("disconnecting", connection.Team?.Name);
-            connection.OnReconnect += () => Log("reconnect", connection.Team?.Name);
-            connection.OnReconnecting += () => Log("reconnecting", connection.Team?.Name);
             var workspace = new ConnectedWorkspace
             {
                 Token = token,
                 TeamId = connection.Team.Id,
                 TeamName = connection.Team.Name,
                 Connection = connection
+            };
+            
+            connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
+            
+            connection.OnDisconnect += () =>
+            {
+                Log("disconnect", connection.Team?.Name);
+                _connectedWorkspaces.Remove(workspace.TeamId);
+            };
+            connection.OnReconnect += () =>
+            {
+                Log("reconnect", connection.Team?.Name);
+                if(!_connectedWorkspaces.ContainsKey(workspace.TeamId))
+                    _connectedWorkspaces.Add(workspace.TeamId, workspace);
+                
+                return Task.CompletedTask;
+            };
+            connection.OnReconnecting += () => Log("reconnecting", connection.Team?.Name);
+            
+            connection.OnReconnectFailure += async (failure, teamId, teamName) =>
+            {
+                if (failure == "token_revoked" || failure == "account_inactive")
+                {
+                    _logger.LogWarning($"OnReconnectFailure: Token was revoked, and will be deleted. {LastSectionOf(token)}\n{failure}");
+                    await _tokenStore.Delete(token);
+                    _logger.LogInformation($"OnReconnectFailure: Token deleted. {LastSectionOf(token)}");
+                    _connectedWorkspaces.Remove(workspace.TeamId);
+                }
             };
             _connectedWorkspaces.Add(workspace.TeamId, workspace);
 
