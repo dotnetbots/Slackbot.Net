@@ -29,19 +29,22 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
         public event DisconnectEventHandler OnDisconnect;
         public void RaiseOnDisconnect()
         {
-            OnDisconnect?.Invoke();
+            OnDisconnect?.Invoke(Team?.Id, Team?.Name);
         }
 
         public event ReconnectEventHandler OnReconnecting;
         public void RaiseOnReconnecting()
         {
-            OnReconnecting?.Invoke();
+            OnReconnecting?.Invoke(Team?.Id, Team?.Name);
         }
 
         public event ReconnectEventHandler OnReconnect;
         public void RaiseOnReconnect()
         {
-            OnReconnect?.Invoke();
+            if (Team?.Name == "always fail")
+                OnReconnectFailure?.Invoke("stub", Team?.Id, Team?.Name);
+            
+            OnReconnect?.Invoke(Team?.Id, Team?.Name);
         }
 
         public event MessageReceivedEventHandler OnMessageReceived;
@@ -56,6 +59,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
         }
 
         public string SlackKey { get; }
+        
+       
         public event ReconnectFailureEventHandler OnReconnectFailure;
 
         public event PongEventHandler OnPong;

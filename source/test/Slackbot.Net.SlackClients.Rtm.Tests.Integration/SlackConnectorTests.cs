@@ -37,7 +37,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
             Connection.IsConnected.ShouldBeFalse();
         }
 
-        private void ConnectorOnDisconnect()
+        private void ConnectorOnDisconnect(string teamId, string teamName)
         {
 
         }

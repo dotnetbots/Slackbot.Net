@@ -72,13 +72,10 @@ namespace Slackbot.Net.SlackClients.Rtm
             {
                 await RaiseErrorOnReconnect(handshake.Error);
                 Console.WriteLine($"Handshake error in Reconnect: {handshake.Error}");
-                
             }
 
             await RaiseOnReconnect();
         }
-
-   
 
         private Task ListenTo(InboundMessage inboundMessage)
         {
@@ -171,7 +168,7 @@ namespace Slackbot.Net.SlackClients.Rtm
         public event DisconnectEventHandler OnDisconnect;
         private void RaiseOnDisconnect()
         {
-            OnDisconnect?.Invoke();
+            OnDisconnect?.Invoke(Team.Id, Team.Name);
         }
 
         public event ReconnectEventHandler OnReconnecting;
@@ -182,7 +179,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             {
                 try
                 {
-                    await e();
+                    await e(Team.Id, Team.Name);
                 }
                 catch (Exception)
                 {
@@ -199,7 +196,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             {
                 try
                 {
-                    await e();
+                    await e(Team.Id, Team.Name);
                 }
                 catch (Exception)
                 {

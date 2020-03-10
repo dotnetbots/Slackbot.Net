@@ -23,7 +23,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
 
             // given
             bool connectionChangedValue = false;
-            slackConnection.OnDisconnect += () => connectionChangedValue = true;
+            slackConnection.OnDisconnect += (teamId, teamName) => connectionChangedValue = true;
 
             var info = new ConnectionInformation();
             await slackConnection.Initialise(info);

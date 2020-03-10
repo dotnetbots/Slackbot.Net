@@ -15,16 +15,16 @@ namespace Slackbot.Net.Connections
     internal class SlackConnectionSetup
     {
         private readonly IServiceProvider _services;
-        private readonly Dictionary<string,ConnectedWorkspace> _connectedWorkspaces;
+        private readonly Dictionary<string,IConnection> _connections;
         private readonly ITokenStore _tokenStore;
-        private ILogger<SlackConnectionSetup> _logger;
-        private ILogger<Connector> _loggerConnector;
+        private readonly ILogger<SlackConnectionSetup> _logger;
+        private readonly ILogger<Connector> _loggerConnector;
 
         public SlackConnectionSetup(IServiceProvider services)
         {
             _services = services;
             var loggerFactory = _services.GetService<ILoggerFactory>();
-            _connectedWorkspaces = new Dictionary<string, ConnectedWorkspace>();
+            _connections = new Dictionary<string, IConnection>();
             _tokenStore = _services.GetService<ITokenStore>();
             _logger = loggerFactory.CreateLogger<SlackConnectionSetup>();
             _loggerConnector = loggerFactory.CreateLogger<Connector>();
@@ -41,7 +41,7 @@ namespace Slackbot.Net.Connections
 
             foreach (var token in tokens)
             {
-                var existingConnection = _connectedWorkspaces.Values.FirstOrDefault(w => w.Token == token);
+                var existingConnection = _connections.Values.FirstOrDefault(w => w.SlackKey == token);
                 if (existingConnection == null)
                 {
                     _logger.LogInformation("Connecting..");
@@ -49,7 +49,7 @@ namespace Slackbot.Net.Connections
                 }
                 else
                 {
-                    _logger.LogTrace($"Token in use for {existingConnection.TeamName}");
+                    _logger.LogTrace($"Token in use for {existingConnection.Team?.Name}");
                 }
             }
         }
@@ -87,30 +87,24 @@ namespace Slackbot.Net.Connections
                 _logger.LogError($"Could not connect using token ending in {LastSectionOf(token)}\n{he.Message}");
                 return;
             }
-            var workspace = new ConnectedWorkspace
-            {
-                Token = token,
-                TeamId = connection.Team.Id,
-                TeamName = connection.Team.Name,
-                Connection = connection
-            };
-            
-            connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
-            
-            connection.OnDisconnect += () =>
+
+            connection.OnDisconnect += (teamId, teamName) =>
             {
                 Log("disconnect", connection.Team?.Name);
-                _connectedWorkspaces.Remove(workspace.TeamId);
+                _connections.Remove(connection.Team.Id);
             };
-            connection.OnReconnect += () =>
+
+            connection.OnReconnecting += (teamId, teamName) => Log("reconnecting", teamName);
+            
+            connection.OnReconnect += (teamId, teamName) =>
             {
-                Log("reconnect", connection.Team?.Name);
-                if(!_connectedWorkspaces.ContainsKey(workspace.TeamId))
-                    _connectedWorkspaces.Add(workspace.TeamId, workspace);
+                Log("reconnect", teamName);
+                if(!_connections.ContainsKey(teamId))
+                    _connections.Add(teamId, connection);
                 
+                _logger.LogInformation($"Connected to workspace {connection.Team?.Name}");
                 return Task.CompletedTask;
             };
-            connection.OnReconnecting += () => Log("reconnecting", connection.Team?.Name);
             
             connection.OnReconnectFailure += async (failure, teamId, teamName) =>
             {
@@ -119,14 +113,13 @@ namespace Slackbot.Net.Connections
                     _logger.LogWarning($"OnReconnectFailure: Token was revoked, and will be deleted. {LastSectionOf(token)}\n{failure}");
                     await _tokenStore.Delete(token);
                     _logger.LogInformation($"OnReconnectFailure: Token deleted. {LastSectionOf(token)}");
-                    _connectedWorkspaces.Remove(workspace.TeamId);
+                    _connections.Remove(teamId);
                 }
             };
-            _connectedWorkspaces.Add(workspace.TeamId, workspace);
+            
+            connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
 
-            if (connection.IsConnected)
-                _logger.LogInformation($"Connected to workspace {workspace.TeamName}");
-
+            _connections.Add(connection.Team.Id, connection);
         }
 
         private Task Log(string action, string teamName)
