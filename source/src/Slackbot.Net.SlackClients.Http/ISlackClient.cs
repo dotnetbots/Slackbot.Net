@@ -41,15 +41,24 @@ namespace Slackbot.Net.SlackClients.Http
 
         /// <summary>
         /// Scopes required: `users:read`
-        /// </summary>  
+        /// </summary>
         /// <remarks>https://api.slack.com/methods/users.list</remarks>
         Task<UsersListResponse> UsersList();
 
         /// <summary>
         /// Scopes required: channels:read
         /// Only requests `public_channel` types of conversations
-        /// </summary>  
+        /// </summary>
         /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
         Task<ConversationsListResponse> ConversationsListPublicChannels();
+
+        /// <summary>
+        /// Scopes required: channels:read | groups:read | im:read
+        /// Only requests `public_channel` types of conversations
+        /// </summary>
+        /// <remarks>https://api.slack.com/methods/conversations.members</remarks>
+        Task<ConversationsListResponse> ConversationsMembers(string channel);
+
+
     }
 }

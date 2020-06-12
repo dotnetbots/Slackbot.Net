@@ -16,18 +16,15 @@ namespace Slackbot.Net.Hosting
         public SlackbotWorkerBuilder(IServiceCollection services)
         {
             Services = services;
-            AddRtmConnections();
         }
 
         public IServiceCollection Services
         {
             get;
         }
-        
-        private ISlackbotWorkerBuilder AddRtmConnections()
+
+        public ISlackbotWorkerBuilder AddRtmConnections()
         {
-            Services.AddSingleton<ISlackClientService, SlackClientService>();
-            Services.AddSlackClientBuilder();
             Services.AddSingleton<SlackConnectionSetup>();
             Services.AddSingleton<HandlerSelector>();
             Services.AddHostedService<SlackRtmConnectionHostedService>();

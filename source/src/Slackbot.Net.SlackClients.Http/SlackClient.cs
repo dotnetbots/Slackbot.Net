@@ -35,7 +35,7 @@ namespace Slackbot.Net.SlackClients.Http
                 new KeyValuePair<string, string>("text", text),
                 new KeyValuePair<string, string>("as_user", "true"),
                 new KeyValuePair<string, string>("link_names", "true")
-                
+
             };
             return await _client.PostParametersAsForm<ChatPostMessageResponse>(parameters, "chat.postMessage", s => _logger.LogTrace(s));
         }
@@ -54,7 +54,7 @@ namespace Slackbot.Net.SlackClients.Http
                 new KeyValuePair<string, string>("channel", channel),
                 new KeyValuePair<string, string>("message_ts", message_ts)
             };
-          
+
             return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters,"chat.getPermalink", s => _logger.LogTrace(s));
         }
 
@@ -67,7 +67,7 @@ namespace Slackbot.Net.SlackClients.Http
                 new KeyValuePair<string, string>("channel", channel),
                 new KeyValuePair<string, string>("timestamp", timestamp)
             };
-          
+
             return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters,"reactions.add", s => _logger.LogTrace(s));
         }
 
@@ -86,6 +86,16 @@ namespace Slackbot.Net.SlackClients.Http
                 new KeyValuePair<string, string>("exclude_archived", "true"),
             };
             return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.list", s => _logger.LogTrace(s));
+        }
+
+        /// <inheritdoc/>
+        public async Task<ConversationsListResponse> ConversationsMembers(string channel)
+        {
+            var parameters = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("channel", channel)
+            };
+            return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.members", s => _logger.LogTrace(s));
         }
     }
 }

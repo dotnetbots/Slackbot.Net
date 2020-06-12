@@ -5,6 +5,8 @@ namespace Slackbot.Net.Abstractions.Hosting
     public interface ISlackbotWorkerBuilder
     {
         IServiceCollection Services { get; }
+        ISlackbotWorkerBuilder AddRtmConnections();
+        
         ISlackbotWorkerBuilder BuildRecurrers();
     }
 }

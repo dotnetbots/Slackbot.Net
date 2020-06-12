@@ -3,17 +3,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Slackbot.Net.Endpoints.Interactive;
+using Slackbot.Net.Endpoints.Hosting;
 
-namespace Slackbot.Net.Endpoints.Hosting
+namespace Slackbot.Net.Endpoints.Interactive
 {
-    internal class HttpResponderMiddleware
+    internal class GenericeEventsMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<HttpResponderMiddleware> _logger;
+        private readonly ILogger<GenericeEventsMiddleware> _logger;
         private readonly IHandleInteractiveActions _responseHandler;
 
-        public HttpResponderMiddleware(RequestDelegate next, ILogger<HttpResponderMiddleware> logger, IHandleInteractiveActions responseHandler)
+        public GenericeEventsMiddleware(RequestDelegate next, ILogger<GenericeEventsMiddleware> logger, IHandleInteractiveActions responseHandler)
         {
             _next = next;
             _logger = logger;
