@@ -9,5 +9,8 @@ namespace Slackbot.Net.Endpoints.Generic
         public string[] AuthedUsers { get; set; }
         public string Event_Id { get; set; }
         public string Event_Time { get; set; }
+        
+        // only used for install-verify
+        public string Challenge { get; set; }
     }
 }

@@ -12,5 +12,13 @@ namespace Slackbot.Net.SlackClients.Http
         /// <param name="req"></param>
         /// <returns></returns>
         Task<OAuthAccessResponse> OAuthAccess(OauthAccessRequest req);
+        
+        /// <summary>
+        /// https://api.slack.com/methods/oauth.v2.access
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        Task<OAuthAccessResponseV2> OAuthAccessV2(OauthAccessRequestV2 req);
+
     }
 }

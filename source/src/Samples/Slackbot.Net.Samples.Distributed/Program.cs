@@ -20,7 +20,7 @@ namespace Slackbot.Net.Samples.Distributed
                 })
                 .ConfigureLogging(c =>
                 {
-                    c.AddFilter("Slackbot.Net.SlackClients.Http",level => level == LogLevel.Information);
+                    c.AddFilter("Slackbot.Net.SlackClients.Http",level => level == LogLevel.Debug);
                     c.AddConsole().SetMinimumLevel(LogLevel.Trace);
                 })
                 .Build();

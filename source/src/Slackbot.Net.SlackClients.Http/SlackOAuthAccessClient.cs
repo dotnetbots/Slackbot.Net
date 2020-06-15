@@ -41,5 +41,33 @@ namespace Slackbot.Net.SlackClients.Http
 
             return await _client.PostParametersAsForm<OAuthAccessResponse>(parameters,"oauth.access", s => _logger?.LogTrace(s));
         }
+        
+        /// <inheritdoc/>
+        public async Task<OAuthAccessResponseV2> OAuthAccessV2(OauthAccessRequestV2 oauthAccessRequest)
+        {
+            var parameters = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("code", oauthAccessRequest.Code)
+            };
+
+            if (!string.IsNullOrEmpty(oauthAccessRequest.RedirectUri))
+            {
+                parameters.Add(new KeyValuePair<string, string>("redirect_uri", oauthAccessRequest.RedirectUri));
+            }
+
+            if (!string.IsNullOrEmpty(oauthAccessRequest.ClientId))
+            {
+                parameters.Add(new KeyValuePair<string, string>("client_id", oauthAccessRequest.ClientId));
+            }
+
+            if (!string.IsNullOrEmpty(oauthAccessRequest.ClientSecret))
+            {
+                parameters.Add(new KeyValuePair<string, string>("client_secret", oauthAccessRequest.ClientSecret));
+            }
+            
+      
+
+            return await _client.PostParametersAsForm<OAuthAccessResponseV2>(parameters,"oauth.v2.access", s => _logger?.LogTrace(s));
+        }
     }
 }
