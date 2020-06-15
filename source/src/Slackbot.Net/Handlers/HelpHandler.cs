@@ -8,7 +8,7 @@ using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Handlers
 {
-    internal class HelpHandler
+    public class HelpHandler
     {
         private readonly IEnumerable<IHandleMessages> _handlers;
         private readonly ISlackClient _slackClient;

@@ -13,7 +13,7 @@ using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Handlers
 {
-    internal class HandlerSelector
+    public class HandlerSelector
     {
         private readonly IServiceProvider _provider;
         private readonly ILogger<HandlerSelector> _logger;
