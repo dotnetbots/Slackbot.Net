@@ -7,6 +7,7 @@ using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Connections;
 using Slackbot.Net.Dynamic;
 using Slackbot.Net.Handlers;
+using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Extensions;
 
 namespace Slackbot.Net.Hosting
@@ -15,6 +16,7 @@ namespace Slackbot.Net.Hosting
     {
         public SlackbotWorkerBuilder(IServiceCollection services)
         {
+            services.AddSingleton<ISlackClientService, SlackClientService>();
             Services = services;
         }
 
