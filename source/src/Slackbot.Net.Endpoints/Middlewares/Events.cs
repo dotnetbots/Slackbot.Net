@@ -31,6 +31,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
             {
                 try
                 {
+                    _logger.LogInformation($"Handling using {handler.GetType()}");
                     await handler.Handle(metadata, slackEvent);
                 }
                 catch (Exception e)

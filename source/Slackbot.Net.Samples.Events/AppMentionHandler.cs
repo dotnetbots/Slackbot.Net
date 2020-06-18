@@ -10,7 +10,7 @@ namespace Slackbot.Net.Samples.Events
     {
         public Task Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(slackEvent));
+            Console.WriteLine("Doing stuff from AppmentionHandler: " + JsonConvert.SerializeObject(slackEvent));
             return Task.CompletedTask;
         }
 

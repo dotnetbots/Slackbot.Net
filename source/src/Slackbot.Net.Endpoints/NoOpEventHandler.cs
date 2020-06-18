@@ -15,7 +15,7 @@ namespace Slackbot.Net.Endpoints
         {
             _logger = logger;
         }
-        Task IHandleEvent.Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
+        public Task Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {
             var contents = JsonConvert.SerializeObject(slackEvent);
             _logger.LogWarning($"No-op for {slackEvent.Type}. {contents}");

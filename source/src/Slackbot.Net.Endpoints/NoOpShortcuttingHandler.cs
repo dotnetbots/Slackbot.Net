@@ -4,7 +4,7 @@ using Slackbot.Net.Endpoints.Models;
 
 namespace Slackbot.Net.Endpoints
 {
-    public class NoOpShortcuttingHandler : IShortcutHandlers 
+    public class NoOpShortcuttingHandler : IShortcutHandler
     {
         public Task Handle(EventMetaData eventMetadata, SlackEvent @event)
         {

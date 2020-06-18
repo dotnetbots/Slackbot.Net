@@ -17,5 +17,11 @@ namespace Slackbot.Net.Endpoints.Hosting
             _services.AddSingleton<IHandleEvent, T>();
             return this;
         }
+
+        public ISlackbotEventHandlersBuilder AddShortcut<T>() where T : class, IShortcutHandler
+        {
+            _services.AddSingleton<IShortcutHandler, T>();
+            return this;
+        }
     }
 }
