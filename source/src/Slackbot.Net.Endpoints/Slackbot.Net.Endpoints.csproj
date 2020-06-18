@@ -27,6 +27,15 @@
         <None Include="images/slack.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Hosting\Events" />
+      <Folder Include="Hosting\Interactive" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
+    </ItemGroup>
+
   
 
 </Project>

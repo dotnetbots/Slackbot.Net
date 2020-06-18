@@ -6,7 +6,7 @@ using Slackbot.Net.Abstractions.Hosting;
 
 namespace Slackbot.Net.Samples.Distributed
 {
-    internal class MyTokenStore : ITokenStore
+    public class MyTokenStore : ITokenStore
     {
         private readonly List<Workspace> _workspaces;
 

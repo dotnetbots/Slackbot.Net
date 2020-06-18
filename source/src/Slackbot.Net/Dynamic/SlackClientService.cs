@@ -4,7 +4,7 @@ using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Dynamic
 {
-    internal class SlackClientService : ISlackClientService
+    public class SlackClientService : ISlackClientService
     {
         private readonly ITokenStore _tokenStore;
         private readonly ISlackClientBuilder _clientFactory;

@@ -7,13 +7,13 @@ using Slackbot.Net.Endpoints.Hosting;
 
 namespace Slackbot.Net.Endpoints.Interactive
 {
-    internal class GenericeEventsMiddleware
+    internal class InteractiveEventsMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<GenericeEventsMiddleware> _logger;
+        private readonly ILogger<InteractiveEventsMiddleware> _logger;
         private readonly IHandleInteractiveActions _responseHandler;
 
-        public GenericeEventsMiddleware(RequestDelegate next, ILogger<GenericeEventsMiddleware> logger, IHandleInteractiveActions responseHandler)
+        public InteractiveEventsMiddleware(RequestDelegate next, ILogger<InteractiveEventsMiddleware> logger, IHandleInteractiveActions responseHandler)
         {
             _next = next;
             _logger = logger;
