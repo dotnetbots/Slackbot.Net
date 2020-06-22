@@ -15,6 +15,7 @@ namespace Slackbot.Net.Samples.Events
         {
             services.AddSlackBotEvents<MyTokenStore>()
                 .AddHandler<AppMentionHandler>()
+                .AddHandler<OtherAppMentionHandler>()
                 .AddShortcut<Shortcutter>();
         }
 
