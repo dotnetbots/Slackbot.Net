@@ -27,8 +27,6 @@ namespace Slackbot.Net.Endpoints
             return true;
         }
 
-        public bool ShouldShowInHelp => false;
-
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("nada", "Fallback when no handlers are matched for any event you subscribe to");
+        public (string, string) GetHelpDescription() => ("nada", "Fallback when no handlers are matched for any event you subscribe to");
     }
 }

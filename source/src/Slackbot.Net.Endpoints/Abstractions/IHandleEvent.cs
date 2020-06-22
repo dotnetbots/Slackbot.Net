@@ -9,6 +9,6 @@ namespace Slackbot.Net.Endpoints.Abstractions
         Task Handle(EventMetaData eventMetadata, SlackEvent slackEvent);
         bool ShouldHandle(SlackEvent slackEvent);
 
-        Tuple<string, string> GetHelpDescription();
+        (string, string) GetHelpDescription();
     }
 }

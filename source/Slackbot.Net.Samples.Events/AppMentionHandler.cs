@@ -16,6 +16,6 @@ namespace Slackbot.Net.Samples.Events
 
         public bool ShouldHandle(SlackEvent slackEvent) => slackEvent is AppMentionEvent appMentionEvent && appMentionEvent.Text == "test";
 
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("does stuff when bot is app is mentioned", "does all");
+        public (string, string) GetHelpDescription() => ("does stuff when bot is app is mentioned", "does all");
     }
 }
