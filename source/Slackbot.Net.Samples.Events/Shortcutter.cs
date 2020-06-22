@@ -19,9 +19,9 @@ namespace Slackbot.Net.Samples.Events
 
         public Task Handle(EventMetaData eventMetadata, SlackEvent @event)
         {
-            var text = _handlers.Where(handler => handler.GetHelpDescription().Item1 != "donotshowinhelp")
+            var text = _handlers.Where(handler => handler.GetHelpDescription().HandlerTrigger != "donotshowinhelp")
                 .Select(handler => handler.GetHelpDescription())
-                .Aggregate("*HALP:*", (current, helpDescription) => current + $"\n• `{helpDescription.Item1}` : _{helpDescription.Item2}_");
+                .Aggregate("*HALP:*", (current, kvPair) => current + $"\n• `{kvPair.HandlerTrigger}` : _{kvPair.Description}_");
             
             
             Console.WriteLine(text);

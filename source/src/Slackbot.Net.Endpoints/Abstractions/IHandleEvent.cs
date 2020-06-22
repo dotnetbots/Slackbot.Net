@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Slackbot.Net.Endpoints.Models;
 
@@ -8,7 +7,6 @@ namespace Slackbot.Net.Endpoints.Abstractions
     {
         Task Handle(EventMetaData eventMetadata, SlackEvent slackEvent);
         bool ShouldHandle(SlackEvent slackEvent);
-
-        (string, string) GetHelpDescription();
+        (string HandlerTrigger, string Description) GetHelpDescription();
     }
 }
