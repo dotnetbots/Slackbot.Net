@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -15,11 +14,11 @@ namespace Slackbot.Net.Endpoints
         {
             _logger = logger;
         }
-        public Task Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
+        public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {
             var contents = JsonConvert.SerializeObject(slackEvent);
             _logger.LogWarning($"No-op for {slackEvent.Type}. {contents}");
-            return Task.CompletedTask;
+            return Task.FromResult(new EventHandledResponse("no-op handled it"));
         }
 
         public bool ShouldHandle(SlackEvent slackEvent)
