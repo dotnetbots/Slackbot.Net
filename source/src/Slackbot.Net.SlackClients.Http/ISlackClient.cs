@@ -60,5 +60,11 @@ namespace Slackbot.Net.SlackClients.Http
         Task<ConversationsListResponse> ConversationsMembers(string channel);
 
 
+        /// <summary>
+        /// Scopes required: none
+        /// Uninstalls an app (client_id/client_secret defines which app) in the workspace (token defines which workspace)
+        /// </summary>
+        /// <remarks>https://api.slack.com/methods/conversations.members</remarks>
+        Task<ConversationsListResponse> AppsUninstall(string clientId, string clientSecret);
     }
 }

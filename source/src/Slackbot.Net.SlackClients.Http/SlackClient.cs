@@ -97,5 +97,16 @@ namespace Slackbot.Net.SlackClients.Http
             };
             return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.members", s => _logger.LogTrace(s));
         }
+        
+        /// <inheritdoc/>
+        public async Task<ConversationsListResponse> AppsUninstall(string clientId, string clientSecret)
+        {
+            var parameters = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("client_id", clientId),
+                new KeyValuePair<string, string>("client_secret", clientSecret)
+            };
+            return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"apps.uninstall", s => _logger.LogTrace(s));
+        }
     }
 }
