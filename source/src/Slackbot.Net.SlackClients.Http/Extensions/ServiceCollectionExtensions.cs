@@ -37,6 +37,7 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
         /// </summary>
         public static IServiceCollection AddSlackClientBuilder(this IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddSingleton<ISlackClientBuilder, SlackClientBuilder>();
             return services;
         }
