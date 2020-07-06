@@ -99,7 +99,7 @@ namespace Slackbot.Net.SlackClients.Http
         }
         
         /// <inheritdoc/>
-        public async Task<ConversationsListResponse> AppsUninstall(string clientId, string clientSecret)
+        public async Task<Response> AppsUninstall(string clientId, string clientSecret)
         {
             var parameters = new List<KeyValuePair<string, string>>
             {
