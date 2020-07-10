@@ -18,10 +18,10 @@ namespace Slackbot.Net.Samples.Distributed
                     Token = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser"),
                     TeamId = "T0EC3DG3A"
                 },
-                new Workspace { 
-                    Token = Environment.GetEnvironmentVariable("FplBot_SlackApiKey_BotUser"),
-                    TeamId = "T0A9QSU83"
-                }
+                // new Workspace { 
+                //     Token = Environment.GetEnvironmentVariable("FplBot_SlackApiKey_BotUser"),
+                //     TeamId = "T0A9QSU83"
+                // }
             };
         }
         

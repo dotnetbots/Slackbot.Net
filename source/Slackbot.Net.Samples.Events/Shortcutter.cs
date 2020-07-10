@@ -36,7 +36,7 @@ namespace Slackbot.Net.Samples.Events
                 return appMention.Text.Contains("help");
             }
 
-            return true;
+            return false;
         }
     }
 }

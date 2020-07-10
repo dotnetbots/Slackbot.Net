@@ -52,13 +52,12 @@ namespace Slackbot.Net.Endpoints.Middlewares
         private static SlackEvent ToEventType(JObject eventJson)
         {
             var eventType = GetEventType(eventJson);
-            switch (eventType)
-            {    
-                case EventTypes.AppMention:
-                    return eventJson.ToObject<AppMentionEvent>();
-                default:
-                    return eventJson.ToObject<SlackEvent>();
-            }
+            return eventType switch
+            {
+                EventTypes.AppMention => eventJson.ToObject<AppMentionEvent>(),
+                EventTypes.MemberJoinedChannel => eventJson.ToObject<MemberJoinedChannelEvent>(),
+                _ => eventJson.ToObject<SlackEvent>()
+            };
         }
         
         public static string GetEventType(JObject eventJson)

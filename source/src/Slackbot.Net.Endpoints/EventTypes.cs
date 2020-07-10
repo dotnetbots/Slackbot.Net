@@ -5,5 +5,6 @@ namespace Slackbot.Net.Endpoints
         public const string AppUninstalled = "app_uninstalled";
         public const string TokensRevoked = "tokens_revoked";
         public const string AppMention = "app_mention";
+        public const string MemberJoinedChannel = "member_joined_channel";
     }
 }
