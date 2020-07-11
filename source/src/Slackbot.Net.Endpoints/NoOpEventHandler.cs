@@ -16,8 +16,15 @@ namespace Slackbot.Net.Endpoints
         }
         public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {
-            var contents = JsonConvert.SerializeObject(slackEvent);
-            _logger.LogWarning($"No-op for {slackEvent.Type}. {contents}");
+            if (slackEvent is UnknownSlackEvent unknown)
+            {
+                _logger.LogWarning($"No handler for event type `{slackEvent.Type}`. Unknown raw:\n{unknown.RawJson}");
+            }
+            else
+            {
+                _logger.LogWarning($"No-op for event type `{slackEvent.Type}`.");
+            }
+            
             return Task.FromResult(new EventHandledResponse("no-op handled it"));
         }
 

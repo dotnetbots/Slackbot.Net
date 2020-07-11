@@ -37,7 +37,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
                     var metadata = JsonConvert.DeserializeObject<EventMetaData>(body);
                     if (jObject["event"] is JObject @event)
                     {
-                        var slackEvent = ToEventType(@event);
+                        var slackEvent = ToEventType(@event, body);
                         context.Items.Add(HttpItemKeys.EventMetadataKey, metadata);
                         context.Items.Add(HttpItemKeys.SlackEventKey, slackEvent);
                         context.Items.Add(HttpItemKeys.EventTypeKey, @event["type"]);
@@ -49,15 +49,20 @@ namespace Slackbot.Net.Endpoints.Middlewares
             await _next(context);
         }
 
-        private static SlackEvent ToEventType(JObject eventJson)
+        private static SlackEvent ToEventType(JObject eventJson, string raw)
         {
             var eventType = GetEventType(eventJson);
-            return eventType switch
+            switch (eventType)
             {
-                EventTypes.AppMention => eventJson.ToObject<AppMentionEvent>(),
-                EventTypes.MemberJoinedChannel => eventJson.ToObject<MemberJoinedChannelEvent>(),
-                _ => eventJson.ToObject<SlackEvent>()
-            };
+                case EventTypes.AppMention:
+                    return eventJson.ToObject<AppMentionEvent>();
+                case EventTypes.MemberJoinedChannel:
+                    return eventJson.ToObject<MemberJoinedChannelEvent>();
+                default:
+                    UnknownSlackEvent unknownSlackEvent = eventJson.ToObject<UnknownSlackEvent>();
+                    unknownSlackEvent.RawJson = raw;
+                    return unknownSlackEvent;
+            }
         }
         
         public static string GetEventType(JObject eventJson)
