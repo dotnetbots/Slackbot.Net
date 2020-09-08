@@ -34,14 +34,18 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
 
             if (!response.IsSuccessStatusCode)
             {
+                logger?.Invoke(responseContent);
                 throw new SlackApiException($"Status code {response.StatusCode} \n {responseContent}");
             }
             
             var resObj = JsonConvert.DeserializeObject<T>(responseContent, JsonSerializerSettings);
-            
-            if(!resObj.Ok)
+
+            if (!resObj.Ok)
+            {
+                logger?.Invoke(resObj.Error);
                 throw new SlackApiException($"{resObj.Error}");
-            
+            }
+
             return resObj;
         }
         

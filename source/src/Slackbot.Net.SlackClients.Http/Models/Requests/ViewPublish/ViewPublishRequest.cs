@@ -4,10 +4,10 @@ namespace Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish
     {
         public ViewPublishRequest(string userId)
         {
-            UserId = userId;
+            User_Id = userId;
         }
 
-        public string UserId { get; }
+        public string User_Id { get; }
         public View View { get; set; }
     }
 }
