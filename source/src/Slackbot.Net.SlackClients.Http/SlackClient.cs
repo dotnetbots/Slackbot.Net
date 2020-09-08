@@ -5,12 +5,14 @@ using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.OAuthAccess;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.OAuthAccess;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ViewPublish;
 
 namespace Slackbot.Net.SlackClients.Http
 {
@@ -107,6 +109,12 @@ namespace Slackbot.Net.SlackClients.Http
                 new KeyValuePair<string, string>("client_secret", clientSecret)
             };
             return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"apps.uninstall", s => _logger.LogTrace(s));
+        }
+        
+        /// <inheritdoc/>
+        public async Task<ViewPublishResponse> ViewPublish(ViewPublishRequest view)
+        {
+            return await _client.PostJson<ViewPublishResponse>(view, "views.publish", s => _logger.LogTrace(s));
         }
     }
 }
