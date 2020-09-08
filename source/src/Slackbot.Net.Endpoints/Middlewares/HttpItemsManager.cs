@@ -58,6 +58,8 @@ namespace Slackbot.Net.Endpoints.Middlewares
                     return eventJson.ToObject<AppMentionEvent>();
                 case EventTypes.MemberJoinedChannel:
                     return eventJson.ToObject<MemberJoinedChannelEvent>();
+                case EventTypes.AppHomeOpened:
+                    return eventJson.ToObject<AppHomeOpenedEvent>();
                 default:
                     UnknownSlackEvent unknownSlackEvent = eventJson.ToObject<UnknownSlackEvent>();
                     unknownSlackEvent.RawJson = raw;
