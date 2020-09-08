@@ -16,7 +16,7 @@ namespace Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish
         ///
         /// Only applicable for Modals
         /// </summary>
-        public Text Text { get; set; }
+        public Text Title { get; set; }
         
         /// <summary>
         /// 	An array of blocks that defines the content of the view. Max of 100 blocks.
