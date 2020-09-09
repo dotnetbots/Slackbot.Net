@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks
 {
  public class Block : IBlock
@@ -45,6 +47,15 @@ namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks
         public string block_id { get; set; }
         public IElement[] elements { get; set; }
     }
+    
+    public class InputBlock : IBlock
+    {
+        public string type { get; } = BlockTypes.Input;
+        public string block_id { get; set; }
+        public Text label { get; set; }
+        public IElement element { get; set; }
+    }
+    
     public class Text : IElement
     {
         public string type { get; set; } = TextTypes.PlainText;
@@ -175,6 +186,13 @@ namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks
         public Confirm confirm { get; set; }
     }
 
+    public class PlainTextElement : IElement
+    {
+        public string type { get; } = ElementTypes.PlainTextInput;
+        public string action_id { get; set; }
+        public Text placeholder { get; set; }
+    }
+
     public static class ButtonStyles
     {
         public const string Primary = "primary";
@@ -188,6 +206,7 @@ namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks
         public const string Actions = "actions";
         public const string Context = "context";
         public const string Image = "image";
+        public const string Input = "input";
     }
 
     public static class TextTypes
@@ -207,6 +226,7 @@ namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks
         public const string ConversationSelect = "conversation_select";
         public const string Overflow = "overflow";
         public const string DatePicker = "datepicker";
+        public const string PlainTextInput = "plain_text_input";
     }
 
     public interface IElement { }
