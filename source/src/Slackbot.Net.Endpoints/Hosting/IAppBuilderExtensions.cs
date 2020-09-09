@@ -6,20 +6,15 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class IAppBuilderExtensions
     {
-        public static IApplicationBuilder UseInteractiveSlackbotEndpoints(this IApplicationBuilder app, string path)
-        {
-            return app.MapWhen(c => c.Request.Method == "POST" && c.Request.Path == path,
-                a => a.UseMiddleware<InteractiveEventsMiddleware>());
-        }
-
-        public static IApplicationBuilder UseSlackbotEvents(this IApplicationBuilder app, string path = "/events")
+        public static IApplicationBuilder UseSlackbot(this IApplicationBuilder app, string path = "/events")
         {
             app.MapWhen(c => IsSlackRequest(c, path), a =>
             {
                 a.UseMiddleware<HttpItemsManager>();
                 a.MapWhen(Challenge.ShouldRun, b => b.UseMiddleware<Challenge>());
                 a.MapWhen(Uninstall.ShouldRun, b => b.UseMiddleware<Uninstall>());
-                a.MapWhen(Events.ShouldRun, b => b.UseMiddleware<Events>());            
+                a.MapWhen(Events.ShouldRun, b => b.UseMiddleware<Events>());
+                a.MapWhen(Interactive.ShouldRun, b => b.UseMiddleware<Interactive>());
             });
    
             return app;
@@ -27,7 +22,7 @@ namespace Microsoft.AspNetCore.Builder
 
         private static bool IsSlackRequest(HttpContext ctx, string path)
         {
-            return ctx.Request.Path == path && ctx.Request.Method == "POST" && ctx.Request.ContentType == "application/json";
+            return ctx.Request.Path == path && ctx.Request.Method == "POST";
         }
     }
 }

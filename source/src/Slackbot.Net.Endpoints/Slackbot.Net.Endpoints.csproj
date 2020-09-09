@@ -28,12 +28,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Hosting\Events" />
-      <Folder Include="Hosting\Interactive" />
+      <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
+      <Folder Include="Interactive" />
     </ItemGroup>
 
   

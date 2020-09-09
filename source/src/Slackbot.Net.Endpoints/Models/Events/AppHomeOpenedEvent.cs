@@ -5,7 +5,6 @@ namespace Slackbot.Net.Endpoints.Models
         public string Tab { get; set; }
         public string User { get; set; }
         public string Channel { get; set; }
-        public string Ts { get; set; }
         public string Event_Ts { get; set; }
     }
 }

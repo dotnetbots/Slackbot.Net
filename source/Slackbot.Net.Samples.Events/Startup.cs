@@ -17,7 +17,8 @@ namespace Slackbot.Net.Samples.Events
                 .AddHandler<AppMentionHandler>()
                 .AddHandler<OtherAppMentionHandler>()
                 .AddHandler<MemberJoinedChannelHandler>()
-                .AddShortcut<Shortcutter>();
+                .AddShortcut<Shortcutter>()
+                .AddViewSubmissionHandler<AppHomeViewSubmissionHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,7 +29,7 @@ namespace Slackbot.Net.Samples.Events
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSlackbotEvents();
+            app.UseSlackbot();
         }
     }
 }

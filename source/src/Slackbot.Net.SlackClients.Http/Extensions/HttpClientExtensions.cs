@@ -34,6 +34,7 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
 
             if (!response.IsSuccessStatusCode)
             {
+                logger?.Invoke(serializedObject);
                 logger?.Invoke(responseContent);
                 throw new SlackApiException($"Status code {response.StatusCode} \n {responseContent}");
             }
@@ -42,6 +43,7 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
 
             if (!resObj.Ok)
             {
+                logger?.Invoke(serializedObject);
                 logger?.Invoke(resObj.Error);
                 throw new SlackApiException($"{resObj.Error}");
             }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Slackbot.Net.Endpoints.Interactive;
+using Slackbot.Net.Endpoints.Interactive.ViewSubmissions;
 using Slackbot.Net.Endpoints.Models;
 
 namespace Slackbot.Net.Endpoints.Middlewares
@@ -26,23 +28,39 @@ namespace Slackbot.Net.Endpoints.Middlewares
             using (var reader = new StreamReader(context.Request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true))
             {
                 var body = await reader.ReadToEndAsync();
-                var jObject = JObject.Parse(body);
 
-                if (jObject.ContainsKey("challenge"))
+                if (body.StartsWith("{"))
                 {
-                    context.Items.Add(HttpItemKeys.ChallengeKey, jObject["challenge"]);
-                }
-                else
-                {
-                    var metadata = JsonConvert.DeserializeObject<EventMetaData>(body);
-                    if (jObject["event"] is JObject @event)
+                    var jObject = JObject.Parse(body);
+
+                    if (jObject.ContainsKey("challenge"))
                     {
-                        var slackEvent = ToEventType(@event, body);
-                        context.Items.Add(HttpItemKeys.EventMetadataKey, metadata);
-                        context.Items.Add(HttpItemKeys.SlackEventKey, slackEvent);
-                        context.Items.Add(HttpItemKeys.EventTypeKey, @event["type"]);
+                        context.Items.Add(HttpItemKeys.ChallengeKey, jObject["challenge"]);
+                    }
+                    else
+                    {
+                        var metadata = JsonConvert.DeserializeObject<EventMetaData>(body);
+                        if (jObject["event"] is JObject @event)
+                        {
+                            var slackEvent = ToEventType(@event, body);
+                            context.Items.Add(HttpItemKeys.EventMetadataKey, metadata);
+                            context.Items.Add(HttpItemKeys.SlackEventKey, slackEvent);
+                            context.Items.Add(HttpItemKeys.EventTypeKey, @event["type"]);
+                        }
                     }
                 }
+                // https://api.slack.com/interactivity/handling#payloads
+                // The body of that request will contain a payload parameter.
+                // Your app should parse this payload parameter as JSON.
+                else if (body.StartsWith("payload="))
+                {
+                    _logger.LogTrace(body);
+                    var payloadJson = body.Remove(0,8);
+                    var payload = JObject.Parse(payloadJson);
+                    var interactivePayloadTyped = ToInteractiveType(payload, body);
+                    context.Items.Add(HttpItemKeys.InteractivePayloadKey, interactivePayloadTyped);
+                }
+ 
                 context.Request.Body.Position = 0;
             }
 
@@ -62,6 +80,26 @@ namespace Slackbot.Net.Endpoints.Middlewares
                     return eventJson.ToObject<AppHomeOpenedEvent>();
                 default:
                     UnknownSlackEvent unknownSlackEvent = eventJson.ToObject<UnknownSlackEvent>();
+                    unknownSlackEvent.RawJson = raw;
+                    return unknownSlackEvent;
+            }
+        }
+        
+        private static Interaction ToInteractiveType(JObject payloadJson, string raw)
+        {
+            var eventType = GetEventType(payloadJson);
+            switch (eventType)
+            {
+                case InteractionTypes.ViewSubmission:
+                    var viewSubmission = payloadJson.ToObject<ViewSubmission>();
+                    
+                    var view = payloadJson["view"] as JObject;
+                    var viewState = view["state"] as JObject;;
+                    viewSubmission.ViewId = view.Value<string>("id");
+                    viewSubmission.ViewState = viewState;
+                    return viewSubmission;
+                default:
+                    var unknownSlackEvent = payloadJson.ToObject<UnknownInteractiveMessage>();
                     unknownSlackEvent.RawJson = raw;
                     return unknownSlackEvent;
             }
