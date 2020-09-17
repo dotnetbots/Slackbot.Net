@@ -1,6 +1,4 @@
-using System.Collections;
-
-namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks
+namespace Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions
 {
  public class Block : IBlock
     {
