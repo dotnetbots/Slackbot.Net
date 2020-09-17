@@ -7,6 +7,7 @@ using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.OAuthAccess;
+using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ViewPublish;
 
@@ -75,5 +76,12 @@ namespace Slackbot.Net.SlackClients.Http
         /// </summary>
         /// <remarks>https://api.slack.com/methods/views.publish</remarks>
         Task<ViewPublishResponse> ViewPublish(ViewPublishRequest view);
+        
+        /// <summary>
+        /// Scopes required: users.profile:read 
+        /// Gets a users profile
+        /// </summary>
+        /// <remarks>https://api.slack.com/methods/users.profile.get</remarks>
+        Task<UserProfileResponse> UserProfile(string user);
     }
 }

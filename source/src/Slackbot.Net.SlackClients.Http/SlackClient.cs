@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
-using Slackbot.Net.SlackClients.Http.Models.Requests.OAuthAccess;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
-using Slackbot.Net.SlackClients.Http.Models.Responses.OAuthAccess;
+using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ViewPublish;
 
@@ -115,6 +114,16 @@ namespace Slackbot.Net.SlackClients.Http
         public async Task<ViewPublishResponse> ViewPublish(ViewPublishRequest view)
         {
             return await _client.PostJson<ViewPublishResponse>(view, "views.publish", s => _logger.LogTrace(s));
+        }
+
+        /// <inheritdoc/>
+        public async Task<UserProfileResponse> UserProfile(string user)
+        {
+            var parameters = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("user", user),
+            };
+            return await _client.PostParametersAsForm<UserProfileResponse>(parameters,"users.profile.get", s => _logger.LogTrace(s));        
         }
     }
 }
