@@ -36,8 +36,9 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
             {
                 logger?.Invoke(serializedObject);
                 logger?.Invoke(responseContent);
-                throw new SlackApiException($"Status code {response.StatusCode} \n {responseContent}");
             }
+
+            response.EnsureSuccessStatusCode();
             
             var resObj = JsonConvert.DeserializeObject<T>(responseContent, JsonSerializerSettings);
 
@@ -45,7 +46,7 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
             {
                 logger?.Invoke(serializedObject);
                 logger?.Invoke(resObj.Error);
-                throw new SlackApiException($"{resObj.Error}");
+                throw new WellKnownSlackApiException(error:$"{resObj.Error}",responseContent:responseContent);
             }
 
             return resObj;
@@ -67,17 +68,17 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
             var response =  await httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
             
-            logger?.Invoke($"{response.StatusCode} \n {responseContent}");
-
             if (!response.IsSuccessStatusCode)
             {
-                throw new SlackApiException($"Status code {response.StatusCode} \n {responseContent}");
+                logger?.Invoke($"{response.StatusCode} \n {responseContent}");
             }
-            
+        
+            response.EnsureSuccessStatusCode();
+
             var resObj = JsonConvert.DeserializeObject<T>(responseContent, JsonSerializerSettings);
             
             if(!resObj.Ok)
-                throw new SlackApiException($"{resObj.Error}");
+                throw new WellKnownSlackApiException(error: $"{resObj.Error}", responseContent:responseContent);
             
             return resObj;        
         }

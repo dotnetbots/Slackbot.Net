@@ -23,7 +23,7 @@ namespace Slackbot.Net.Tests
                 ClientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET"),
                 Code = ""
             };
-            var ex = Assert.Throws<SlackApiException>(() =>
+            var ex = Assert.Throws<WellKnownSlackApiException>(() =>
             {
                 var oAuthAccess = SlackOAuthClient.OAuthAccess(oauthAccessRequest).GetAwaiter().GetResult();
                 return oAuthAccess;

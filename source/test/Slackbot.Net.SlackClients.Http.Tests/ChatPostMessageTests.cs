@@ -36,7 +36,7 @@ namespace Slackbot.Net.Tests
         [Fact]
         public async Task PostMissingChannelThrowsSlackApiException()
         {
-            await Assert.ThrowsAsync<SlackApiException>(() => SlackClient.ChatPostMessage("", Text));
+            await Assert.ThrowsAsync<WellKnownSlackApiException>(() => SlackClient.ChatPostMessage("", Text));
         }
     }
 }
