@@ -14,7 +14,7 @@ namespace Slackbot.Net.Tests
         [Fact]
         public async Task ConversationsListWorks()
         {
-            var response = await SlackClient.ConversationsListPublicChannels();
+            var response = await SlackClient.ConversationsListPublicChannels(300);
             Assert.True(response.Ok);
         }
         

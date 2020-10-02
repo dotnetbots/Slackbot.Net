@@ -79,13 +79,18 @@ namespace Slackbot.Net.SlackClients.Http
         }
 
         /// <inheritdoc/>
-        public async Task<ConversationsListResponse> ConversationsListPublicChannels()
+        public async Task<ConversationsListResponse> ConversationsListPublicChannels(int? limit = null, string cursor = null)
         {
             var parameters = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("types", "public_channel"),
                 new KeyValuePair<string, string>("exclude_archived", "true"),
+                new KeyValuePair<string, string>("limit", (limit ?? 200).ToString()),
             };
+            if (cursor != null)
+            {
+                parameters.Add(new KeyValuePair<string, string>("cursor", cursor));
+            }
             return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.list", s => _logger.LogTrace(s));
         }
 

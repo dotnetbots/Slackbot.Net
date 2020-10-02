@@ -53,7 +53,7 @@ namespace Slackbot.Net.SlackClients.Http
         /// Only requests `public_channel` types of conversations
         /// </summary>
         /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
-        Task<ConversationsListResponse> ConversationsListPublicChannels();
+        Task<ConversationsListResponse> ConversationsListPublicChannels(int? limit = null, string cursor = null);
 
         /// <summary>
         /// Scopes required: channels:read | groups:read | im:read
