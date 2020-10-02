@@ -5,6 +5,13 @@ namespace Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList
     public class ConversationsListResponse : Response
     {
         public IEnumerable<Conversation> Channels { get; set; }
+        
+        public ResponseMetadata Response_Metadata { get; set; }
+    }
+
+    public class ResponseMetadata
+    {
+        public string Next_Cursor { get; set; }
     }
     
     public class Conversation
