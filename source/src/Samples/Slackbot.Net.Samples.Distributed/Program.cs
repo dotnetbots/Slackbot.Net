@@ -14,7 +14,7 @@ namespace Slackbot.Net.Samples.Distributed
                 .ConfigureServices((c, s) =>
                 {
                     s.AddSlackbotWorker<MyTokenStore>()
-                        .AddSamples();
+                        .AddRecurringActions();
                 })
                 .ConfigureLogging(c =>
                 {

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
@@ -21,7 +22,7 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
             _logger = logger;
         }
         
-        public async Task Process()
+        public async Task Process(CancellationToken stoppingToken)
         {
             var allTokens = await _tokenStore.GetTokens();
             foreach (var token in allTokens)

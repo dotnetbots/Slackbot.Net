@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Slackbot.Net.Abstractions.Handlers
@@ -9,7 +10,7 @@ namespace Slackbot.Net.Abstractions.Handlers
         /// The job to be executed at intervals defined by the Cron expression
         /// </summary>
         /// <returns></returns>
-        Task Process();
+        Task Process(CancellationToken stoppingToken);
         
         /// <summary>
         /// The cron expression (including seconds) as defined by the Cronos library:

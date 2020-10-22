@@ -1,15 +1,18 @@
 ﻿using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Endpoints.Hosting;
 
 namespace Slackbot.Net.Extensions.Samples.HelloWorld
 {
     public static class SlackbotNetBuilderExtensions
     {
-        public static ISlackbotWorkerBuilder AddSamples(this ISlackbotWorkerBuilder builder)
+        public static ISlackbotHandlersBuilder AddAppMentionHandlerSamples(this ISlackbotHandlersBuilder builder)
+        {
+            return builder.AddHandler<HelloWorldHandler>();
+        }
+
+        public static ISlackbotWorkerBuilder AddRecurringActions(this ISlackbotWorkerBuilder builder)
         {
             return builder
-                .AddHandler<HelloWorldHandler>()
-                .AddHandler<DebuggingStuffHandler>()
-                .AddHandler<DeprecatedHandler>()
                 .AddRecurring<WorkspacesAction>()
                 .AddRecurring<HelloWorldRecurrer>()
                 .BuildRecurrers();

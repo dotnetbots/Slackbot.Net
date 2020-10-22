@@ -1,43 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
-using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.Endpoints.Abstractions;
+using Slackbot.Net.Endpoints.Models;
 
 namespace Slackbot.Net.Extensions.Samples.HelloWorld
 {
-    internal class HelloWorldHandler : IHandleMessages
+    internal class HelloWorldHandler : IHandleEvent
     {
-        private readonly IEnumerable<IPublisherBuilder> _publishers;
-        public bool ShouldShowInHelp { get; } = true;
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("hw", "hw");
-
-        public HelloWorldHandler(IEnumerable<IPublisherBuilder> publishers)
+        public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {
-            _publishers = publishers;
-        }
-        
-        public async Task<HandleResponse> Handle(SlackMessage message)
-        {
-            foreach (var p in _publishers)
-            {
-                var publisher = await p.Build(message.Team.Id);
-
-                await publisher.Publish(new Notification
-                {
-                    Msg = $"Hello world, {message.User.Name} ({message.User.FirstName} {message.User.LastName})\n" +
-                          $"I am {message.Bot.Name}",
-                    Recipient = message.ChatHub.Id
-                });   
-            }
-            
-            return new HandleResponse("Responded");
+            var message = slackEvent as AppMentionEvent;
+            Console.WriteLine($"Hello world, {message.User}\n");
+            return Task.FromResult(new EventHandledResponse("Responded"));
         }
 
-        public bool ShouldHandle(SlackMessage message)
-        {
-            return message.MentionsBot && message.Text.Contains("hw");
-        }
+        public bool ShouldHandle(SlackEvent slackEvent) => (slackEvent is AppMentionEvent appMention) && appMention.Text.Contains("hw");
+
+        (string HandlerTrigger, string Description) IHandleEvent.GetHelpDescription() => ("hw", "hw");
     }
 }

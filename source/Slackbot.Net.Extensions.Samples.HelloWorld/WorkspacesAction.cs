@@ -1,8 +1,7 @@
-using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Hosting;
 
@@ -19,7 +18,7 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
             _logger = logger;
         }
 
-        public async Task Process()
+        public async Task Process(CancellationToken stoppingToken)
         {
             var ws = await _workspaceService.GetTokens();
             _logger.LogTrace(string.Join("\n", ws.Select(c => $"Token: {Scrambled(c)}")));

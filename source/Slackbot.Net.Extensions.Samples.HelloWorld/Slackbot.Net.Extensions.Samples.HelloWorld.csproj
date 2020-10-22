@@ -7,6 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\src\Slackbot.Net.Abstractions.Handlers\Slackbot.Net.Abstractions.Handlers.csproj" />
       <ProjectReference Include="..\src\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
+      <ProjectReference Include="..\src\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj" />
       <ProjectReference Include="..\src\Slackbot.Net.Extensions.Publishers.Logger\Slackbot.Net.Extensions.Publishers.Logger.csproj" />
       <ProjectReference Include="..\src\Slackbot.Net.Extensions.Publishers.Slack\Slackbot.Net.Extensions.Publishers.Slack.csproj" />
       <ProjectReference Include="..\src\Slackbot.Net\Slackbot.Net.csproj" />

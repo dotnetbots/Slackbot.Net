@@ -46,7 +46,7 @@ namespace Slackbot.Net
                 {
                     try
                     {
-                        await Action.Process();
+                        await Action.Process(stoppingToken);
                     }
                     catch (Exception e)
                     {

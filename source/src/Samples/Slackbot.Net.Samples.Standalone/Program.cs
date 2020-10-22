@@ -1,15 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Hosting;
-using Slackbot.Net.Configuration;
-using Slackbot.Net.Extensions.Publishers.Logger;
-using Slackbot.Net.Extensions.Publishers.Slack;
 using Slackbot.Net.Extensions.Samples.HelloWorld;
-using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Samples.Standalone
 {
@@ -21,7 +14,7 @@ namespace Slackbot.Net.Samples.Standalone
                 .ConfigureServices((c,s) =>
                 {
                     s.AddSlackbotWorker(c.Configuration)
-                        .AddSamples();
+                        .AddRecurringActions();
                 })
                 .ConfigureLogging(c =>
                 {
