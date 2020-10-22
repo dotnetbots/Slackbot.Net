@@ -9,10 +9,5 @@ namespace CronBackgroundServices.Extensions.Samples.HelloWorld
         {
             return builder.AddHandler<HelloWorldHandler>();
         }
-
-        public static IRecurringActionsBuilder AddSamples(this IRecurringActionsBuilder builder)
-        {
-            return builder.AddRecurrer<WorkspacesAction>().AddRecurrer<WorkspacesAction>().Build();
-        }
     }
 }

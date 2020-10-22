@@ -14,18 +14,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Endpoints", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Samples.Standalone", "src\Samples\Slackbot.Net.Samples.Standalone\Slackbot.Net.Samples.Standalone.csproj", "{908FAC13-7483-4F5D-9A10-57638948C9D7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{10CBAF56-F382-480E-B8BE-CBF270617AD8}"
 ProjectSection(SolutionItems) = preProject
 	..\build.cake = ..\build.cake
 		..\CI.yml = ..\.github\workflows\CI.yml
 	..\tools\packages.config = ..\tools\packages.config
 EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Samples.Distributed", "src\Samples\Slackbot.Net.Samples.Distributed\Slackbot.Net.Samples.Distributed.csproj", "{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.Samples.HelloWorld", "Slackbot.Net.Extensions.Samples.HelloWorld\Slackbot.Net.Extensions.Samples.HelloWorld.csproj", "{8253A399-F856-42A2-A275-2CE30EEA2044}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Samples.Events", "Slackbot.Net.Samples.Events\Slackbot.Net.Samples.Events.csproj", "{1743E1DB-EC60-461F-8E03-01D5A0CC1173}"
 EndProject
@@ -51,18 +45,6 @@ Global
 		{0B4A58E9-FF02-4942-9345-D9E255C5C87D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B4A58E9-FF02-4942-9345-D9E255C5C87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B4A58E9-FF02-4942-9345-D9E255C5C87D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{908FAC13-7483-4F5D-9A10-57638948C9D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8253A399-F856-42A2-A275-2CE30EEA2044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8253A399-F856-42A2-A275-2CE30EEA2044}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8253A399-F856-42A2-A275-2CE30EEA2044}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8253A399-F856-42A2-A275-2CE30EEA2044}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1743E1DB-EC60-461F-8E03-01D5A0CC1173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1743E1DB-EC60-461F-8E03-01D5A0CC1173}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1743E1DB-EC60-461F-8E03-01D5A0CC1173}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,9 +55,6 @@ Global
 		{E844F8E7-7D8B-4147-AED6-85EDF30717A2} = {ED8E20FC-B173-40FF-B447-D74B58FC27C6}
 		{D6C3CE02-3D77-4313-AC43-1A8E990DCB9C} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
 		{0B4A58E9-FF02-4942-9345-D9E255C5C87D} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
-		{908FAC13-7483-4F5D-9A10-57638948C9D7} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
-		{8B8B1DCE-9E35-453D-9DD5-55327CD382E8} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
-		{8253A399-F856-42A2-A275-2CE30EEA2044} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
 		{1743E1DB-EC60-461F-8E03-01D5A0CC1173} = {F22E2B7D-C611-4444-BBCB-F4FC4DAC956C}
 	EndGlobalSection
 EndGlobal

@@ -5,7 +5,7 @@ using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Xunit.Abstractions;
 
-namespace CronBackgroundServices.Tests
+namespace Slackbot.Net.Tests.Helpers
 {
     public class Setup
     {

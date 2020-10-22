@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CronBackgroundServices.Abstractions.Handlers;
-using CronBackgroundServices.Abstractions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Hosting;
 

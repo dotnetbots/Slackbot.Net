@@ -1,9 +1,9 @@
-using System.Linq;
 using System.Threading.Tasks;
+using Slackbot.Net.Tests.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CronBackgroundServices.Tests
+namespace Slackbot.Net.Tests
 {
     public class UsersProfileGetTests : Setup
     {

@@ -1,9 +1,8 @@
 using System;
 using Microsoft.Extensions.Logging;
-using CronBackgroundServices.SlackClients;
 using Xunit.Abstractions;
 
-namespace CronBackgroundServices.Tests
+namespace Slackbot.Net.Tests.Helpers
 {
     public class XUnitLogger<T> : ILogger<T>
     {

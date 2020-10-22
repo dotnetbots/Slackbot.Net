@@ -10,7 +10,7 @@ namespace CronBackgroundServices.Samples.Events
     {
         public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {
-            Console.WriteLine("Doing stuff from AppmentionHandler: " + JsonConvert.SerializeObject(slackEvent));
+            Console.WriteLine("Doing stuff from OtherAppMentionHandler: " + JsonConvert.SerializeObject(slackEvent));
             return Task.FromResult(new EventHandledResponse("Wrote stuff to log"));
         }
 

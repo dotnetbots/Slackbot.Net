@@ -10,19 +10,16 @@ namespace CronBackgroundServices.Samples.Distributed
     public class MyTokenStore : ITokenStore
     {
         private readonly List<Workspace> _workspaces;
+        public string SlackToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
 
         public MyTokenStore()
         {
             _workspaces = new List<Workspace>()
             {
                 new Workspace { 
-                    Token = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser"),
+                    Token = SlackToken,
                     TeamId = "T0EC3DG3A"
-                },
-                // new Workspace { 
-                //     Token = Environment.GetEnvironmentVariable("FplBot_SlackApiKey_BotUser"),
-                //     TeamId = "T0A9QSU83"
-                // }
+                }
             };
         }
         

@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
+using Slackbot.Net.Tests.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CronBackgroundServices.Tests
+namespace Slackbot.Net.Tests
 {
     public class ViewPublishTests: Setup
     {

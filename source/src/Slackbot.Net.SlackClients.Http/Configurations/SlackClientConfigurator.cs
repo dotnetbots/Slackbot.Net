@@ -32,7 +32,6 @@ namespace Slackbot.Net.SlackClients.Http.Configurations
             if (name is nameof(SlackOAuthAccessClient))
             {
                 options.HttpClientActions.Add(c => CommonHttpClientConfiguration.ConfigureHttpClient(c));
-
             }
         }
 

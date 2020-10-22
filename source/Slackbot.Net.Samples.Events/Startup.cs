@@ -1,9 +1,11 @@
+using CronBackgroundServices.Extensions.Samples.HelloWorld;
 using CronBackgroundServices.Samples.Distributed;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Slackbot.Net.Endpoints.Hosting;
+using Slackbot.Net.SlackClients.Http.Extensions;
 
 namespace CronBackgroundServices.Samples.Events
 {
@@ -13,10 +15,14 @@ namespace CronBackgroundServices.Samples.Events
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.AddSlackClientBuilder();
+            services.AddRecurringActions().AddRecurrer<WorkspacesAction>().AddRecurrer<HelloWorldRecurrer>().Build();
+            
             services.AddSlackBotEvents<MyTokenStore>()
-                .AddHandler<AppMentionHandler>()
-                .AddHandler<OtherAppMentionHandler>()
-                .AddHandler<MemberJoinedChannelHandler>()
+                .AddAppMentionHandler<AppMentionHandler>()
+                .AddAppMentionHandler<OtherAppMentionHandler>()
+                .AddAppMentionHandler<MemberJoinedChannelHandler>()
                 .AddShortcut<Shortcutter>()
                 .AddViewSubmissionHandler<AppHomeViewSubmissionHandler>();
         }

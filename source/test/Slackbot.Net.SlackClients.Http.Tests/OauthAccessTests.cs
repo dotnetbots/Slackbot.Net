@@ -1,11 +1,11 @@
 using System;
-using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Http.Exceptions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.OAuthAccess;
+using Slackbot.Net.Tests.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CronBackgroundServices.Tests
+namespace Slackbot.Net.Tests
 {
     public class OauthAccessTests : Setup
     {
