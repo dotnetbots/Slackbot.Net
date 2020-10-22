@@ -24,7 +24,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Slackbot.Net.Abstractions.Handlers\Slackbot.Net.Abstractions.Handlers.csproj" />
-        <ProjectReference Include="..\Slackbot.Net.Abstractions.Publishers\Slackbot.Net.Abstractions.Publishers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
