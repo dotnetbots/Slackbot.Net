@@ -31,10 +31,6 @@
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Interactive" />
-    </ItemGroup>
-
   
 
 </Project>

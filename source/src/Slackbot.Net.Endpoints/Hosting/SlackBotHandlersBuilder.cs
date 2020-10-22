@@ -12,9 +12,9 @@ namespace Slackbot.Net.Endpoints.Hosting
             _services = services;
         }
 
-        public ISlackbotHandlersBuilder AddHandler<T>() where T : class, IHandleEvent
+        public ISlackbotHandlersBuilder AddHandler<T>() where T : class, IHandleAppMentionEvent
         {
-            _services.AddSingleton<IHandleEvent, T>();
+            _services.AddSingleton<IHandleAppMentionEvent, T>();
             return this;
         }
         

@@ -25,9 +25,9 @@ namespace Slackbot.Net.Endpoints.Middlewares
         {
             var metadata = (EventMetaData) context.Items[HttpItemKeys.EventMetadataKey];
             var slackEvent = (SlackEvent) context.Items[HttpItemKeys.SlackEventKey];
-            var handlers = await _responseHandler.GetEventHandlerFor(metadata, slackEvent);
+            var appMentionEventHandler = await _responseHandler.GetAppMentionEventHandlerFor(metadata, slackEvent);
             
-            foreach (var handler in handlers)
+            foreach (var handler in appMentionEventHandler)
             {
                 try
                 {

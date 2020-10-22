@@ -6,7 +6,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace CronBackgroundServices.Samples.Events
 {
-    public class AppMentionHandler : IHandleEvent
+    public class AppMentionHandler : IHandleAppMentionEvent
     {
         public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {

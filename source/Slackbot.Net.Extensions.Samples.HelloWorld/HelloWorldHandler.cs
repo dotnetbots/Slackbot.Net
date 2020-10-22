@@ -5,7 +5,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace CronBackgroundServices.Extensions.Samples.HelloWorld
 {
-    internal class HelloWorldHandler : IHandleEvent
+    internal class HelloWorldHandler : IHandleAppMentionEvent
     {
         public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
         {
@@ -16,6 +16,6 @@ namespace CronBackgroundServices.Extensions.Samples.HelloWorld
 
         public bool ShouldHandle(SlackEvent slackEvent) => (slackEvent is AppMentionEvent appMention) && appMention.Text.Contains("hw");
 
-        (string HandlerTrigger, string Description) IHandleEvent.GetHelpDescription() => ("hw", "hw");
+        (string HandlerTrigger, string Description) IHandleAppMentionEvent.GetHelpDescription() => ("hw", "hw");
     }
 }

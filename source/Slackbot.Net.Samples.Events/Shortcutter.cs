@@ -9,10 +9,10 @@ namespace CronBackgroundServices.Samples.Events
 {
     public class Shortcutter : IShortcutHandler
     {
-        private readonly IEnumerable<IHandleEvent> _handlers;
+        private readonly IEnumerable<IHandleAppMentionEvent> _handlers;
         
 
-        public Shortcutter(IEnumerable<IHandleEvent> allHandlers)
+        public Shortcutter(IEnumerable<IHandleAppMentionEvent> allHandlers)
         {
             _handlers = allHandlers;
         }
