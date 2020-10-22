@@ -1,5 +1,5 @@
-using CronBackgroundServices.Extensions.Samples.HelloWorld;
-using CronBackgroundServices.Samples.Distributed;
+using HelloWorld.EventHandlers;
+using HelloWorld.RecurringActions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Slackbot.Net.Endpoints.Hosting;
 using Slackbot.Net.SlackClients.Http.Extensions;
 
-namespace CronBackgroundServices.Samples.Events
+namespace HelloWorld
 {
     public class Startup
     {

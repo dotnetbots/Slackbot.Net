@@ -9,15 +9,13 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints
 {
-    internal class EventHandlerSelector : ISelectEventHandlers
+    internal class AppMentionEventHandlerSelector : ISelectAppMentionEventHandlers
     {
-        private readonly ILogger<EventHandlerSelector> _logger;
         private readonly ILoggerFactory _loggerFactory;
         private readonly IServiceProvider _provider;
 
-        public EventHandlerSelector(ILoggerFactory loggerFactory, IServiceProvider provider)
+        public AppMentionEventHandlerSelector(ILoggerFactory loggerFactory, IServiceProvider provider)
         {
-            _logger = loggerFactory.CreateLogger<EventHandlerSelector>();
             _loggerFactory = loggerFactory;
             _provider = provider;
         }

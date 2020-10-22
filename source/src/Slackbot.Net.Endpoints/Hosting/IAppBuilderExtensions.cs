@@ -14,7 +14,8 @@ namespace Slackbot.Net.Endpoints.Hosting
                 a.MapWhen(Challenge.ShouldRun, b => b.UseMiddleware<Challenge>());
                 a.MapWhen(Uninstall.ShouldRun, b => b.UseMiddleware<Uninstall>());
                 a.MapWhen(AppMentionEvents.ShouldRun, b => b.UseMiddleware<AppMentionEvents>());
-                a.MapWhen(Interactive.ShouldRun, b => b.UseMiddleware<Interactive>());
+                a.MapWhen(MemberJoinedEvents.ShouldRun, b => b.UseMiddleware<MemberJoinedEvents>());
+                a.MapWhen(ViewSubmissionEvents.ShouldRun, b => b.UseMiddleware<ViewSubmissionEvents>());
             });
    
             return app;

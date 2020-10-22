@@ -5,7 +5,7 @@ using CronBackgroundServices.Abstractions.Handlers;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Hosting;
 
-namespace CronBackgroundServices.Extensions.Samples.HelloWorld
+namespace HelloWorld.RecurringActions
 {
     internal class WorkspacesAction : IRecurringAction
     {

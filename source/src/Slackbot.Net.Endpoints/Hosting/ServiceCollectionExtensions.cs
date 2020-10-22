@@ -9,7 +9,7 @@ namespace Slackbot.Net.Endpoints.Hosting
         public static ISlackbotHandlersBuilder AddSlackBotEvents<T>(this IServiceCollection services) where T: class, ITokenStore
         {
             services.AddSingleton<ITokenStore, T>();
-            services.AddSingleton<ISelectEventHandlers, EventHandlerSelector>();
+            services.AddSingleton<ISelectAppMentionEventHandlers, AppMentionEventHandlerSelector>();
             return new SlackBotHandlersBuilder(services);
         }
     }

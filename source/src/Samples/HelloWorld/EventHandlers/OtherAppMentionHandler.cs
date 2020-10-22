@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
 
-namespace CronBackgroundServices.Samples.Events
+namespace HelloWorld.EventHandlers
 {
     public class OtherAppMentionHandler : IHandleAppMentionEvent
     {

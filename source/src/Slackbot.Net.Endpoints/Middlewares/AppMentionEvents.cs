@@ -12,9 +12,9 @@ namespace Slackbot.Net.Endpoints.Middlewares
         private readonly RequestDelegate _next;
         private readonly ILogger<AppMentionEvents> _logger;
         
-        private readonly ISelectEventHandlers _responseHandler;
+        private readonly ISelectAppMentionEventHandlers _responseHandler;
 
-        public AppMentionEvents(RequestDelegate next, ILogger<AppMentionEvents> logger, ISelectEventHandlers responseHandler)
+        public AppMentionEvents(RequestDelegate next, ILogger<AppMentionEvents> logger, ISelectAppMentionEventHandlers responseHandler)
         {
             _next = next;
             _logger = logger;
@@ -24,29 +24,25 @@ namespace Slackbot.Net.Endpoints.Middlewares
         public async Task Invoke(HttpContext context)
         {
             var metadata = (EventMetaData) context.Items[HttpItemKeys.EventMetadataKey];
-            var slackEvent = (SlackEvent) context.Items[HttpItemKeys.SlackEventKey];
+            var appMentionEvent = (AppMentionEvent) context.Items[HttpItemKeys.SlackEventKey];
+            var handlers = await _responseHandler.GetAppMentionEventHandlerFor(metadata, appMentionEvent);
 
-            if (slackEvent is AppMentionEvent appMentionEvent)
+            foreach (var handler in handlers)
             {
-                var handlers = await _responseHandler.GetAppMentionEventHandlerFor(metadata, appMentionEvent);
-
-                foreach (var handler in handlers)
+                try
                 {
-                    try
-                    {
-                        _logger.LogInformation($"Handling using {handler.GetType()}");
-                        await handler.Handle(metadata, appMentionEvent);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, e.Message);
-                    }
-                } 
+                    _logger.LogInformation($"Handling using {handler.GetType()}");
+                    await handler.Handle(metadata, appMentionEvent);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, e.Message);
+                }
             }
+
 
             context.Response.StatusCode = 200;
         }
-
         public static bool ShouldRun(HttpContext ctx)
         {
             return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey) && (ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.AppMention);

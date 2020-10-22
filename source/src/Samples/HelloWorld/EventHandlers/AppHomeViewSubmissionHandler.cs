@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
-namespace CronBackgroundServices.Samples.Events
+namespace HelloWorld.EventHandlers
 {
     public class AppHomeViewSubmissionHandler : IHandleViewSubmissions
     {

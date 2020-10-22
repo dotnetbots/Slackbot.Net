@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
 
-namespace CronBackgroundServices.Extensions.Samples.HelloWorld
+namespace HelloWorld.EventHandlers
 {
     internal class HelloWorldHandler : IHandleAppMentionEvent
     {

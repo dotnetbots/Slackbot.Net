@@ -7,7 +7,7 @@ namespace Slackbot.Net.Endpoints.Abstractions
     {
         Task<ViewSubmissionHandleResponse> Handle(ViewSubmission payload);
     }
-    
+
     public class ViewSubmissionHandleResponse
     {
         public ViewSubmissionHandleResponse(string message)

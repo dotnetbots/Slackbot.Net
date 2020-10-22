@@ -10,14 +10,14 @@ using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
 namespace Slackbot.Net.Endpoints.Middlewares
 {
-    internal class Interactive
+    internal class ViewSubmissionEvents
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<Interactive> _logger;
+        private readonly ILogger<ViewSubmissionEvents> _logger;
         private readonly IEnumerable<IHandleViewSubmissions> _responseHandlers;
         private NoOpViewSubmissionHandler _noOp;
 
-        public Interactive(RequestDelegate next, ILogger<Interactive> logger, IEnumerable<IHandleViewSubmissions> responseHandlers, ILoggerFactory loggerFactory)
+        public ViewSubmissionEvents(RequestDelegate next, ILogger<ViewSubmissionEvents> logger, IEnumerable<IHandleViewSubmissions> responseHandlers, ILoggerFactory loggerFactory)
         {
             _next = next;
             _logger = logger;

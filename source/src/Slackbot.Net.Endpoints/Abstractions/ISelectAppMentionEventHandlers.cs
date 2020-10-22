@@ -4,7 +4,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints.Abstractions
 {
-    public interface ISelectEventHandlers
+    public interface ISelectAppMentionEventHandlers
     {
         Task<IEnumerable<IHandleAppMentionEvent>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata, AppMentionEvent slackEvent);
     }

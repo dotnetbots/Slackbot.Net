@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CronBackgroundServices.Abstractions.Hosting;
 using Slackbot.Net.Abstractions.Hosting;
 
-namespace CronBackgroundServices.Samples.Distributed
+namespace HelloWorld
 {
     public class MyTokenStore : ITokenStore
     {
