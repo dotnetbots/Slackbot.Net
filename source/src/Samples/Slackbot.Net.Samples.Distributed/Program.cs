@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Extensions.Publishers.Slack;
 using Slackbot.Net.Extensions.Samples.HelloWorld;
 
 namespace Slackbot.Net.Samples.Distributed
@@ -15,7 +14,6 @@ namespace Slackbot.Net.Samples.Distributed
                 .ConfigureServices((c, s) =>
                 {
                     s.AddSlackbotWorker<MyTokenStore>()
-                        .AddSlackPublisherBuilder()
                         .AddSamples();
                 })
                 .ConfigureLogging(c =>

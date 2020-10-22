@@ -4,11 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Hosting;
-using Slackbot.Net.Connections;
 using Slackbot.Net.Dynamic;
-using Slackbot.Net.Handlers;
-using Slackbot.Net.SlackClients.Http;
-using Slackbot.Net.SlackClients.Http.Extensions;
 
 namespace Slackbot.Net.Hosting
 {
@@ -23,14 +19,6 @@ namespace Slackbot.Net.Hosting
         public IServiceCollection Services
         {
             get;
-        }
-
-        public ISlackbotWorkerBuilder AddRtmConnections()
-        {
-            Services.AddSingleton<SlackConnectionSetup>();
-            Services.AddSingleton<HandlerSelector>();
-            Services.AddHostedService<SlackRtmConnectionHostedService>();
-            return this;
         }
 
         public ISlackbotWorkerBuilder BuildRecurrers()

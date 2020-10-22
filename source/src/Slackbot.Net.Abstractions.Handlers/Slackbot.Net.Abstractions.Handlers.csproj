@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\Rtm\SlackAppDistribution" />
+      <Folder Include="Models" />
     </ItemGroup>
 
 </Project>

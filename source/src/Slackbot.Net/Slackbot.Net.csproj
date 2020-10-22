@@ -32,7 +32,6 @@
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Publishers\Slackbot.Net.Abstractions.Publishers.csproj" />
       <ProjectReference Include="..\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj" />
-      <ProjectReference Include="..\Slackbot.Net.SlackClients.Rtm\Slackbot.Net.SlackClients.Rtm.csproj" />
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
     </ItemGroup>
 
