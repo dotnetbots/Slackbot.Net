@@ -13,7 +13,7 @@ namespace Slackbot.Net.Endpoints.Hosting
                 a.UseMiddleware<HttpItemsManager>();
                 a.MapWhen(Challenge.ShouldRun, b => b.UseMiddleware<Challenge>());
                 a.MapWhen(Uninstall.ShouldRun, b => b.UseMiddleware<Uninstall>());
-                a.MapWhen(Events.ShouldRun, b => b.UseMiddleware<Events>());
+                a.MapWhen(AppMentionEvents.ShouldRun, b => b.UseMiddleware<AppMentionEvents>());
                 a.MapWhen(Interactive.ShouldRun, b => b.UseMiddleware<Interactive>());
             });
    

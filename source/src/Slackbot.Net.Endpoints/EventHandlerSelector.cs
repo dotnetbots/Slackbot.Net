@@ -22,7 +22,7 @@ namespace Slackbot.Net.Endpoints
             _provider = provider;
         }
         
-        public async Task<IEnumerable<IHandleAppMentionEvent>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata, SlackEvent slackEvent)
+        public async Task<IEnumerable<IHandleAppMentionEvent>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata, AppMentionEvent slackEvent)
         {
             var allHandlers = _provider.GetServices<IHandleAppMentionEvent>();
             var shortCutter = _provider.GetService<IShortcutHandler>();
@@ -40,13 +40,13 @@ namespace Slackbot.Net.Endpoints
  
         }
 
-        private IEnumerable<IHandleAppMentionEvent> SelectHandler(IEnumerable<IHandleAppMentionEvent> handlers, SlackEvent message)
+        private IEnumerable<IHandleAppMentionEvent> SelectHandler(IEnumerable<IHandleAppMentionEvent> handlers, AppMentionEvent message)
         {
             var matchingHandlers = handlers.Where(s => s.ShouldHandle(message));
             if (matchingHandlers.Any())
                 return matchingHandlers;
 
-            return new List<IHandleAppMentionEvent> {new NoOpEventHandler(_loggerFactory.CreateLogger<NoOpEventHandler>())};
+            return new List<IHandleAppMentionEvent> {new NoOpAppMentionEventHandler(_loggerFactory.CreateLogger<NoOpAppMentionEventHandler>())};
         }
     }
 }

@@ -5,8 +5,8 @@ namespace Slackbot.Net.Endpoints.Abstractions
 {
     public interface IHandleAppMentionEvent
     {
-        Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent);
-        bool ShouldHandle(SlackEvent slackEvent);
+        Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent);
+        bool ShouldHandle(AppMentionEvent slackEvent);
         (string HandlerTrigger, string Description) GetHelpDescription();
     }
 }

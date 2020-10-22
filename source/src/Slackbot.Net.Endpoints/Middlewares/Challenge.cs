@@ -7,8 +7,8 @@ namespace Slackbot.Net.Endpoints.Middlewares
 {
     public class Challenge
     {
-        private readonly ILogger<Events> _logger;
-        public Challenge(RequestDelegate next, ILogger<Events> logger)
+        private readonly ILogger<AppMentionEvents> _logger;
+        public Challenge(RequestDelegate next, ILogger<AppMentionEvents> logger)
         {
             _logger = logger;
         }

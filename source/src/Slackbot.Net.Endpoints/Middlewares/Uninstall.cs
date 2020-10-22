@@ -10,10 +10,10 @@ namespace Slackbot.Net.Endpoints.Middlewares
 {
     public class Uninstall
     {
-        private readonly ILogger<Events> _logger;
+        private readonly ILogger<AppMentionEvents> _logger;
         private readonly IUninstall _uninstaller;
 
-        public Uninstall(RequestDelegate next, ILogger<Events> logger, IServiceProvider provider)
+        public Uninstall(RequestDelegate next, ILogger<AppMentionEvents> logger, IServiceProvider provider)
         {
             _logger = logger;
             _uninstaller = provider.GetService<IUninstall>() ?? new NoopUninstaller(provider.GetService<ILogger<NoopUninstaller>>());

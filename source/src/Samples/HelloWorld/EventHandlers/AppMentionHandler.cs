@@ -8,13 +8,13 @@ namespace CronBackgroundServices.Samples.Events
 {
     public class AppMentionHandler : IHandleAppMentionEvent
     {
-        public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
+        public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
         {
             Console.WriteLine("Doing stuff from AppmentionHandler: " + JsonConvert.SerializeObject(slackEvent));
             return Task.FromResult(new EventHandledResponse("Wrote stuff to log"));
         }
 
-        public bool ShouldHandle(SlackEvent slackEvent) => slackEvent is AppMentionEvent appMentionEvent && appMentionEvent.Text == "test";
+        public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text == "test";
 
         public (string, string) GetHelpDescription() => ("does stuff when bot is app is mentioned", "does all");
     }
