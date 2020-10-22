@@ -1,11 +1,26 @@
 using System.Threading.Tasks;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Endpoints.Interactive.ViewSubmissions;
+using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
 namespace Slackbot.Net.Endpoints.Abstractions
 {
     public interface IHandleViewSubmissions
     {
-        Task<HandleResponse> Handle(ViewSubmission payload);
+        Task<ViewSubmissionHandleResponse> Handle(ViewSubmission payload);
     }
+    
+    public class ViewSubmissionHandleResponse
+    {
+        public ViewSubmissionHandleResponse(string message)
+        {
+            HandledMessage = message;
+        }
+
+        public string HandledMessage
+        {
+            get;
+            set;
+        }
+    }
+    
+    
 }

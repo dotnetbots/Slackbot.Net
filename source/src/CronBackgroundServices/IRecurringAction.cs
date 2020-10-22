@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Slackbot.Net.Abstractions.Handlers
+namespace CronBackgroundServices.Abstractions.Handlers
 {
     public interface IRecurringAction
     {

@@ -1,5 +1,4 @@
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks;
-using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
 namespace Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish
 {

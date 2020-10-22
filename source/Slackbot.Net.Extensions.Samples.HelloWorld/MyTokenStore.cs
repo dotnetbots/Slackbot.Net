@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CronBackgroundServices.Abstractions.Hosting;
 using Slackbot.Net.Abstractions.Hosting;
 
-namespace Slackbot.Net.Samples.Distributed
+namespace CronBackgroundServices.Samples.Distributed
 {
     public class MyTokenStore : ITokenStore
     {

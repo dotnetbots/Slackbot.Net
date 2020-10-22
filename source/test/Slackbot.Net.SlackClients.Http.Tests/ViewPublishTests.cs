@@ -4,7 +4,7 @@ using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Slackbot.Net.Tests
+namespace CronBackgroundServices.Tests
 {
     public class ViewPublishTests: Setup
     {

@@ -9,8 +9,8 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\..\Slackbot.Net.Extensions.Samples.HelloWorld\Slackbot.Net.Extensions.Samples.HelloWorld.csproj" />
+      <ProjectReference Include="..\..\CronBackgroundServices\CronBackgroundServices.csproj" />
       <ProjectReference Include="..\..\Slackbot.Net.Extensions.Publishers.Logger\Slackbot.Net.Extensions.Publishers.Logger.csproj" />
-      <ProjectReference Include="..\..\Slackbot.Net\Slackbot.Net.csproj" />
     </ItemGroup>
 
 </Project>

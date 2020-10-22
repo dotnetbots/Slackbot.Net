@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Abstractions;
-using Slackbot.Net.Endpoints.Interactive.ViewSubmissions;
-using Slackbot.Net.Endpoints.Middlewares;
+using Slackbot.Net.Endpoints.Models.Interactive;
+using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
-namespace Slackbot.Net.Endpoints.Interactive
+namespace Slackbot.Net.Endpoints.Middlewares
 {
     internal class Interactive
     {

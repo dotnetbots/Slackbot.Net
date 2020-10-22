@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Slackbot.Net.Endpoints.Models;
+using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints.Abstractions
 {

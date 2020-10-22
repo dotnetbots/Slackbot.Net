@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Slackbot.Net.Endpoints.Abstractions;
-using Slackbot.Net.Endpoints.Models;
+using Slackbot.Net.Endpoints.Models.Events;
 
-namespace Slackbot.Net.Samples.Events
+namespace CronBackgroundServices.Samples.Events
 {
     public class OtherAppMentionHandler : IHandleEvent
     {

@@ -2,11 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <RootNamespace>Slackbot.Net</RootNamespace>
-        <PackageId>Slackbot.Net</PackageId>
+        <RootNamespace>CronBackgroundServices</RootNamespace>
+        <PackageId>CronBackgroundServices</PackageId>
         <Authors>John Korsnes</Authors>
         <Description>
-            A .NET Core Host friendly Slack bot framework
+            A .NET Core Background Service using Cron expressions as triggers
         </Description>
 
         <PackageTags>slack dotnetcore</PackageTags>
@@ -27,12 +27,6 @@
       <PackageReference Include="Cronos" Version="0.7.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Slackbot.Net.Abstractions.Handlers\Slackbot.Net.Abstractions.Handlers.csproj" />
-      <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
-      <ProjectReference Include="..\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj" />
-      <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
-    </ItemGroup>
 
     <ItemGroup>
         <None Include="images/slack.png" Pack="true" PackagePath="" />

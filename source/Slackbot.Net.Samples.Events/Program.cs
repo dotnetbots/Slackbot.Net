@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Slackbot.Net.Samples.Events
+namespace CronBackgroundServices.Samples.Events
 {
     public class Program
     {

@@ -1,11 +1,11 @@
+using CronBackgroundServices.Samples.Distributed;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Slackbot.Net.Endpoints.Hosting;
-using Slackbot.Net.Samples.Distributed;
 
-namespace Slackbot.Net.Samples.Events
+namespace CronBackgroundServices.Samples.Events
 {
     public class Startup
     {

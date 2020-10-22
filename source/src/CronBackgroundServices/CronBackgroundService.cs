@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CronBackgroundServices.Abstractions.Handlers;
+using CronBackgroundServices.Utilities;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Utilities;
 
-namespace Slackbot.Net
+namespace CronBackgroundServices
 {
     internal class CronBackgroundService : BackgroundService
     {

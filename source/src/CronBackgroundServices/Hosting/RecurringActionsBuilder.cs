@@ -1,18 +1,17 @@
+using System;
 using System.Linq;
+using CronBackgroundServices.Abstractions.Handlers;
+using CronBackgroundServices.Abstractions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Hosting;
-using Slackbot.Net.Dynamic;
 
-namespace Slackbot.Net.Hosting
+namespace CronBackgroundServices.Hosting
 {
-    public class SlackbotWorkerBuilder : ISlackbotWorkerBuilder
+    public class RecurringActionsBuilder : IRecurringActionsBuilder
     {
-        public SlackbotWorkerBuilder(IServiceCollection services)
+        public RecurringActionsBuilder(IServiceCollection services)
         {
-            services.AddSingleton<ISlackClientService, SlackClientService>();
             Services = services;
         }
 
@@ -21,9 +20,11 @@ namespace Slackbot.Net.Hosting
             get;
         }
 
-        public ISlackbotWorkerBuilder BuildRecurrers()
+        public IRecurringActionsBuilder Build()
         {
             var recurrers = Services.Where(s => s.ServiceType == typeof(IRecurringAction)).ToList();
+            if(!recurrers.Any())
+                throw new Exception("No recurrers added. Missing");
 
             foreach (var recurrer in recurrers)
             {
@@ -37,6 +38,12 @@ namespace Slackbot.Net.Hosting
                 }); 
             }
 
+            return this;
+        }
+        
+        public IRecurringActionsBuilder AddRecurrer<T>() where T : class, IRecurringAction
+        {
+            Services.AddSingleton<IRecurringAction,T>();
             return this;
         }
     }

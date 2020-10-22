@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Endpoints.Interactive
+namespace Slackbot.Net.Endpoints.Models.Interactive.Responding
 {
     public class Acknowledge
     {

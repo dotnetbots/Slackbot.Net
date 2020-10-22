@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Abstractions;
-using Slackbot.Net.Endpoints.Models;
+using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints.Middlewares
 {

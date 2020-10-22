@@ -1,6 +1,6 @@
 using System;
 
-namespace Slackbot.Net.Validations
+namespace CronBackgroundServices.Validations
 {
     internal class ConfigurationException : Exception
     {

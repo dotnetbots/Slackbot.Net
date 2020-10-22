@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Slackbot.Net.Tests
+namespace CronBackgroundServices.Tests
 {
     public class ChatGetPermalinkTests : Setup
     {

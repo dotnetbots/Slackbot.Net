@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Endpoints.Interactive.ViewSubmissions;
+using Slackbot.Net.Endpoints.Abstractions;
+using Slackbot.Net.Endpoints.Models.Interactive;
 
-namespace Slackbot.Net.Endpoints.Interactive
+namespace Slackbot.Net.Endpoints
 {
     internal class NoOpViewSubmissionHandler
     {
@@ -14,7 +14,7 @@ namespace Slackbot.Net.Endpoints.Interactive
             _logger = logger;
         }
         
-        public Task<HandleResponse> Handle(Interaction payload)
+        public Task<ViewSubmissionHandleResponse> Handle(Interaction payload)
         {
             if (payload is UnknownInteractiveMessage unknown)
             {
@@ -26,7 +26,7 @@ namespace Slackbot.Net.Endpoints.Interactive
             }
             
             
-            return Task.FromResult(new HandleResponse("No-op."));
+            return Task.FromResult(new ViewSubmissionHandleResponse("No-op."));
         }
     }
 }

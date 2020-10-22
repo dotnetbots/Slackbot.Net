@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Slackbot.Net.Endpoints.Interactive
+namespace Slackbot.Net.Endpoints.Models.Interactive
 {
     public class User
     {

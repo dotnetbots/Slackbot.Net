@@ -1,7 +1,7 @@
-﻿using Slackbot.Net.Abstractions.Hosting;
+﻿using CronBackgroundServices.Abstractions.Hosting;
 using Slackbot.Net.Endpoints.Hosting;
 
-namespace Slackbot.Net.Extensions.Samples.HelloWorld
+namespace CronBackgroundServices.Extensions.Samples.HelloWorld
 {
     public static class SlackbotNetBuilderExtensions
     {
@@ -10,12 +10,9 @@ namespace Slackbot.Net.Extensions.Samples.HelloWorld
             return builder.AddHandler<HelloWorldHandler>();
         }
 
-        public static ISlackbotWorkerBuilder AddRecurringActions(this ISlackbotWorkerBuilder builder)
+        public static IRecurringActionsBuilder AddSamples(this IRecurringActionsBuilder builder)
         {
-            return builder
-                .AddRecurring<WorkspacesAction>()
-                .AddRecurring<HelloWorldRecurrer>()
-                .BuildRecurrers();
+            return builder.AddRecurrer<WorkspacesAction>().AddRecurrer<WorkspacesAction>().Build();
         }
     }
 }

@@ -1,7 +1,7 @@
 
 using Newtonsoft.Json.Linq;
 
-namespace Slackbot.Net.Endpoints.Interactive.ViewSubmissions
+namespace Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions
 {
     public class ViewSubmission : Interaction
     {

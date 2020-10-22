@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http.Headers;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Options;
 using Slackbot.Net.SlackClients.Http.Configurations.Options;

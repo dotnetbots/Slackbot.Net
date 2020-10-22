@@ -1,13 +1,14 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CronBackgroundServices.Abstractions.Handlers;
+using CronBackgroundServices.Abstractions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
-namespace Slackbot.Net.Extensions.Samples.HelloWorld
+namespace CronBackgroundServices.Extensions.Samples.HelloWorld
 {
     internal class HelloWorldRecurrer : IRecurringAction
     {

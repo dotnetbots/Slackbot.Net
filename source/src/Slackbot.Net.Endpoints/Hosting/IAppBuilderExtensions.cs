@@ -1,8 +1,8 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Slackbot.Net.Endpoints.Interactive;
 using Slackbot.Net.Endpoints.Middlewares;
 
-namespace Microsoft.AspNetCore.Builder
+namespace Slackbot.Net.Endpoints.Hosting
 {
     public static class IAppBuilderExtensions
     {

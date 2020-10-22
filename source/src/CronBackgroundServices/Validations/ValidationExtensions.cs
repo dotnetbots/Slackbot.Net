@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Slackbot.Net.Validations
+namespace CronBackgroundServices.Validations
 {
     public static class ValidationExtensions
     {

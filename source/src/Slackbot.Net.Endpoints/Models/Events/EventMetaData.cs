@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Endpoints.Models
+namespace Slackbot.Net.Endpoints.Models.Events
 {
     public class EventMetaData
     {

@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Slackbot.Net.Endpoints.Interactive;
-using Slackbot.Net.Endpoints.Interactive.ViewSubmissions;
-using Slackbot.Net.Endpoints.Models;
+using Slackbot.Net.Endpoints.Models.Events;
+using Slackbot.Net.Endpoints.Models.Interactive;
+using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
 namespace Slackbot.Net.Endpoints.Middlewares
 {

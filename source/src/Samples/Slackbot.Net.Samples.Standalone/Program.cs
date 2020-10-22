@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Extensions.Samples.HelloWorld;
+using CronBackgroundServices.Extensions.Samples.HelloWorld;
 
-namespace Slackbot.Net.Samples.Standalone
+namespace CronBackgroundServices.Samples.Standalone
 {
     class Program
     {
@@ -13,8 +13,7 @@ namespace Slackbot.Net.Samples.Standalone
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((c,s) =>
                 {
-                    s.AddSlackbotWorker(c.Configuration)
-                        .AddRecurringActions();
+                    s.AddRecurringActions().AddSamples();
                 })
                 .ConfigureLogging(c =>
                 {
