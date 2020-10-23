@@ -14,7 +14,7 @@ namespace Slackbot.Net.Endpoints
             _logger = logger;
         }
         
-        public Task<ViewSubmissionHandleResponse> Handle(Interaction payload)
+        public Task<EventHandledResponse> Handle(Interaction payload)
         {
             if (payload is UnknownInteractiveMessage unknown)
             {
@@ -26,7 +26,7 @@ namespace Slackbot.Net.Endpoints
             }
             
             
-            return Task.FromResult(new ViewSubmissionHandleResponse("No-op."));
+            return Task.FromResult(new EventHandledResponse("No-op."));
         }
     }
 }

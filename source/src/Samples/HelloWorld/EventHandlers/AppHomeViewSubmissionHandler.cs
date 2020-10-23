@@ -6,9 +6,9 @@ namespace HelloWorld.EventHandlers
 {
     public class AppHomeViewSubmissionHandler : IHandleViewSubmissions
     {
-        public Task<ViewSubmissionHandleResponse> Handle(ViewSubmission payload)
+        public Task<EventHandledResponse> Handle(ViewSubmission payload)
         {
-            return Task.FromResult(new ViewSubmissionHandleResponse("YoLO!"));
+            return Task.FromResult(new EventHandledResponse("YoLO!"));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
         private readonly RequestDelegate _next;
         private readonly ILogger<ViewSubmissionEvents> _logger;
         private readonly IEnumerable<IHandleViewSubmissions> _responseHandlers;
-        private NoOpViewSubmissionHandler _noOp;
+        private readonly NoOpViewSubmissionHandler _noOp;
 
         public ViewSubmissionEvents(RequestDelegate next, ILogger<ViewSubmissionEvents> logger, IEnumerable<IHandleViewSubmissions> responseHandlers, ILoggerFactory loggerFactory)
         {
@@ -28,15 +28,15 @@ namespace Slackbot.Net.Endpoints.Middlewares
         public async Task Invoke(HttpContext context)
         {
             var payload = (Interaction) context.Items[HttpItemKeys.InteractivePayloadKey];
-            var interactiveType = payload.Type;
-            
-            if (interactiveType == InteractionTypes.ViewSubmission)
+
+            switch (payload.Type)
             {
-                await HandleViewSubmission(payload as ViewSubmission);
-            }
-            else
-            {
-                await _noOp.Handle(payload);
+                case InteractionTypes.ViewSubmission:
+                    await HandleViewSubmission(payload as ViewSubmission);
+                    break;
+                default:
+                    await _noOp.Handle(payload);
+                    break;
             }
 
             await _next(context);
@@ -58,7 +58,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
                 {
                     _logger.LogInformation($"Handling using {handler.GetType()}");
                     var response = await handler.Handle(payload);
-                    _logger.LogInformation(response.HandledMessage);
+                    _logger.LogInformation(response.Response);
                 }
                 catch (Exception e)
                 {
