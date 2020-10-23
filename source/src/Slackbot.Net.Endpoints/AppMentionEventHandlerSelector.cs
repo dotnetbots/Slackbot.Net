@@ -20,31 +20,28 @@ namespace Slackbot.Net.Endpoints
             _provider = provider;
         }
         
-        public async Task<IEnumerable<IHandleAppMentionEvent>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata, AppMentionEvent slackEvent)
+        public async Task<IEnumerable<IHandleAppMentions>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata, AppMentionEvent slackEvent)
         {
-            var allHandlers = _provider.GetServices<IHandleAppMentionEvent>();
-            var shortCutter = _provider.GetService<IShortcutHandler>();
-            
-            if(shortCutter == null)
-                shortCutter = new NoOpShortcuttingHandler();
+            var allHandlers = _provider.GetServices<IHandleAppMentions>();
+            var shortCutter = _provider.GetService<IShortcutAppMentions>();
 
-            if (shortCutter.ShouldHandle(slackEvent))
+            if (shortCutter != null && shortCutter.ShouldShortcut(slackEvent))
             {
                 await shortCutter.Handle(eventMetadata, slackEvent);
-                return new List<IHandleAppMentionEvent>();
+                return new List<IHandleAppMentions>();
             }
 
             return SelectHandler(allHandlers, slackEvent);
  
         }
 
-        private IEnumerable<IHandleAppMentionEvent> SelectHandler(IEnumerable<IHandleAppMentionEvent> handlers, AppMentionEvent message)
+        private IEnumerable<IHandleAppMentions> SelectHandler(IEnumerable<IHandleAppMentions> handlers, AppMentionEvent message)
         {
             var matchingHandlers = handlers.Where(s => s.ShouldHandle(message));
             if (matchingHandlers.Any())
                 return matchingHandlers;
 
-            return new List<IHandleAppMentionEvent> {new NoOpAppMentionEventHandler(_loggerFactory.CreateLogger<NoOpAppMentionEventHandler>())};
+            return new List<IHandleAppMentions> {new NoOpAppMentionEventHandler(_loggerFactory.CreateLogger<NoOpAppMentionEventHandler>())};
         }
     }
 }

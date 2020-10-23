@@ -6,7 +6,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace HelloWorld.EventHandlers
 {
-    public class AppMentionHandler : IHandleAppMentionEvent
+    public class PublicJokeHandler : IHandleAppMentions
     {
         public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
         {
@@ -16,6 +16,6 @@ namespace HelloWorld.EventHandlers
 
         public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text == "test";
 
-        public (string, string) GetHelpDescription() => ("does stuff when bot is app is mentioned", "does all");
+        public (string HandlerTrigger, string Description) GetHelpDescription() => ("telljoke", "bot tells a joke");
     }
 }

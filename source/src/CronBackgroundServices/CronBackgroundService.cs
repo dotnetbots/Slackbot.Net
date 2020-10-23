@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CronBackgroundServices.Abstractions.Handlers;
-using CronBackgroundServices.Utilities;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 

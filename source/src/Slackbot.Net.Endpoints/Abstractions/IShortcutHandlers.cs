@@ -3,9 +3,9 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints.Abstractions
 {
-    public interface IShortcutHandler
+    public interface IShortcutAppMentions
     {
-        Task Handle(EventMetaData eventMetadata, SlackEvent @event);
-        bool ShouldHandle(SlackEvent @event);
+        Task Handle(EventMetaData eventMetadata, AppMentionEvent @event);
+        bool ShouldShortcut(AppMentionEvent @event);
     }
 }

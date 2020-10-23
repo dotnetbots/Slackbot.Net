@@ -33,7 +33,7 @@ namespace Slackbot.Net.SlackClients.Http.Extensions
 
         /// <summary>
         /// Registers a config-less builder for creating a SlackClient runtime.
-        /// Provide token to build a SlackClient runtime.
+        /// Provide token to build a SlackClient runtime using `ISlackClientBuilder`.
         /// </summary>
         public static IServiceCollection AddSlackClientBuilder(this IServiceCollection services)
         {

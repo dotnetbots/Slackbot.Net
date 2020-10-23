@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CronBackgroundServices.Abstractions.Handlers
+namespace CronBackgroundServices
 {
     public interface IRecurringAction
     {

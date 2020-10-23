@@ -5,17 +5,16 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace HelloWorld.EventHandlers
 {
-    internal class HelloWorldHandler : IHandleAppMentionEvent
+    internal class HelloWorldHandler : IHandleAppMentions
     {
-        public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, SlackEvent slackEvent)
+        public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent message)
         {
-            var message = slackEvent as AppMentionEvent;
             Console.WriteLine($"Hello world, {message.User}\n");
             return Task.FromResult(new EventHandledResponse("Responded"));
         }
 
-        public bool ShouldHandle(SlackEvent slackEvent) => (slackEvent is AppMentionEvent appMention) && appMention.Text.Contains("hw");
+        public bool ShouldHandle(AppMentionEvent appMention) => appMention.Text.Contains("hw");
 
-        (string HandlerTrigger, string Description) IHandleAppMentionEvent.GetHelpDescription() => ("hw", "hw");
+        public (string HandlerTrigger, string Description) GetHelpDescription() => ("hw", "Returns a hello world message");
     }
 }

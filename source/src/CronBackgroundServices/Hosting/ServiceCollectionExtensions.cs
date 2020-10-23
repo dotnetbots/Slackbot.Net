@@ -1,4 +1,4 @@
-using CronBackgroundServices.Abstractions.Hosting;
+using CronBackgroundServices;
 using CronBackgroundServices.Hosting;
 
 // namespace on purpose:

@@ -20,10 +20,11 @@ namespace HelloWorld
             services.AddRecurringActions().AddRecurrer<WorkspacesAction>().AddRecurrer<HelloWorldRecurrer>().Build();
             
             services.AddSlackBotEvents<MyTokenStore>()
-                .AddAppMentionHandler<AppMentionHandler>()
-                .AddAppMentionHandler<OtherAppMentionHandler>()
-                .AddAppMentionHandler<MemberJoinedChannelHandler>()
-                .AddShortcut<Shortcutter>()
+                .AddAppMentionHandler<PublicJokeHandler>()
+                .AddAppMentionHandler<HiddenTestHandler>()
+                .AddAppMentionHandler<HelloWorldHandler>()
+                .AddMemberJoinedChannelHandler<MemberJoinedChannelHandler>()
+                .AddShortcut<ListPublicCommands>()
                 .AddViewSubmissionHandler<AppHomeViewSubmissionHandler>();
         }
 

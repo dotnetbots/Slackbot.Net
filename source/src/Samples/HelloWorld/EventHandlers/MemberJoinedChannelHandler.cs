@@ -6,7 +6,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace HelloWorld.EventHandlers
 {
-    public class MemberJoinedChannelHandler : IHandleMemberJoinedChannelEvents
+    public class MemberJoinedChannelHandler : IHandleMemberJoinedChannel
     {
         public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, MemberJoinedChannelEvent slackEvent)
         {

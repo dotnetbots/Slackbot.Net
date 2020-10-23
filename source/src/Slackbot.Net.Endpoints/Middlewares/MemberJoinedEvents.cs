@@ -13,9 +13,9 @@ namespace Slackbot.Net.Endpoints.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<MemberJoinedEvents> _logger;
-        private readonly IEnumerable<IHandleMemberJoinedChannelEvents> _responseHandlers;
+        private readonly IEnumerable<IHandleMemberJoinedChannel> _responseHandlers;
 
-        public MemberJoinedEvents(RequestDelegate next, ILogger<MemberJoinedEvents> logger, IEnumerable<IHandleMemberJoinedChannelEvents> responseHandlers, ILoggerFactory loggerFactory)
+        public MemberJoinedEvents(RequestDelegate next, ILogger<MemberJoinedEvents> logger, IEnumerable<IHandleMemberJoinedChannel> responseHandlers, ILoggerFactory loggerFactory)
         {
             _next = next;
             _logger = logger;
@@ -24,7 +24,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            var memberJoinedChannelEvent = (MemberJoinedChannelEvent) context.Items[HttpItemKeys.InteractivePayloadKey];
+            var memberJoinedChannelEvent = (MemberJoinedChannelEvent) context.Items[HttpItemKeys.SlackEventKey];
             var metadata = (EventMetaData) context.Items[HttpItemKeys.EventMetadataKey];
             var handler = _responseHandlers.FirstOrDefault();
             
@@ -50,6 +50,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
             await _next(context);
         }
 
-        public static bool ShouldRun(HttpContext ctx) => ctx.Items.ContainsKey(HttpItemKeys.InteractivePayloadKey);
+        public static bool ShouldRun(HttpContext ctx) =>  ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey) && (ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.MemberJoinedChannel);
+
     }
 }

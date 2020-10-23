@@ -5,7 +5,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints
 {
-    public class NoOpAppMentionEventHandler : IHandleAppMentionEvent
+    public class NoOpAppMentionEventHandler : IHandleAppMentions
     {
         private readonly ILogger<NoOpAppMentionEventHandler> _logger;
 

@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cronos;
 
-namespace CronBackgroundServices.Utilities
+namespace CronBackgroundServices
 {
     internal class Timing
     {

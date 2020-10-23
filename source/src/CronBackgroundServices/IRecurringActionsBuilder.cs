@@ -1,7 +1,6 @@
-using CronBackgroundServices.Abstractions.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CronBackgroundServices.Abstractions.Hosting
+namespace CronBackgroundServices
 {
     public interface IRecurringActionsBuilder
     {

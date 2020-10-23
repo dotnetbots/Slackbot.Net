@@ -12,21 +12,27 @@ namespace Slackbot.Net.Endpoints.Hosting
             _services = services;
         }
 
-        public ISlackbotHandlersBuilder AddAppMentionHandler<T>() where T : class, IHandleAppMentionEvent
+        public ISlackbotHandlersBuilder AddAppMentionHandler<T>() where T : class, IHandleAppMentions
         {
-            _services.AddSingleton<IHandleAppMentionEvent, T>();
+            _services.AddSingleton<IHandleAppMentions, T>();
             return this;
         }
-        
+
+        public ISlackbotHandlersBuilder AddMemberJoinedChannelHandler<T>() where T : class, IHandleMemberJoinedChannel
+        {
+            _services.AddSingleton<IHandleMemberJoinedChannel, T>();
+            return this;
+        }
+
         public ISlackbotHandlersBuilder AddViewSubmissionHandler<T>() where T : class, IHandleViewSubmissions
         {
             _services.AddSingleton<IHandleViewSubmissions, T>();
             return this;
         }
 
-        public ISlackbotHandlersBuilder AddShortcut<T>() where T : class, IShortcutHandler
+        public ISlackbotHandlersBuilder AddShortcut<T>() where T : class, IShortcutAppMentions
         {
-            _services.AddSingleton<IShortcutHandler, T>();
+            _services.AddSingleton<IShortcutAppMentions, T>();
             return this;
         }
     }
