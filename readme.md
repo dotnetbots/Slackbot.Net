@@ -36,4 +36,4 @@ and
 
  ### Samples
 
- Check the [samples](/source/Samples/).
+ Check the [samples](/source/src/Samples/).
