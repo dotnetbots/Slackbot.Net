@@ -8,7 +8,7 @@ namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage
         public string Text { get; set; }
         public string Parse { get; set; }
 
-        public int Link_Names { get; set; } = 1;
+        public bool Link_Names { get; set; } = true;
         public string thread_ts { get; set; }
         public string unfurl_links { get; set; }
         public string unfurl_media { get; set; }
