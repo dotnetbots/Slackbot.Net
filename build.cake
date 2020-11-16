@@ -4,12 +4,13 @@ var configuration = Argument("configuration", "Release");
 var packageNameWorker = "CronBackgroundServices";
 var packageNameEndpoints = "Slackbot.Net.Endpoints";
 var packageNameHttpClient = "Slackbot.Net.SlackClients.Http";
+var packageNameShared = "Slackbot.Net.Shared";
 
 private string ProjectPath(string name){
     return $"./source/src/{name}/{name}.csproj";
 }
 
-var version = "4.0.1";
+var version = "4.1.0-pre001";
 var outputDir = "./output";
 
 Task("Build")
@@ -28,6 +29,7 @@ Task("Pack")
         Pack(packageNameWorker);
         Pack(packageNameEndpoints);
         Pack(packageNameHttpClient);
+        Pack(packageNameShared);
   
 });
 
@@ -55,6 +57,7 @@ Task("Publish")
         DotNetCoreNuGetPush($"{outputDir}/{packageNameWorker}.{version}.nupkg", settings);
         DotNetCoreNuGetPush($"{outputDir}/{packageNameEndpoints}.{version}.nupkg", settings);
         DotNetCoreNuGetPush($"{outputDir}/{packageNameHttpClient}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameShared}.{version}.nupkg", settings);
 
 });
 
