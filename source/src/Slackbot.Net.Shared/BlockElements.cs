@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions
+namespace Slackbot.Net.Models.BlockKit
 {
     public class Block : IBlock
     {
@@ -49,7 +49,7 @@ namespace Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions
     }
     
     public class InputBlock : IBlock
-    {
+    { 
         public string type { get; } = BlockTypes.Input;
         public IElement element { get; set; }
         public Text label { get; set; }
