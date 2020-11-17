@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-dotnet@v1 # .NET Core 3.1.100 not installed on Ubuntu on Github yet
         with:
-          dotnet-version: '3.1.100' 
+          dotnet-version: '5.0.100' 
       - name: BuildLinux
         run: ./build.sh 
       
