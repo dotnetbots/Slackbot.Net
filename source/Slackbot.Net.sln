@@ -17,7 +17,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{10CBAF56-F382-480E-B8BE-CBF270617AD8}"
 ProjectSection(SolutionItems) = preProject
 	..\build.cake = ..\build.cake
-		..\CI.yml = ..\.github\workflows\CI.yml
+	..\CI.yml = ..\.github\workflows\CI.yml
+	..\Release.yml = ..\.github\workflows\Release.yml
+	..\PreRelease.yml = ..\.github\workflows\PreRelease.yml
 	..\tools\packages.config = ..\tools\packages.config
 EndProjectSection
 EndProject

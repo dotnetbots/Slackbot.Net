@@ -26,3 +26,5 @@ jobs:
         run: dotnet build --no-restore source
       - name: Test
         run: dotnet test --no-build source
+        env:
+          Slackbot_SlackApiKey_BotUser: ${{ secrets.SLACKBOT_SLACKAPIKEY_BOTUSER }}
