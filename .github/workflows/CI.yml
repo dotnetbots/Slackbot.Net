@@ -28,3 +28,4 @@ jobs:
         run: dotnet test --no-build source
         env:
           Slackbot_SlackApiKey_BotUser: ${{ secrets.SLACKBOT_SLACKAPIKEY_BOTUSER }}
+          Slackbot_SlackApiKey_SlackApp: ${{ secrets.SLACKBOT_SLACKAPIKEY_SLACKAPP }}
