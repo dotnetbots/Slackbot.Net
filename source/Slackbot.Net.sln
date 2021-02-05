@@ -21,7 +21,7 @@ ProjectSection(SolutionItems) = preProject
 	..\tools\packages.config = ..\tools\packages.config
 EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "src\Samples\HelloWorld\HelloWorld.csproj", "{15519075-7574-4F9B-820F-D8F7190AF460}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "..\Samples\HelloWorld\HelloWorld.csproj", "{15519075-7574-4F9B-820F-D8F7190AF460}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Shared", "src\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj", "{BA30DCAA-D5D0-4BA6-8DAE-562D3BAA9943}"
 EndProject

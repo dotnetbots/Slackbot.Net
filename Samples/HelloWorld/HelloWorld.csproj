@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\source\src\CronBackgroundServices\CronBackgroundServices.csproj" />
+      <ProjectReference Include="..\..\source\src\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj" />
+      <ProjectReference Include="..\..\source\src\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj" />
+    </ItemGroup>
+
+</Project>

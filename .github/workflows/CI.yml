@@ -1,23 +1,24 @@
 name: CI
 
-on: [push, pull_request]
-      
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
 jobs:
-  ubuntu-16_04:
-    name: ubuntu-16_04
-    runs-on: ubuntu-16.04
+  build:
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-dotnet@v1 # .NET Core 3.1.100 not installed on Ubuntu on Github yet
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.100' 
-      - name: BuildLinux
-        run: ./build.sh 
-      
-  windows-latest:
-    name: windows-latest
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: BuildWin
-        run: powershell .\build.ps1
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore source
+      - name: Build
+        run: dotnet build --no-restore source
+      - name: Test
+        run: dotnet test --no-build source
