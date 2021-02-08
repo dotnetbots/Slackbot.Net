@@ -4,8 +4,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{53AD07F7-25C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ED8E20FC-B173-40FF-B447-D74B58FC27C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronBackgroundServices", "src\CronBackgroundServices\CronBackgroundServices.csproj", "{6F703D22-475E-430A-B7D8-B1ECCAB868E4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Http.Tests", "test\Slackbot.Net.SlackClients.Http.Tests\Slackbot.Net.SlackClients.Http.Tests.csproj", "{E844F8E7-7D8B-4147-AED6-85EDF30717A2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Http", "src\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj", "{D6C3CE02-3D77-4313-AC43-1A8E990DCB9C}"
@@ -33,10 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6F703D22-475E-430A-B7D8-B1ECCAB868E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F703D22-475E-430A-B7D8-B1ECCAB868E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F703D22-475E-430A-B7D8-B1ECCAB868E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F703D22-475E-430A-B7D8-B1ECCAB868E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E844F8E7-7D8B-4147-AED6-85EDF30717A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E844F8E7-7D8B-4147-AED6-85EDF30717A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E844F8E7-7D8B-4147-AED6-85EDF30717A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,7 +53,6 @@ Global
 		{BA30DCAA-D5D0-4BA6-8DAE-562D3BAA9943}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{6F703D22-475E-430A-B7D8-B1ECCAB868E4} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
 		{E844F8E7-7D8B-4147-AED6-85EDF30717A2} = {ED8E20FC-B173-40FF-B447-D74B58FC27C6}
 		{D6C3CE02-3D77-4313-AC43-1A8E990DCB9C} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
 		{0B4A58E9-FF02-4942-9345-D9E255C5C87D} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
