@@ -1,5 +1,8 @@
+using HelloWorld.EventHandlers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Slackbot.Net.Endpoints.Hosting;
+using Slackbot.Net.SlackClients.Http.Extensions;
 
 namespace HelloWorld
 {
@@ -14,7 +17,19 @@ namespace HelloWorld
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureServices(services =>
+                    {
+                        services.AddSlackClientBuilder();
+                        services.AddSlackBotEvents<MyTokenStore>()
+                            .AddAppMentionHandler<PublicJokeHandler>()
+                            .AddAppMentionHandler<HiddenTestHandler>()
+                            .AddAppMentionHandler<HelloWorldHandler>()
+                            .AddMemberJoinedChannelHandler<MemberJoinedChannelHandler>()
+                            .AddShortcut<ListPublicCommands>()
+                            .AddViewSubmissionHandler<AppHomeViewSubmissionHandler>()
+                            .AddAppHomeOpenedHandler<AppHomeOpenedHandler>();
+                    });
+                    webBuilder.Configure(app => app.UseSlackbot());
                 });
     }
 }

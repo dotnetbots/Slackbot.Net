@@ -1,0 +1,12 @@
+# Mimicks a payload slack would send for app_mention events, like "@yourbot hw" in this case:
+POST http://localhost:1337/events
+
+{
+    "team_id": "T0EC3DG3A",
+    "event": {
+        "type": "app_mention",
+        "user": "USRAR1YTV",
+        "text" : "<@BOT123> hw",
+        "channel": "C92QZTVEF"
+    }
+}
