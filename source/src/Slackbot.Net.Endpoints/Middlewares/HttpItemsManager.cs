@@ -1,5 +1,4 @@
 using System.IO;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +33,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
                 if (body.StartsWith("{"))
                 {
                     var jObject = JObject.Parse(body);
-
+                    _logger.LogTrace(body);
                     if (jObject.ContainsKey("challenge"))
                     {
                         context.Items.Add(HttpItemKeys.ChallengeKey, jObject["challenge"]);
@@ -63,7 +62,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
                     var interactivePayloadTyped = ToInteractiveType(payload, body);
                     context.Items.Add(HttpItemKeys.InteractivePayloadKey, interactivePayloadTyped);
                 }
- 
+
                 context.Request.Body.Position = 0;
             }
 
@@ -87,7 +86,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
                     return unknownSlackEvent;
             }
         }
-        
+
         private static Interaction ToInteractiveType(JObject payloadJson, string raw)
         {
             var eventType = GetEventType(payloadJson);
@@ -95,7 +94,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
             {
                 case InteractionTypes.ViewSubmission:
                     var viewSubmission = payloadJson.ToObject<ViewSubmission>();
-                    
+
                     var view = payloadJson["view"] as JObject;
                     var viewState = view["state"] as JObject;;
                     viewSubmission.ViewId = view.Value<string>("id");
@@ -109,14 +108,14 @@ namespace Slackbot.Net.Endpoints.Middlewares
                     return unknownSlackEvent;
             }
         }
-        
+
         public static string GetEventType(JObject eventJson)
         {
             if (eventJson != null)
             {
                 return eventJson["type"].Value<string>();
             }
-            
+
             return "unknown";
         }
     }

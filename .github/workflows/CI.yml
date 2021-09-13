@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches:
+      - "*"
   pull_request:
     branches: [master]
 
@@ -20,6 +21,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.100-rc.2.21458.9"
       - name: Restore dependencies
         run: dotnet restore source
       - name: Build
