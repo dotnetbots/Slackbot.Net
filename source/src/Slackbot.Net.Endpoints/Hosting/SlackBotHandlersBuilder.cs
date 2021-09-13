@@ -47,7 +47,7 @@ namespace Slackbot.Net.Endpoints.Hosting
             _services.AddSingleton<IShortcutAppMentions, T>();
             return this;
         }
-
+        
         public ISlackbotHandlersBuilder AddNoOpAppMentionHandler<T>() where T : class, INoOpAppMentions
         {
             _services.AddSingleton<INoOpAppMentions, T>();

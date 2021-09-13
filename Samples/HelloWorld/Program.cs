@@ -1,35 +1,20 @@
 using HelloWorld.EventHandlers;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Slackbot.Net.Endpoints.Hosting;
 using Slackbot.Net.SlackClients.Http.Extensions;
+using Slackbot.Net.Endpoints.Authentication;
 
-namespace HelloWorld
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAuthentication().AddSlackbotEvents(c => c.SigningSecret = Environment.GetEnvironmentVariable("CLIENT_SIGNING_SECRET"));
+builder.Services.AddSlackClientBuilder()
+                .AddSlackBotEvents<MyTokenStore>()
+                    .AddAppMentionHandler<PublicJokeHandler>()
+                    .AddAppMentionHandler<HiddenTestHandler>()
+                    .AddAppMentionHandler<HelloWorldHandler>()
+                    .AddMemberJoinedChannelHandler<MemberJoinedChannelHandler>()
+                    .AddShortcut<ListPublicCommands>()
+                    .AddViewSubmissionHandler<AppHomeViewSubmissionHandler>()
+                    .AddAppHomeOpenedHandler<AppHomeOpenedHandler>();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.ConfigureServices(services =>
-                    {
-                        services.AddSlackClientBuilder();
-                        services.AddSlackBotEvents<MyTokenStore>()
-                            .AddAppMentionHandler<PublicJokeHandler>()
-                            .AddAppMentionHandler<HiddenTestHandler>()
-                            .AddAppMentionHandler<HelloWorldHandler>()
-                            .AddMemberJoinedChannelHandler<MemberJoinedChannelHandler>()
-                            .AddShortcut<ListPublicCommands>()
-                            .AddViewSubmissionHandler<AppHomeViewSubmissionHandler>()
-                            .AddAppHomeOpenedHandler<AppHomeOpenedHandler>();
-                    });
-                    webBuilder.Configure(app => app.UseSlackbot());
-                });
-    }
-}
+var app = builder.Build();
+app.UseSlackbot(enableAuth: !app.Environment.IsDevelopment());
+app.Run();

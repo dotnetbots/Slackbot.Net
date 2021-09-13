@@ -1,5 +1,7 @@
 # Mimicks a payload slack would send for app_mention events, like "@yourbot hw" in this case:
 POST http://localhost:1337/events
+X-Slack-Request-Timestamp: 12331231
+X-Slack-Signature: v0:abc123etcetc
 
 {
     "team_id": "T0EC3DG3A",

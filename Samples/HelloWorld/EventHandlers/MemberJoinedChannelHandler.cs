@@ -1,17 +1,14 @@
-using System;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
 
-namespace HelloWorld.EventHandlers
+namespace HelloWorld.EventHandlers;
+
+public class MemberJoinedChannelHandler : IHandleMemberJoinedChannel
 {
-    public class MemberJoinedChannelHandler : IHandleMemberJoinedChannel
+    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, MemberJoinedChannelEvent slackEvent)
     {
-        public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, MemberJoinedChannelEvent slackEvent)
-        {
-            Console.WriteLine("Doing stuff from MemberJoinedChannelHandler: " + JsonConvert.SerializeObject(slackEvent));
-            return Task.FromResult(new EventHandledResponse("Wrote stuff to log"));
-        }
+        Console.WriteLine("Doing stuff from MemberJoinedChannelHandler: " + JsonConvert.SerializeObject(slackEvent));
+        return Task.FromResult(new EventHandledResponse("Wrote stuff to log"));
     }
 }

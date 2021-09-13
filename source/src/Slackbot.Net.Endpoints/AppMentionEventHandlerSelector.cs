@@ -41,10 +41,10 @@ namespace Slackbot.Net.Endpoints
             var matchingHandlers = handlers.Where(s => s.ShouldHandle(message));
             if (matchingHandlers.Any())
                 return matchingHandlers;
-
+            
             if(noOpAppMentions != null)
                 return new List<IHandleAppMentions> { noOpAppMentions };
-
+            
             return new List<IHandleAppMentions>
             {
                 new NoOpAppMentionEventHandler(_loggerFactory.CreateLogger<NoOpAppMentionEventHandler>())
