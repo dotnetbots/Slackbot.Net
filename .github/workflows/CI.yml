@@ -24,7 +24,7 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: "6.0.100-rc.2.21458.9"
       - name: Restore dependencies
         run: dotnet restore source
       - name: Build
