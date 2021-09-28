@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Slackbot.Net.Endpoints.Hosting;
 using Slackbot.Net.Endpoints.Authentication;
 using Slackbot.Net.Endpoints.Abstractions;
@@ -38,4 +39,5 @@ class TokenStore : ITokenStore
     public Task<IEnumerable<string>> GetTokens() => Task.FromResult(new [] { SlackToken }.AsEnumerable());
     public Task<string> GetTokenByTeamId(string teamId) => Task.FromResult(SlackToken);
     public Task Delete(string token) => throw new NotImplementedException("Single workspace app");
+    public Task Insert(Workspace slackTeam) => throw new NotImplementedException("Single workspace app");
 }
