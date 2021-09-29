@@ -75,7 +75,7 @@ namespace Slackbot.Net.Endpoints.Middlewares
         private static SlackEvent ToEventType(JsonElement eventJson, string raw)
         {
             var eventType = GetEventType(eventJson);
-            string? json = eventJson.ToString();
+            string json = eventJson.ToString();
             switch (eventType)
             {
                 case EventTypes.AppMention:
