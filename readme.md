@@ -48,7 +48,7 @@ class DoStuff : IHandleAppMentions
 {
     public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text.Contains("hi");
 
-    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
+    public Task<EventHandledResponse> Handle(EventMetaData meta, AppMentionEvent @evt)
     {
         Console.WriteLine("Doing stuff!");
         return Task.FromResult(new EventHandledResponse("yolo"));
