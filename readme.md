@@ -5,7 +5,7 @@
 
 
 ## What?
-An opinionated ASP.NET Core middleware to handle Slack Event payloads.
+An opinionated ASP.NET Core middleware to create simple Slackbots using the Slack event API.
 
 ### Install
 Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.endpoints.svg)](https://www.nuget.org/packages/slackbot.net.endpoints/)
@@ -31,10 +31,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Needed to verify that incoming event payloads are from Slack
 builder.Services.AddAuthentication()
-                .AddSlackbotEvents(c => c.SigningSecret = Environment.GetEnvironmentVariable("secret"));
+                .AddSlackbotEvents(c =>
+                    c.SigningSecret = Environment.GetEnvironmentVariable("SIGNING_SECRET")
+                );
 
 // Setup event handlers
-builder.Services.AddSlackBotEvents<MyTokenStore>()
+builder.Services.AddSlackBotEvents()
                 .AddAppMentionHandler<DoStuff>()
 
 
@@ -44,7 +46,7 @@ app.Run();
 
 class DoStuff : IHandleAppMentions
 {
-    public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text.Contains("CLIENT_SIGNING_SECRET");
+    public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text.Contains("hello");
 
     public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
     {
@@ -52,21 +54,11 @@ class DoStuff : IHandleAppMentions
         return Task.FromResult(new EventHandledResponse("yolo"));
     }
 }
-
-class MyTokenStore : ITokenStore
-{
-    public string SlackToken = Environment.GetEnvironmentVariable("SLACK_TOKEN");
-
-    public Task<IEnumerable<string>> GetTokens() => Task.FromResult(new[] { SlackToken });
-    public Task<string> GetTokenByTeamId(string teamId) => Task.FromResult(SlackToken);
-    public Task Delete(string token) => throw new NotImplementedException("Single workspace app");
-    public Task Insert(Workspace slackTeam) => throw new NotImplementedException("Single workspace app");
-}
  ```
 
  ### Advanced: Distributed Slack app
 
- Implement the `ITokenStore` and store/retrieve tokens to any storage.
+ Implement the `ITokenStore` to store/remote on install/uninstall flows.
 
  ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -104,10 +96,9 @@ class DoStuff : IHandleAppMentions
 /// Bring-your-own-token-store:
 class MyTokenStore : ITokenStore
 {
-    public Task<IEnumerable<string>> GetTokens() => _db.AllTokens();
-    public Task<string> GetTokenByTeamId(string teamId) => _db.FetchById(teamId);
-    public Task Delete(string token) => _db.DeleteByToken(token);
-    public Task Insert(Workspace slackTeam) => db.Insert(slackTeam);
+    // _db is some persistance technology you choose (sql, mongo, whatever)
+    public Task<Workspace Delete(string teamId) => _db.DeleteByTeamId(teamId);
+    public Task Insert(Workspace slackTeam) => _db.Insert(slackTeam);
 }
  ```
 
