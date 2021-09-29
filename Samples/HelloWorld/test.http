@@ -12,3 +12,13 @@ X-Slack-Signature: v0:abc123etcetc
         "channel": "C92QZTVEF"
     }
 }
+
+###
+# Verification request
+GET http://localhost:1337
+
+{
+    "token": "Jhj5dZrVaK7ZwHHjRyZWjbDl",
+    "challenge": "3eZbrw1aBm2rZgRNFdxV2595E9CY3gmdALWMmHkvFXO7tYXAYM8P",
+    "type": "url_verification"
+}
