@@ -16,6 +16,7 @@
         <PackageIconUrl>images/slack.png</PackageIconUrl>
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,6 +26,7 @@
 
     <ItemGroup>
         <None Include="images/slack.png" Pack="true" PackagePath="" />
+        <None Include="../../../readme.md" Pack="true" PackagePath=""/>
     </ItemGroup>
 
     <ItemGroup>
