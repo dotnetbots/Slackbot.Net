@@ -1,5 +1,5 @@
 # Mimicks a payload slack would send for app_mention events, like "@yourbot dostuff" in this case:
-GET http://localhost:5000/
+GET http://localhost:1337/
 X-Slack-Request-Timestamp: 12331231
 X-Slack-Signature: v0:abc123etcetc
 
