@@ -46,7 +46,7 @@ app.Run();
 
 class DoStuff : IHandleAppMentions
 {
-    public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text.Contains("hello");
+    public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text.Contains("hi");
 
     public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
     {
@@ -65,7 +65,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Needed to verify that incoming event payloads are from Slack
 builder.Services.AddAuthentication()
-                .AddSlackbotEvents(c => c.SigningSecret = Environment.GetEnvironmentVariable("SIGNING_SECRET"));
+                .AddSlackbotEvents(c => c.
+                    SigningSecret = Environment.GetEnvironmentVariable("SIGNING_SECRET")
+                );
 
 builder.Services.AddSlackbotDistribution(c => {
     c.CLIENT_ID = Environment.GetEnvironmentVariable("CLIENT_ID");
@@ -82,16 +84,6 @@ app.Map("/authorize", a => a.UseSlackbotDistribution()); // OAuth callback endpo
 app.Map("/events", a => a.UseSlackbot()); // event endpoint
 app.Run();
 
-class DoStuff : IHandleAppMentions
-{
-    public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text.Contains("CLIENT_SIGNING_SECRET");
-
-    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
-    {
-        Console.WriteLine("Doing stuff!");
-        return Task.FromResult(new EventHandledResponse("yolo"));
-    }
-}
 
 /// Bring-your-own-token-store:
 class MyTokenStore : ITokenStore
