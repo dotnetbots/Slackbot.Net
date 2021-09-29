@@ -13,7 +13,7 @@ namespace Slackbot.Net.Tests
         {
         }
         
-        [Fact]
+        [Fact(Skip = "not enabled")]
         public async Task ViewPublishWorks()
         {
             var response = await SlackClient.ViewPublish(new ViewPublishRequest("U0EBWMGG4")
