@@ -1,20 +1,8 @@
 namespace Slackbot.Net.Models.BlockKit
 {
-    public class Block : IBlock
-    {
-        public string type { get; set; }
-        public string block_id { get; set; }
-        public Text text { get; set; }
-        public Element accessory { get; set; }
-        public Element[] elements { get; set; }
-        public Text title { get; set; }
-        public string image_url { get; set; }
-        public string alt_text { get; set; }
-        public Text[] fields { get; set; }
-    }
     public class SectionBlock : IBlock
     {
-        public string type { get; } = BlockTypes.Section;
+        public string type { get; set; } = BlockTypes.Section;
         public string block_id { get; set; }
         public Text text { get; set; }
         public IElement accessory { get; set; }
@@ -236,8 +224,9 @@ namespace Slackbot.Net.Models.BlockKit
         public const string DatePicker = "datepicker";
         public const string PlainTextInput = "plain_text_input";
     }
+    
+    public interface IHaveType { string type { get; set; } }
 
-    public interface IElement { }
-
-    public interface IBlock { }
+    public interface IElement : IHaveType { }
+    public interface IBlock : IHaveType { }
 }

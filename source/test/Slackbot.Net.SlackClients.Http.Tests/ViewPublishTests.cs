@@ -13,7 +13,7 @@ namespace Slackbot.Net.Tests
         {
         }
         
-        [Fact(Skip = "Integration test")]
+        [Fact]
         public async Task ViewPublishWorks()
         {
             var response = await SlackClient.ViewPublish(new ViewPublishRequest("U0EBWMGG4")
@@ -23,9 +23,8 @@ namespace Slackbot.Net.Tests
                     Type = PublishViewConstants.Home,
                     Blocks = new IBlock[]
                     {
-                        new Block
+                        new SectionBlock()
                         {
-                            type = BlockTypes.Section,
                             text = new Text
                             {
                                 text = "This is some other text"
