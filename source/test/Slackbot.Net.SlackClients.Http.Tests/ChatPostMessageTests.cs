@@ -38,6 +38,21 @@ namespace Slackbot.Net.Tests
         }
         
         [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task LinkNameWorks(bool link_names)
+        {
+            var msg = new ChatPostMessageRequest
+            {
+                Channel = Channel,
+                Text = Text + " and @jarlelin",
+                Link_Names = link_names
+            };
+            var response = await SlackClient.ChatPostMessage(msg);
+            Assert.True(response.Ok);
+        }
+        
+        [Theory]
         [ClassData(typeof(AllBlocks))]
         public async Task PostBlocksWorks(IBlock blocks)
         {
