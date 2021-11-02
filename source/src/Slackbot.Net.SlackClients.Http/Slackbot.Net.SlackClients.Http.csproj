@@ -13,7 +13,6 @@
         <PackageProjectUrl>https://github.com/slackbot-net/slackbot.net</PackageProjectUrl>
         <License>https://github.com/slackbot-net/slackbot.net/blob/master/LICENSE</License>
         <RepositoryUrl>https://github.com/slackbot-net/slackbot.net</RepositoryUrl>
-        <PackageIconUrl>images/slack.png</PackageIconUrl>
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
