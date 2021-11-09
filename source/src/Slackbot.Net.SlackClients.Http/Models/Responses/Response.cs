@@ -1,8 +1,7 @@
-namespace Slackbot.Net.SlackClients.Http.Models.Responses
+namespace Slackbot.Net.SlackClients.Http.Models.Responses;
+
+public class Response
 {
-    public class Response
-    {
-        public bool Ok { get; set; }
-        public string Error { get; set; }
-    }
+    public bool Ok { get; set; }
+    public string Error { get; set; }
 }

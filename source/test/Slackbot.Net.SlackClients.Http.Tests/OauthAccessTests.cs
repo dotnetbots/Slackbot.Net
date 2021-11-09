@@ -1,9 +1,6 @@
-using System;
 using Slackbot.Net.SlackClients.Http.Exceptions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.OAuthAccess;
 using Slackbot.Net.Tests.Helpers;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Slackbot.Net.Tests
 {

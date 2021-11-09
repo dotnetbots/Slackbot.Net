@@ -1,7 +1,6 @@
-namespace Slackbot.Net.Endpoints.Models.Events
+namespace Slackbot.Net.Endpoints.Models.Events;
+
+public class AppUninstalledEvent : SlackEvent
 {
-    public class AppUninstalledEvent : SlackEvent
-    {
         
-    }
 }
