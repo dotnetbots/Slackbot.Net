@@ -1,10 +1,9 @@
-namespace Slackbot.Net.SlackClients.Http
+namespace Slackbot.Net.SlackClients.Http;
+
+public interface ISlackClientBuilder
 {
-    public interface ISlackClientBuilder
-    {
-        /// <summary>
-        /// Build a SlackClient from a token
-        /// </summary>
-        ISlackClient Build(string token);
-    }
+    /// <summary>
+    /// Build a SlackClient from a token
+    /// </summary>
+    ISlackClient Build(string token);
 }

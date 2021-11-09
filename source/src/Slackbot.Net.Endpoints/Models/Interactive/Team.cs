@@ -1,7 +1,6 @@
-namespace Slackbot.Net.Endpoints.Models.Interactive
+namespace Slackbot.Net.Endpoints.Models.Interactive;
+
+public class Team
 {
-    public class Team
-    {
-        public string Id { get; set; }
-    }
+    public string Id { get; set; }
 }

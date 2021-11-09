@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
-        <PackageIcon>slack.png</PackageIcon>
-        <PackageReleaseNotes>Shared code for Slackbot.Net packages</PackageReleaseNotes>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>        
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="../../images/slack.png" Pack="true" PackagePath="" />
-    </ItemGroup>
 
 </Project>

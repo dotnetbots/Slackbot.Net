@@ -3,7 +3,6 @@ using Slackbot.Net.Endpoints.Authentication;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Needed in production to verify that incoming event payloads are from Slack

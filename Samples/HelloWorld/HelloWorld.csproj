@@ -4,9 +4,8 @@
         <TargetFramework>net6.0</TargetFramework>
         <IsPackable>false</IsPackable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <LangVersion>preview</LangVersion>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
-    
 
     <ItemGroup>
       <ProjectReference Include="..\..\source\src\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj" />

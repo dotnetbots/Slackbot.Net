@@ -1,8 +1,7 @@
-namespace Slackbot.Net.Endpoints.Models.Interactive
-{
-    public class Interaction
-    {
+namespace Slackbot.Net.Endpoints.Models.Interactive;
 
-        public string Type { get; set; }
-    }
+public class Interaction
+{
+
+    public string Type { get; set; }
 }

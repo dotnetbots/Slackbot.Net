@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Slackbot.Net.Endpoints</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
         <PackageId>Slackbot.Net.Endpoints</PackageId>
         <Authors>John Korsnes</Authors>
         <Description>ASP.NET Core endpoints for the Slack event API</Description>
@@ -13,6 +15,7 @@
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
         <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeP2PAssets</TargetsForTfmSpecificBuildOutput>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,7 +28,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" />
+        <ProjectReference Include="..\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" PrivateAssets="All" />
     </ItemGroup>
+
+    <Target Name="IncludeP2PAssets">
+        <ItemGroup>
+            <BuildOutputInPackage Include="$(OutputPath)Slackbot.Net.Shared.dll" />
+        </ItemGroup>
+    </Target>
 
 </Project>

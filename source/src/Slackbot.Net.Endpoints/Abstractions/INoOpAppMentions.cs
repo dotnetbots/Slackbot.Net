@@ -1,7 +1,6 @@
-namespace Slackbot.Net.Endpoints.Abstractions
+namespace Slackbot.Net.Endpoints.Abstractions;
+
+public interface INoOpAppMentions : IHandleAppMentions
 {
-    public interface INoOpAppMentions : IHandleAppMentions
-    {
         
-    }
 }

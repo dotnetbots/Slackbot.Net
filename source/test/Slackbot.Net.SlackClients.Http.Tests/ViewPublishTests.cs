@@ -1,9 +1,6 @@
-using System.Threading.Tasks;
 using Slackbot.Net.Models.BlockKit;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.Tests.Helpers;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Slackbot.Net.Tests
 {

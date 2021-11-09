@@ -1,7 +1,4 @@
-using System.Threading.Tasks;
 using Slackbot.Net.Tests.Helpers;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Slackbot.Net.Tests
 {

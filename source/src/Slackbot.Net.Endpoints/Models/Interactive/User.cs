@@ -1,10 +1,9 @@
 using System.Text.Json.Serialization;
 
-namespace Slackbot.Net.Endpoints.Models.Interactive
+namespace Slackbot.Net.Endpoints.Models.Interactive;
+
+public class User
 {
-    public class User
-    {
-        [JsonPropertyName("user_id")]
-        public string User_Id { get; set; }
-    }
+    [JsonPropertyName("user_id")]
+    public string User_Id { get; set; }
 }

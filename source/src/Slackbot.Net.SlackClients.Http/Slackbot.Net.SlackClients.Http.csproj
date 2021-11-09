@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Slackbot.Net.SlackClients.Http</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
         <PackageId>Slackbot.Net.SlackClients.Http</PackageId>
         <Authors>John Korsnes</Authors>
         <Description>
@@ -15,16 +17,12 @@
         <RepositoryUrl>https://github.com/slackbot-net/slackbot.net</RepositoryUrl>
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeP2PAssets</TargetsForTfmSpecificBuildOutput>
     </PropertyGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-        <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-*" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0-*" />
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -32,7 +30,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" />
+      <ProjectReference Include="..\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" PrivateAssets="All" />
     </ItemGroup>
 
+    <Target Name="IncludeP2PAssets">
+        <ItemGroup>
+            <BuildOutputInPackage Include="$(OutputPath)Slackbot.Net.Shared.dll" />
+        </ItemGroup>
+    </Target>
+    
 </Project>
