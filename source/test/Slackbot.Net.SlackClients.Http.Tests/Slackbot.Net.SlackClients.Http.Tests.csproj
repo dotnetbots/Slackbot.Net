@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj" />
+        <ProjectReference Include="..\..\src\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" />
     </ItemGroup>
     
     <ItemGroup>

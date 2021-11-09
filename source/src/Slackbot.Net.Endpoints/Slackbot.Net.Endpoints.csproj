@@ -15,6 +15,7 @@
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
         <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeP2PAssets</TargetsForTfmSpecificBuildOutput>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,7 +28,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" />
+        <ProjectReference Include="..\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" PrivateAssets="All" />
     </ItemGroup>
+
+    <Target Name="IncludeP2PAssets">
+        <ItemGroup>
+            <BuildOutputInPackage Include="$(OutputPath)Slackbot.Net.Shared.dll" />
+        </ItemGroup>
+    </Target>
 
 </Project>
