@@ -27,7 +27,7 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.100-rc.2.21458.9"
+          dotnet-version: "6.0.x"
           include-prerelease: true
       - name: Determine Version
         id: gitversion
