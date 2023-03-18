@@ -4,12 +4,13 @@ public class MessageActionInteraction : Interaction
 {
     public string Callback_Id { get; set; }
     public string Response_Url { get; set; }
-    
+
     public Team Team { get; set; }
     public User User { get; set; }
-    
+    public Channel Channel { get; set; }
+
     public string Message_Ts { get; set; }
-    
+
     public Message Message { get; set; }
 }
 
@@ -22,6 +23,12 @@ public class User
 {
     public string Id { get; set; }
     public string Username { get; set; }
+    public string Name { get; set; }
+}
+
+public class Channel
+{
+    public string Id { get; set; }
     public string Name { get; set; }
 }
 

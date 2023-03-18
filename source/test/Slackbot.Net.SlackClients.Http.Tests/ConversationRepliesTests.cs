@@ -13,9 +13,10 @@ namespace Slackbot.Net.Tests
         }
         
         [Fact]
-        public async Task ConversationsListWorks()
+        public async Task ConversationsRepliesWorks()
         {
             var response = await SlackClient.ConversationsReplies("C0EC3DG5N","1679144061.148689");
+            _helper.WriteLine(JsonConvert.SerializeObject(response));
             Assert.True(response.Ok);
         }
     }

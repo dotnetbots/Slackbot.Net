@@ -110,6 +110,7 @@ public class SlackClient : ISlackClient
             new KeyValuePair<string, string>("channel", channel),
             new KeyValuePair<string, string>("ts", ts),
             new KeyValuePair<string, string>("limit", (limit ?? 1000).ToString()),
+            new KeyValuePair<string, string>("include_all_metadata", "true"),
         };
         return await _client.PostParametersAsForm<ConversationsRepliesResponse>(parameters,"conversations.replies", s => _logger.LogTrace(s));
     }    
