@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Models.Events;
 using Slackbot.Net.Endpoints.Models.Interactive;
 using Slackbot.Net.Endpoints.Models.Interactive.BlockActions;
+using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
 namespace Slackbot.Net.Endpoints.Middlewares;
@@ -105,6 +106,8 @@ public class HttpItemsManager
                 return viewSubmission;
             case InteractionTypes.BlockActions:
                 return JsonSerializer.Deserialize<BlockActionInteraction>(json, WebOptions);
+            case InteractionTypes.MessageAction:
+                return JsonSerializer.Deserialize<MessageActionInteraction>(json, WebOptions);
             default:
                 var unknownSlackEvent = JsonSerializer.Deserialize<UnknownInteractiveMessage>(json, WebOptions);
                 unknownSlackEvent.RawJson = raw;

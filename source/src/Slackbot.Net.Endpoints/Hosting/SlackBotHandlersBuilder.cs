@@ -53,4 +53,10 @@ public class SlackBotHandlersBuilder : ISlackbotHandlersBuilder
         _services.AddSingleton<INoOpAppMentions, T>();
         return this;
     }
+
+    public ISlackbotHandlersBuilder AddMessageActionsHandler<T>() where T : class, IHandleMessageActions
+    {
+        _services.AddSingleton<IHandleMessageActions, T>();
+        return this;
+    }
 }
