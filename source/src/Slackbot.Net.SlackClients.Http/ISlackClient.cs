@@ -4,6 +4,7 @@ using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ViewPublish;
@@ -58,6 +59,13 @@ public interface ISlackClient
     /// </summary>
     /// <remarks>https://api.slack.com/methods/conversations.members</remarks>
     Task<ConversationsListResponse> ConversationsMembers(string channel);
+    
+    
+    /// <summary>
+    /// Scopes required: channels:history/groups:history/im:history or mpim:history
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
+    Task<ConversationsRepliesResponse> ConversationsReplies(string channel, string ts, int? limit = null, string cursor = null);
 
 
     /// <summary>

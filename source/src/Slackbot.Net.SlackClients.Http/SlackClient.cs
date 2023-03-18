@@ -6,6 +6,7 @@ using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ViewPublish;
@@ -100,7 +101,19 @@ public class SlackClient : ISlackClient
         };
         return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.members", s => _logger.LogTrace(s));
     }
-        
+
+    /// <inheritdoc/>
+    public async Task<ConversationsRepliesResponse> ConversationsReplies(string channel, string ts, int? limit = null, string cursor = null)
+    {
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("channel", channel),
+            new KeyValuePair<string, string>("ts", ts),
+            new KeyValuePair<string, string>("limit", (limit ?? 1000).ToString()),
+        };
+        return await _client.PostParametersAsForm<ConversationsRepliesResponse>(parameters,"conversations.replies", s => _logger.LogTrace(s));
+    }    
+
     /// <inheritdoc/>
     public async Task<Response> AppsUninstall(string clientId, string clientSecret)
     {
