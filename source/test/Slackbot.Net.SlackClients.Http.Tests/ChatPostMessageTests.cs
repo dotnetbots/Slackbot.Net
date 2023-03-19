@@ -32,6 +32,20 @@ public class ChatPostMessageTests : Setup
         var response = await SlackClient.ChatPostMessage(msg);
         Assert.True(response.Ok);
     }
+    
+    [Fact]
+    public async Task PostWithBroadCastWorks()
+    {
+        var msg = new ChatPostMessageRequest
+        {
+            Channel = "CTECR3J6M",
+            thread_ts = "1679186947.684479",
+            Text = "BROADCAST!",
+            Reply_Broadcast = true
+        };
+        var response = await SlackClient.ChatPostMessage(msg);
+        Assert.True(response.Ok);
+    }
         
     [Theory]
     [InlineData(true)]

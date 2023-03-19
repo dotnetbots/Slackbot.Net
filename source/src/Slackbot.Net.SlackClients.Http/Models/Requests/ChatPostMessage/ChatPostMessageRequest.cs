@@ -17,6 +17,7 @@ public class ChatPostMessageRequest
     public Attachment[] attachments { get; set; }
         
     public IBlock[] Blocks { get; set; }
+    public bool? Reply_Broadcast { get; set; }
 }
     
 public class Attachment
