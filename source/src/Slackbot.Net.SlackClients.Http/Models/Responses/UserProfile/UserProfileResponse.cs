@@ -14,6 +14,9 @@ public class GetUserProfile
         
     public string Real_Name{ get; set; }
     public string Real_Name_Normalized{ get; set; }
+    
+    public string Display_Name { get; set; }
+    public string Display_Name_Normalized { get; set; }
         
     public string Phone{ get; set; }
     public string Email{ get; set; }
