@@ -5,7 +5,7 @@
         <IsPackable>false</IsPackable>
         <RootNamespace>Slackbot.Net.Tests</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>Preview</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,6 +24,13 @@
     <ItemGroup>
         <Using Include="Xunit" />
         <Using Include="Xunit.Abstractions" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Remove="Helpers\ImageBase64Encoded.txt" />
+      <Content Include="Helpers\ImageBase64Encoded.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

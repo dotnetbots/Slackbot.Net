@@ -1,12 +1,14 @@
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
+using Slackbot.Net.SlackClients.Http.Models.Responses.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ViewPublish;
@@ -140,5 +142,44 @@ public class SlackClient : ISlackClient
             new KeyValuePair<string, string>("user", user),
         };
         return await _client.PostParametersAsForm<UserProfileResponse>(parameters,"users.profile.get", s => _logger.LogTrace(s));        
+    }
+
+    /// <inheritdoc/>
+    public async Task<FileUploadResponse> FilesUpload(FileUploadRequest req)
+    {
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("channels", req.Channels),
+            new KeyValuePair<string, string>("title", req.Title),
+            new KeyValuePair<string, string>("content", req.Content),
+            new KeyValuePair<string, string>("filename", req.Filename),
+            new KeyValuePair<string, string>("filetype", req.Filetype),
+            new KeyValuePair<string, string>("initial_comment", req.Initial_Comment),
+            new KeyValuePair<string, string>("thread_ts", req.Thread_Ts),
+        };
+        return await _client.PostParametersAsForm<FileUploadResponse>(parameters, "files.upload", s => _logger.LogTrace(s));
+    }
+    
+    /// <inheritdoc/>
+    public async Task<FileUploadResponse> FilesUpload(FileUploadMultiPartRequest req)
+    {
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("channels", req.Channels),
+            new KeyValuePair<string, string>("title", req.Title),
+            new KeyValuePair<string, string>("filename", req.Filename),
+        };
+
+        if (req.Initial_Comment is { })
+        {
+            parameters.Add(new KeyValuePair<string, string>("initial_comment", req.Initial_Comment));
+        }
+        
+        if (req.Thread_Ts is { })
+        {
+            parameters.Add(new KeyValuePair<string, string>("thread_ts", req.Thread_Ts));
+        }
+        
+        return await _client.PostParametersAsMultiPartFormData<FileUploadResponse>(parameters, req.File, "files.upload", s => _logger.LogTrace(s));
     }
 }

@@ -1,10 +1,12 @@
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
+using Slackbot.Net.SlackClients.Http.Models.Responses.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ViewPublish;
@@ -88,4 +90,13 @@ public interface ISlackClient
     /// </summary>
     /// <remarks>https://api.slack.com/methods/users.profile.get</remarks>
     Task<UserProfileResponse> UserProfile(string user);
+    
+    /// <summary>
+    /// Scopes required: files.write 
+    /// Uploads a file
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/files.upload</remarks>
+    Task<FileUploadResponse> FilesUpload(FileUploadRequest fileupload);
+
+    Task<FileUploadResponse> FilesUpload(FileUploadMultiPartRequest req);
 }

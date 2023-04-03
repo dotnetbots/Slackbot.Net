@@ -84,6 +84,40 @@ internal static class HttpClientExtensions
             
         return resObj;        
     }
+    
+    public static async Task<T> PostParametersAsMultiPartFormData<T>(this HttpClient httpClient, IEnumerable<KeyValuePair<string, string>> parameters, Byte[] bytes, string api, Action<string> logger = null) where T: Response
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, api);
+
+        if (parameters != null && parameters.Any())
+        {
+            var formData = new MultipartFormDataContent();
+            foreach (KeyValuePair<string,string> param in parameters)
+            {
+                formData.Add(new StringContent(param.Value), param.Key);
+            }
+            formData.Add(new ByteArrayContent(bytes), "file", parameters.First(p => p.Key == "filename").Value);
+
+            request.Content = formData;
+        }
+
+        var response =  await httpClient.SendAsync(request);
+        var responseContent = await response.Content.ReadAsStringAsync();
+            
+        if (!response.IsSuccessStatusCode)
+        {
+            logger?.Invoke($"{response.StatusCode} \n {responseContent}");
+        }
+        
+        response.EnsureSuccessStatusCode();
+
+        var resObj = JsonSerializer.Deserialize<T>(responseContent, JsonSerializerSettings);
+            
+        if(!resObj.Ok)
+            throw new WellKnownSlackApiException(error: $"{resObj.Error}", responseContent:responseContent);
+            
+        return resObj;        
+    }
 }
 
 internal class LowerCaseNaming : JsonNamingPolicy

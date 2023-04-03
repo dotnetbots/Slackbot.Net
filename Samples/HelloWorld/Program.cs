@@ -29,6 +29,7 @@ class DoStuff : IHandleAppMentions
     public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
     {
         Console.WriteLine("Doing stuff!");
+        Console.WriteLine(JsonSerializer.Serialize(slackEvent));
         return Task.FromResult(new EventHandledResponse("yolo"));
     }
 }
