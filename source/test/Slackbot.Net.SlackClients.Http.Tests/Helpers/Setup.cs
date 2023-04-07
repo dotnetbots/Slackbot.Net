@@ -34,7 +34,7 @@ namespace Slackbot.Net.Tests.Helpers
             SearchClient = provider.GetService<ISearchClient>();
             SlackClient = provider.GetService<ISlackClient>();
             SlackOAuthClient = provider.GetService<ISlackOAuthAccessClient>();
-            Channel = "#testss";
+            Channel = "#test";
             Text = "Test";
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using Slackbot.Net.Models.BlockKit;
 using Slackbot.Net.SlackClients.Http.Exceptions;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.Tests.Helpers;
 
@@ -33,6 +34,40 @@ public class ChatPostMessageTests : Setup
         Assert.True(response.Ok);
     }
     
+    [Fact]
+    public async Task PostEphemeralWorks()
+    {
+        var msg = new ChatPostEphemeralMessageRequest()
+        {
+            Channel = Channel,
+            Text = Text,
+            User = "U0EBWMGG4"
+        };
+        var response = await SlackClient.ChatPostEphemeralMessage(msg);
+        Assert.True(response.Ok);
+    }
+    
+    [Fact]
+    public async Task PostEphemeralThreadWorks()
+    {
+        var initMsg = await SlackClient.ChatPostMessage(Channel, "Some thread starting text");
+        var reply = await SlackClient.ChatPostMessage(new ChatPostMessageRequest
+        {
+            Channel = Channel,
+            Text = "A threaded reply ",
+            thread_ts = initMsg.ts,
+        });
+        var msg = new ChatPostEphemeralMessageRequest()
+        {
+            Channel = Channel,
+            Text = "This is ephemeral to johnkors",
+            User = "U0EBWMGG4",
+            thread_ts = reply.ts
+        };
+        var response = await SlackClient.ChatPostEphemeralMessage(msg);
+        Assert.True(response.Ok);
+    }
+
     [Fact]
     public async Task PostWithBroadCastWorks()
     {

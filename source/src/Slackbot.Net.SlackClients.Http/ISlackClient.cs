@@ -1,3 +1,4 @@
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
@@ -29,6 +30,12 @@ public interface ISlackClient
     /// </summary>
     /// <remarks>https://api.slack.com/methods/chat.postMessage</remarks>
     Task<ChatPostMessageResponse> ChatPostMessage(ChatPostMessageRequest postMessage);
+    
+    /// <summary>
+    /// Scopes required: `chat:write`
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/chat.postEphemeral</remarks>
+    Task<ChatPostMessageResponse> ChatPostEphemeralMessage(ChatPostEphemeralMessageRequest postMessage);
 
     /// <summary>
     /// Scopes required: no scopes required

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients.Http.Extensions;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
@@ -45,6 +46,12 @@ public class SlackClient : ISlackClient
     public async Task<ChatPostMessageResponse> ChatPostMessage(ChatPostMessageRequest postMessage)
     {
         return await _client.PostJson<ChatPostMessageResponse>(postMessage, "chat.postMessage", s => _logger.LogTrace(s));
+    }
+
+    /// <inheritdoc/>
+    public async Task<ChatPostMessageResponse> ChatPostEphemeralMessage(ChatPostEphemeralMessageRequest postMessage)
+    {
+        return await _client.PostJson<ChatPostMessageResponse>(postMessage, "chat.postEphemeral", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
