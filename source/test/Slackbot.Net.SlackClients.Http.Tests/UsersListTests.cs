@@ -8,14 +8,14 @@ namespace Slackbot.Net.Tests
         {
         }
         
-        [Fact]
+        [Fact(Skip = "Run on demand")]
         public async Task UsersListWorks()
         {
             var response = await SlackClient.UsersList();
             Assert.True(response.Ok);
         }
         
-        [Fact]
+        [Fact(Skip = "Run on demand")]
         public async Task FindsAdmins()
         {
             var response = await SlackClient.UsersList();
@@ -23,7 +23,7 @@ namespace Slackbot.Net.Tests
             Assert.True(adminFound);
         }
         
-        [Fact]
+        [Fact(Skip = "Run on demand")]
         public async Task FindsBots()
         {
             var response = await SlackClient.UsersList();

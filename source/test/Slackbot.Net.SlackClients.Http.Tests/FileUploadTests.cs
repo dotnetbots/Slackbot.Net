@@ -9,7 +9,7 @@ namespace Slackbot.Net.Tests
         {
         }
         
-        [Fact]
+        [Fact(Skip = "Run on demand")]
         public async Task FilesUploadTests()
         {
             var response = await SlackClient.FilesUpload(new FileUploadRequest
@@ -25,7 +25,7 @@ namespace Slackbot.Net.Tests
             Assert.True(response.Ok);
         }
         
-        [Fact]
+        [Fact(Skip = "Run on demand")]
         public async Task FilesUploadFileTests()
         {
             var bytes = Convert.FromBase64String(File.ReadAllText("./Helpers/ImageBase64Encoded.txt"));
