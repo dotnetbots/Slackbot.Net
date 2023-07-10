@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AzureFunctionsVersion>V4</AzureFunctionsVersion>
+        <OutputType>Exe</OutputType>
+        <PublishReadyToRun>true</PublishReadyToRun>
+        <IsPackable>false</IsPackable>
+<!-- Used when publishing to Azure   <RuntimeIdentifier>linux-x64</RuntimeIdentifier>-->
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.16.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.12" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.11.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.0.0-preview2" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="host.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\source\src\Slackbot.Net.Azure.Functions\Slackbot.Net.Azure.Functions.csproj" />
+      <ProjectReference Include="..\..\source\src\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj" />
+    </ItemGroup>
+</Project>

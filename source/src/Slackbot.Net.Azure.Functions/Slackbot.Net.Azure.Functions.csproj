@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>Slackbot.Net.Azure.Functions</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+        <PackageId>Slackbot.Net.Azure.Functions</PackageId>
+        <Authors>John Korsnes</Authors>
+        <Description>Azure Function HttpTrigger for the Slack event API</Description>
+        <PackageTags>slack dotnetcore azure functions</PackageTags>
+        <PackageProjectUrl>https://github.com/slackbot-net/slackbot.net</PackageProjectUrl>
+        <License>https://github.com/slackbot-net/slackbot.net/blob/master/LICENSE</License>
+        <RepositoryUrl>https://github.com/slackbot-net/slackbot.net</RepositoryUrl>
+        <PackageIcon>slack.png</PackageIcon>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeP2PAssets</TargetsForTfmSpecificBuildOutput>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.12" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.0.0-preview2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../images/slack.png" Pack="true" PackagePath="" />
+        <None Include="../../../readme.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+    <Target Name="IncludeP2PAssets">
+        <ItemGroup>
+            <BuildOutputInPackage Include="$(OutputPath)Slackbot.Net.Shared.dll" />
+        </ItemGroup>
+    </Target>
+
+</Project>

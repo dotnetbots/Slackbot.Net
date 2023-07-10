@@ -1,0 +1,20 @@
+# Mimicks a payload slack would send for app_mention events, like "@yourbot dostuff" in this case:
+POST http://localhost:7071/api/slack/event
+
+{
+    "event": {
+        "type": "app_mention",
+        "text" : "<@BOT123> dostuff",
+        "channel": "#test"
+    }
+}
+
+###
+# Verification request
+POST http://localhost:7071/api/slack/event
+
+{
+    "token": "some-opaque-token",
+    "challenge": "this-is-a-challenge-value",
+    "type": "url_verification"
+}
