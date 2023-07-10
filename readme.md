@@ -12,4 +12,4 @@ Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.en
 
 ### Docs
 
-Check the docs: https://slackbot-net.vercel.app/
+Check the docs: https://slack.dotnetbots.com/
