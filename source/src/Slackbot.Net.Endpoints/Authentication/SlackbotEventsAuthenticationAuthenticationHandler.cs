@@ -17,8 +17,8 @@ internal class SlackbotEventsAuthenticationAuthenticationHandler : Authenticatio
     private readonly string _signingSecret;
 
     public SlackbotEventsAuthenticationAuthenticationHandler(
-        IOptionsMonitor<SlackbotEventsAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder,
-        ISystemClock clock) : base(options, logger, encoder, clock)
+        IOptionsMonitor<SlackbotEventsAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder) 
+        : base(options, logger, encoder)
     {
         if (string.IsNullOrEmpty(options.CurrentValue.SigningSecret))
             throw new ArgumentNullException(nameof(SlackbotEventsAuthenticationOptions.SigningSecret));
