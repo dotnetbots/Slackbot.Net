@@ -17,15 +17,24 @@ public class Uninstall
     {
         _logger = logger;
         _uninstaller = provider.GetService<IUninstall>() ?? new NoopUninstaller(provider.GetService<ILogger<NoopUninstaller>>());
-        _tokenStore = provider.GetService<ITokenStore>();
+        _tokenStore = provider.GetService<ITokenStore>() ?? new NoopTokenStore(provider.GetService<ILogger<NoopTokenStore>>());
     }
 
     public async Task Invoke(HttpContext context)
     {
         var metadata = context.Items[HttpItemKeys.EventMetadataKey] as EventMetaData;
+        _logger.LogInformation($"Deleting team with TeamId: `{metadata.Team_Id}`");
         var deleted = await _tokenStore.Delete(metadata.Team_Id);
-        await _uninstaller.OnUninstalled(deleted.TeamId, deleted.TeamName);
-        _logger.LogInformation($"Deleted team with TeamId: `{metadata.Team_Id}`");
+        if (deleted is null)
+        {
+            _logger.LogWarning("Token store returned null for '{TeamId}'. Will not trigger registered OnUninstalled handlers. ", metadata.Team_Id);
+        }
+        else
+        {
+            await _uninstaller.OnUninstalled(deleted?.TeamId, deleted?.TeamName);
+            _logger.LogInformation($"Deleted team with TeamId: `{metadata.Team_Id}`");
+        }
+
         context.Response.StatusCode = 200;
     }
 
@@ -37,17 +46,26 @@ public class Uninstall
     }
 }
 
-public class NoopUninstaller : IUninstall
+public class NoopUninstaller(ILogger<NoopUninstaller> logger) : IUninstall
 {
-    private readonly ILogger<NoopUninstaller> _logger;
-
-    public NoopUninstaller(ILogger<NoopUninstaller> logger)
-    {
-        _logger = logger;
-    }
     public Task OnUninstalled(string teamId, string teamName)
     {
-        _logger.LogDebug("No OnUninstall function registered. No-op.");
+        logger.LogDebug("No OnUninstall function registered. No-op.");
+        return Task.CompletedTask;
+    }
+}
+
+public class NoopTokenStore(ILogger<NoopTokenStore> logger) : ITokenStore
+{
+    public Task<Workspace> Delete(string teamId)
+    {
+        logger.LogDebug("No-op. Returning null for deleting workspace!");
+        return Task.FromResult<Workspace>(null);
+    }
+
+    public Task Insert(Workspace slackTeam)
+    {
+        logger.LogDebug("No-op. Not storing workspace!");
         return Task.CompletedTask;
     }
 }
