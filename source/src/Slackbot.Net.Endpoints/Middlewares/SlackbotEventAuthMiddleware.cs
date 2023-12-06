@@ -16,23 +16,23 @@ internal class SlackbotEventAuthMiddleware
 
     public async Task Invoke(HttpContext ctx, ILogger<SlackbotEventAuthMiddleware> logger)
     {
-        bool success = false;
+        AuthenticateResult res;
         try
         {
-            var res = await ctx.AuthenticateAsync(SlackbotEventsAuthenticationConstants.AuthenticationScheme);
-            success = res.Succeeded;
+            res = await ctx.AuthenticateAsync(SlackbotEventsAuthenticationConstants.AuthenticationScheme);
         }
         catch (InvalidOperationException ioe)
         {
             throw new InvalidOperationException("Did you forget to call services.AddAuthentication().AddSlackbotEvents()?", ioe);
         }
 
-        if (success)
+        if (res.Succeeded)
         {
             await _next(ctx);
         }
         else
         {
+            logger.LogWarning($"Unauthorized callback from Slack");
             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await ctx.Response.WriteAsync("UNAUTHORIZED");
         }
