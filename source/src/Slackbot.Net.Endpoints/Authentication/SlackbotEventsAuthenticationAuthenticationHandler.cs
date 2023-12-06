@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 
 namespace Slackbot.Net.Endpoints.Authentication;
 
@@ -31,22 +32,28 @@ internal class SlackbotEventsAuthenticationAuthenticationHandler : Authenticatio
 
         string timestamp = headers[TimestampHeaderName].FirstOrDefault();
         string signature = headers[SignatureHeaderName].FirstOrDefault();
-
+        var failures = new StringBuilder();
         if (timestamp == null)
         {
-            return HandleRequestResult.Fail($"Missing header {TimestampHeaderName}");
+            failures.Append($"Missing header {TimestampHeaderName}");
         }
 
         if (signature == null)
         {
-            return HandleRequestResult.Fail($"Missing header {SignatureHeaderName}");
+            failures.Append($"Missing header {TimestampHeaderName}");
+        }
+
+        if (timestamp is null || signature == null)
+        {
+            Logger.LogDebug($"Skipping handler: {failures}");
+            return HandleRequestResult.SkipHandler();
         }
 
         bool isNumber = long.TryParse(timestamp, out long timestampAsLong);
 
         if (!isNumber)
         {
-            return HandleRequestResult.Fail($"Invalid header. Header {TimestampHeaderName} not a number");
+            return HandleRequestResult.Fail($"Invalid formatted headers. {TimestampHeaderName} is not a number. ");
         }
 
         Request.EnableBuffering();
@@ -59,7 +66,7 @@ internal class SlackbotEventsAuthenticationAuthenticationHandler : Authenticatio
             return HandleRequestResult.Success(new AuthenticationTicket(new ClaimsPrincipal(), SlackbotEventsAuthenticationConstants.AuthenticationScheme));
         }
 
-        return HandleRequestResult.Fail("Verification of Slack request failed.");
+        return HandleRequestResult.Fail("Slack request failed signature verification.");
 
     }
 
