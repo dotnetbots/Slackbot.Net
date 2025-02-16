@@ -97,7 +97,7 @@ public class AllBlocks : IEnumerable<object[]>
         yield return Scenario(new DividerBlock());
         yield return Scenario(new ImageBlock
         {
-            image_url = "https://placehold.co/150", alt_text = "some alt text"
+            image_url = "https://placehold.co/150.png", alt_text = "some alt text"
         });
         yield return Scenario(new InputBlock { label = TextElement(), element = new PlainTextInputElement() });
         yield return Scenario(new SectionBlock { text = TextElement() });
