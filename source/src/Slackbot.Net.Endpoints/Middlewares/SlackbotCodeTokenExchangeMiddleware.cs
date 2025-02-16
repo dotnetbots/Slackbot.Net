@@ -7,23 +7,20 @@ using Slackbot.Net.Endpoints.OAuth;
 
 namespace Slackbot.Net.Endpoints.Middlewares;
 
-internal class SlackbotCodeTokenExchangeMiddleware
+internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
-    public async Task Invoke(HttpContext ctx, OAuthClient oAuthAccessClient, IServiceProvider provider, IOptions<OAuthOptions> options, ITokenStore slackTeamRepository, ILogger<SlackbotCodeTokenExchangeMiddleware> logger)
+    public async Task Invoke(HttpContext ctx, OAuthClient oAuthAccessClient, IServiceProvider provider,
+        IOptions<OAuthOptions> options, ITokenStore slackTeamRepository,
+        ILogger<SlackbotCodeTokenExchangeMiddleware> logger)
     {
         logger.LogInformation("Installing!");
-        var redirect_uri = new Uri($"{ctx.Request.Scheme}://{ctx.Request.Host.Value.ToString()}{ctx.Request.PathBase.Value}");
+        var redirect_uri = new Uri($"{ctx.Request.Scheme}://{ctx.Request.Host.Value}{ctx.Request.PathBase.Value}");
         var code = ctx.Request.Query["code"].FirstOrDefault();
 
-        if(code == null)
-            await _next(ctx);
+        if (code == null)
+        {
+            await next(ctx);
+        }
 
         var response = await oAuthAccessClient.OAuthAccessV2(new OAuthClient.OauthAccessV2Request(
             code,

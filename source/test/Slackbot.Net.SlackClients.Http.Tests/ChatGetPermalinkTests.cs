@@ -1,20 +1,15 @@
 using Slackbot.Net.Tests.Helpers;
 
-namespace Slackbot.Net.Tests
+namespace Slackbot.Net.Tests;
+
+public class ChatGetPermalinkTests(ITestOutputHelper helper) : Setup(helper)
 {
-    public class ChatGetPermalinkTests : Setup
+    [Fact]
+    public async Task GetPermalinkWorks()
     {
-        public ChatGetPermalinkTests(ITestOutputHelper helper) : base(helper)
-        {
-        }
-        
-        [Fact]
-        public async Task GetPermalinkWorks()
-        {
-            var response = await SlackClient.ChatPostMessage(Channel, Text);
-            var permalink = await SlackClient.ChatGetPermalink(response.channel, response.ts);
-            Assert.True(permalink.Ok);
-            Assert.NotNull(permalink.Permalink);
-        }
+        var response = await SlackClient.ChatPostMessage(Channel, Text);
+        var permalink = await SlackClient.ChatGetPermalink(response.channel, response.ts);
+        Assert.True(permalink.Ok);
+        Assert.NotNull(permalink.Permalink);
     }
 }

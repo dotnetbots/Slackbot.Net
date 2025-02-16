@@ -8,7 +8,9 @@ public static class IAppBuilderExtensions
     public static IApplicationBuilder UseSlackbot(this IApplicationBuilder app, bool enableAuth = true)
     {
         if (enableAuth)
+        {
             app.UseMiddleware<SlackbotEventAuthMiddleware>();
+        }
 
         app.UseMiddleware<HttpItemsManager>();
         app.MapWhen(Challenge.ShouldRun, b => b.UseMiddleware<Challenge>());
@@ -22,9 +24,9 @@ public static class IAppBuilderExtensions
     }
 
     /// <summary>
-    /// NB! The path you run this middleware must:
-    /// - match redirect_uri in your 1st redirect to Slack
-    /// - be a valid redirect_uri in your Slack app configuration
+    ///     NB! The path you run this middleware must:
+    ///     - match redirect_uri in your 1st redirect to Slack
+    ///     - be a valid redirect_uri in your Slack app configuration
     /// </summary>
     /// <param name="app"></param>
     /// <returns></returns>

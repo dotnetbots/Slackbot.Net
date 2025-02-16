@@ -1,25 +1,20 @@
 using Slackbot.Net.Tests.Helpers;
 
-namespace Slackbot.Net.Tests
+namespace Slackbot.Net.Tests;
+
+public class UsersProfileGetTests(ITestOutputHelper helper) : Setup(helper)
 {
-    public class UsersProfileGetTests : Setup
+    [Fact]
+    public async Task UsersProfileWorks()
     {
-        public UsersProfileGetTests(ITestOutputHelper helper) : base(helper)
-        {
-        }
-        
-        [Fact]
-        public async Task UsersProfileWorks()
-        {
-            var response = await SlackClient.UserProfile("USRAR1YTV");
-            Assert.True(response.Ok);
-        }
-        
-        [Fact]
-        public async Task FindsApp()
-        {
-            var response = await SlackClient.UserProfile("USRAR1YTV");
-            Assert.Equal("AREFP62B1",response.Profile.Api_App_Id);
-        }
+        var response = await SlackClient.UserProfile("USRAR1YTV");
+        Assert.True(response.Ok);
+    }
+
+    [Fact]
+    public async Task FindsApp()
+    {
+        var response = await SlackClient.UserProfile("USRAR1YTV");
+        Assert.Equal("AREFP62B1", response.Profile.Api_App_Id);
     }
 }

@@ -2,29 +2,24 @@ using Slackbot.Net.SlackClients.Http.Exceptions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.OAuthAccess;
 using Slackbot.Net.Tests.Helpers;
 
-namespace Slackbot.Net.Tests
+namespace Slackbot.Net.Tests;
+
+public class OauthAccessTests(ITestOutputHelper helper) : Setup(helper)
 {
-    public class OauthAccessTests : Setup
+    [Fact]
+    public void OauthAccessTestsThrowsInvalidCodeOnInvalidCodes()
     {
-        public OauthAccessTests(ITestOutputHelper helper) : base(helper)
+        var oauthAccessRequest = new OauthAccessRequest
         {
-        }
-        
-        [Fact]
-        public void OauthAccessTestsThrowsInvalidCodeOnInvalidCodes()
+            ClientId = Environment.GetEnvironmentVariable("CLIENT_ID"),
+            ClientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET"),
+            Code = ""
+        };
+        var ex = Assert.Throws<WellKnownSlackApiException>(() =>
         {
-            var oauthAccessRequest = new OauthAccessRequest
-            {
-                ClientId = Environment.GetEnvironmentVariable("CLIENT_ID"),
-                ClientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET"),
-                Code = ""
-            };
-            var ex = Assert.Throws<WellKnownSlackApiException>(() =>
-            {
-                var oAuthAccess = SlackOAuthClient.OAuthAccess(oauthAccessRequest).GetAwaiter().GetResult();
-                return oAuthAccess;
-            });
-            Assert.Equal("invalid_code", ex.Message);
-        }
+            var oAuthAccess = SlackOAuthClient.OAuthAccess(oauthAccessRequest).GetAwaiter().GetResult();
+            return oAuthAccess;
+        });
+        Assert.Equal("invalid_code", ex.Message);
     }
 }

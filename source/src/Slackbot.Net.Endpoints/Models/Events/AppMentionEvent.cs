@@ -7,6 +7,6 @@ public class AppMentionEvent : SlackEvent
     public string Channel { get; set; }
     public string Ts { get; set; }
     public string Event_Ts { get; set; }
-    
+
     public string Thread_Ts { get; set; }
 }

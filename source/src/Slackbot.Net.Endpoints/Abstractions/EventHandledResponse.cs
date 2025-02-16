@@ -1,11 +1,6 @@
 namespace Slackbot.Net.Endpoints.Abstractions;
 
-public class EventHandledResponse
+public class EventHandledResponse(string response)
 {
-    public string Response { get; }
-
-    public EventHandledResponse(string response)
-    {
-        Response = response;
-    }
+    public string Response { get; } = response;
 }

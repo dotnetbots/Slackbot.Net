@@ -4,17 +4,11 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints;
 
-public class NoOpAppMentionEventHandler : IHandleAppMentions
+public class NoOpAppMentionEventHandler(ILogger<NoOpAppMentionEventHandler> logger) : IHandleAppMentions
 {
-    private readonly ILogger<NoOpAppMentionEventHandler> _logger;
-
-    public NoOpAppMentionEventHandler(ILogger<NoOpAppMentionEventHandler> logger)
-    {
-        _logger = logger;
-    }
     public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
     {
-        _logger.LogWarning($"No-op for app mention with text `{slackEvent?.Text}`.");
+        logger.LogWarning($"No-op for app mention with text `{slackEvent?.Text}`.");
         return Task.FromResult(new EventHandledResponse("no-op handled it"));
     }
 
@@ -23,5 +17,8 @@ public class NoOpAppMentionEventHandler : IHandleAppMentions
         return true;
     }
 
-    public (string, string) GetHelpDescription() => ("nada", "Fallback when no handlers are matched for any event you subscribe to");
+    public (string, string) GetHelpDescription()
+    {
+        return ("nada", "Fallback when no handlers are matched for any event you subscribe to");
+    }
 }

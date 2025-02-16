@@ -12,16 +12,18 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ISelectAppMentionEventHandlers, AppMentionEventHandlerSelector>();
         return new SlackBotHandlersBuilder(services);
     }
-        
-    public static ISlackbotHandlersBuilder AddSlackBotEvents<T>(this IServiceCollection services) where T: class, ITokenStore
+
+    public static ISlackbotHandlersBuilder AddSlackBotEvents<T>(this IServiceCollection services)
+        where T : class, ITokenStore
     {
         services.AddSingleton<ITokenStore, T>();
         return services.AddSlackBotEvents();
     }
 
-    public static IServiceCollection AddSlackbotDistribution(this IServiceCollection services, Action<OAuthOptions> action)
+    public static IServiceCollection AddSlackbotDistribution(this IServiceCollection services,
+        Action<OAuthOptions> action)
     {
-        services.Configure<OAuthOptions>(action);
+        services.Configure(action);
         services.AddHttpClient<OAuthClient>((s, c) =>
         {
             c.BaseAddress = new Uri("https://slack.com/api/");
@@ -33,12 +35,8 @@ public static class ServiceCollectionExtensions
 
 public class OAuthOptions
 {
-    public OAuthOptions()
-    {
-        OnSuccess = (_,_,_) => Task.CompletedTask;
-    }
     public string CLIENT_ID { get; set; }
     public string CLIENT_SECRET { get; set; }
     public string SuccessRedirectUri { get; set; } = "/success?default=1";
-    public Func<string, string, IServiceProvider, Task> OnSuccess { get; set; }
+    public Func<string, string, IServiceProvider, Task> OnSuccess { get; set; } = (_, _, _) => Task.CompletedTask;
 }
