@@ -5,22 +5,15 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints;
 
-internal class AppMentionEventHandlerSelector : ISelectAppMentionEventHandlers
+internal class AppMentionEventHandlerSelector(ILoggerFactory loggerFactory, IServiceProvider provider)
+    : ISelectAppMentionEventHandlers
 {
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly IServiceProvider _provider;
-
-    public AppMentionEventHandlerSelector(ILoggerFactory loggerFactory, IServiceProvider provider)
+    public async Task<IEnumerable<IHandleAppMentions>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata,
+        AppMentionEvent slackEvent)
     {
-        _loggerFactory = loggerFactory;
-        _provider = provider;
-    }
-        
-    public async Task<IEnumerable<IHandleAppMentions>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata, AppMentionEvent slackEvent)
-    {
-        var allHandlers = _provider.GetServices<IHandleAppMentions>();
-        var shortCutter = _provider.GetService<IShortcutAppMentions>();
-        var noopHandler = _provider.GetService<INoOpAppMentions>();
+        var allHandlers = provider.GetServices<IHandleAppMentions>();
+        var shortCutter = provider.GetService<IShortcutAppMentions>();
+        var noopHandler = provider.GetService<INoOpAppMentions>();
 
         if (shortCutter != null && shortCutter.ShouldShortcut(slackEvent))
         {
@@ -29,21 +22,25 @@ internal class AppMentionEventHandlerSelector : ISelectAppMentionEventHandlers
         }
 
         return SelectHandler(allHandlers, noopHandler, slackEvent);
- 
     }
 
-    private IEnumerable<IHandleAppMentions> SelectHandler(IEnumerable<IHandleAppMentions> handlers, INoOpAppMentions noOpAppMentions, AppMentionEvent message)
+    private IEnumerable<IHandleAppMentions> SelectHandler(IEnumerable<IHandleAppMentions> handlers,
+        INoOpAppMentions noOpAppMentions, AppMentionEvent message)
     {
         var matchingHandlers = handlers.Where(s => s.ShouldHandle(message));
         if (matchingHandlers.Any())
+        {
             return matchingHandlers;
-            
-        if(noOpAppMentions != null)
+        }
+
+        if (noOpAppMentions != null)
+        {
             return new List<IHandleAppMentions> { noOpAppMentions };
-            
+        }
+
         return new List<IHandleAppMentions>
         {
-            new NoOpAppMentionEventHandler(_loggerFactory.CreateLogger<NoOpAppMentionEventHandler>())
+            new NoOpAppMentionEventHandler(loggerFactory.CreateLogger<NoOpAppMentionEventHandler>())
         };
     }
 }

@@ -7,11 +7,12 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 
 internal class MemberJoinedEvents
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger<MemberJoinedEvents> _logger;
+    private readonly RequestDelegate _next;
     private readonly IEnumerable<IHandleMemberJoinedChannel> _responseHandlers;
 
-    public MemberJoinedEvents(RequestDelegate next, ILogger<MemberJoinedEvents> logger, IEnumerable<IHandleMemberJoinedChannel> responseHandlers, ILoggerFactory loggerFactory)
+    public MemberJoinedEvents(RequestDelegate next, ILogger<MemberJoinedEvents> logger,
+        IEnumerable<IHandleMemberJoinedChannel> responseHandlers, ILoggerFactory loggerFactory)
     {
         _next = next;
         _logger = logger;
@@ -20,10 +21,10 @@ internal class MemberJoinedEvents
 
     public async Task Invoke(HttpContext context)
     {
-        var memberJoinedChannelEvent = (MemberJoinedChannelEvent) context.Items[HttpItemKeys.SlackEventKey];
-        var metadata = (EventMetaData) context.Items[HttpItemKeys.EventMetadataKey];
+        var memberJoinedChannelEvent = (MemberJoinedChannelEvent)context.Items[HttpItemKeys.SlackEventKey];
+        var metadata = (EventMetaData)context.Items[HttpItemKeys.EventMetadataKey];
         var handler = _responseHandlers.FirstOrDefault();
-            
+
         if (handler == null)
         {
             _logger.LogError("No handler registered for IHandleMemberJoinedChannelEvents");
@@ -34,7 +35,7 @@ internal class MemberJoinedEvents
             try
             {
                 _logger.LogInformation($"Handling using {handler.GetType()}");
-                var response = await handler.Handle(metadata,memberJoinedChannelEvent);
+                var response = await handler.Handle(metadata, memberJoinedChannelEvent);
                 _logger.LogInformation(response.Response);
             }
             catch (Exception e)
@@ -46,6 +47,9 @@ internal class MemberJoinedEvents
         context.Response.StatusCode = 200;
     }
 
-    public static bool ShouldRun(HttpContext ctx) =>  ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey) && (ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.MemberJoinedChannel);
-
+    public static bool ShouldRun(HttpContext ctx)
+    {
+        return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey) &&
+               ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.MemberJoinedChannel;
+    }
 }

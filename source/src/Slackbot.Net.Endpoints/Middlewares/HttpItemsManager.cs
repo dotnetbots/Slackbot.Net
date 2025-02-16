@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
@@ -10,30 +11,23 @@ using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
 namespace Slackbot.Net.Endpoints.Middlewares;
 
-public class HttpItemsManager
+public class HttpItemsManager(RequestDelegate next, ILogger<HttpItemsManager> logger)
 {
-    private readonly RequestDelegate _next;
-    private ILogger<HttpItemsManager> _logger;
-
-    public HttpItemsManager(RequestDelegate next, ILogger<HttpItemsManager> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
+    private static readonly JsonSerializerOptions WebOptions = new(JsonSerializerDefaults.Web);
 
     public async Task Invoke(HttpContext context)
     {
         context.Request.EnableBuffering();
-        using (var reader = new StreamReader(context.Request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true))
+        using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, false, leaveOpen: true))
         {
             var body = await reader.ReadToEndAsync();
 
             if (body.StartsWith("{"))
             {
                 var jObject = JsonDocument.Parse(body);
-                _logger.LogTrace(body);
+                logger.LogTrace(body);
                 JsonElement challengeValue;
-                bool isChallenge = jObject.RootElement.TryGetProperty("challenge", out challengeValue);
+                var isChallenge = jObject.RootElement.TryGetProperty("challenge", out challengeValue);
                 if (isChallenge)
                 {
                     context.Items.Add(HttpItemKeys.ChallengeKey, challengeValue);
@@ -55,9 +49,9 @@ public class HttpItemsManager
             // Your app should parse this payload parameter as JSON.
             else if (body.StartsWith("payload="))
             {
-                _logger.LogTrace(body);
-                var payloadJsonUrlEncoded = body.Remove(0,8);
-                var decodedJson = System.Net.WebUtility.UrlDecode(payloadJsonUrlEncoded);
+                logger.LogTrace(body);
+                var payloadJsonUrlEncoded = body.Remove(0, 8);
+                var decodedJson = WebUtility.UrlDecode(payloadJsonUrlEncoded);
                 var payload = JsonDocument.Parse(decodedJson).RootElement;
                 var interactivePayloadTyped = ToInteractiveType(payload, body);
                 context.Items.Add(HttpItemKeys.InteractivePayloadKey, interactivePayloadTyped);
@@ -66,15 +60,13 @@ public class HttpItemsManager
             context.Request.Body.Position = 0;
         }
 
-        await _next(context);
+        await next(context);
     }
-
-    private static JsonSerializerOptions WebOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
     private static SlackEvent ToEventType(JsonElement eventJson, string raw)
     {
         var eventType = GetEventType(eventJson);
-        string json = eventJson.ToString();
+        var json = eventJson.ToString();
         switch (eventType)
         {
             case EventTypes.AppMention:
@@ -84,7 +76,7 @@ public class HttpItemsManager
             case EventTypes.AppHomeOpened:
                 return JsonSerializer.Deserialize<AppHomeOpenedEvent>(json, WebOptions);
             default:
-                UnknownSlackEvent unknownSlackEvent = JsonSerializer.Deserialize<UnknownSlackEvent>(json, WebOptions);
+                var unknownSlackEvent = JsonSerializer.Deserialize<UnknownSlackEvent>(json, WebOptions);
                 unknownSlackEvent.RawJson = raw;
                 return unknownSlackEvent;
         }
@@ -93,7 +85,7 @@ public class HttpItemsManager
     private static Interaction ToInteractiveType(JsonElement payloadJson, string raw)
     {
         var eventType = GetEventType(payloadJson);
-        string json = payloadJson.ToString();
+        var json = payloadJson.ToString();
         switch (eventType)
         {
             case InteractionTypes.ViewSubmission:

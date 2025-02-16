@@ -3,6 +3,7 @@ root = true
 
 [*]
 charset = utf-8
+insert_final_newline = true
 
 # C# files
 [*.cs]
@@ -15,8 +16,8 @@ indent_style = space
 tab_width = 4
 
 # New line preferences
-end_of_line = crlf
-insert_final_newline = true
+trim_trailing_whitespace = true
+
 
 #### .NET Coding Conventions ####
 
@@ -37,7 +38,7 @@ dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
 dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 
 # Modifier preferences
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
 
 # Expression-level preferences
 csharp_style_deconstructed_variable_declaration = true:suggestion
@@ -65,9 +66,9 @@ dotnet_code_quality_unused_parameters = all:suggestion
 #### C# Coding Conventions ####
 
 # var preferences
-csharp_style_var_elsewhere = false:silent
-csharp_style_var_for_built_in_types = false:silent
-csharp_style_var_when_type_is_apparent = false:silent
+csharp_style_var_elsewhere = true:silent
+csharp_style_var_for_built_in_types = true:silent
+csharp_style_var_when_type_is_apparent = true:silent
 
 # Expression-bodied members
 csharp_style_expression_bodied_accessors = true:silent
@@ -87,7 +88,7 @@ csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
 
 # Modifier preferences
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async
 
 # Code-block preferences
 csharp_prefer_braces = true:silent
@@ -99,6 +100,12 @@ csharp_style_prefer_index_operator = true:suggestion
 csharp_style_prefer_range_operator = true:suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+
+# C# 10
+csharp_style_namespace_declarations = file_scoped:error
+csharp_style_prefer_primary_constructors = true
+dotnet_diagnostic.IDE0290.severity = error
+
 
 #### C# Formatting Rules ####
 
@@ -146,3 +153,9 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
+
+
+[*.csproj]
+indent_size = 2
+indent_style = space
+tab_width = 2

@@ -6,30 +6,11 @@ namespace Slackbot.Net.Endpoints.OAuth;
 
 internal record Response(bool Ok, string Error);
 
-internal class OAuthClient
+internal class OAuthClient(HttpClient client, ILogger<OAuthClient> logger)
 {
-    private readonly HttpClient _client;
-    private readonly ILogger<OAuthClient> _logger;
-
-    internal record OauthAccessV2Request(string Code, string ClientId, string ClientSecret, string RedirectUri);
-
-    internal record OAuthAccessV2Response(string Access_Token, string Scope, Team Team, string App_Id, OAuthUser Authed_User, bool Ok, string Error) : Response(Ok, Error);
-    internal record Team(string Id, string Name);
-    internal record OAuthUser(string User_Id, string App_Home);
-
-
-    public OAuthClient(HttpClient client, ILogger<OAuthClient> logger)
-    {
-        _client = client;
-        _logger = logger;
-    }
-
     public async Task<OAuthAccessV2Response> OAuthAccessV2(OauthAccessV2Request oauthAccessRequest)
     {
-        var parameters = new List<KeyValuePair<string, string>>
-        {
-            new("code", oauthAccessRequest.Code)
-        };
+        var parameters = new List<KeyValuePair<string, string>> { new("code", oauthAccessRequest.Code) };
 
         if (!string.IsNullOrEmpty(oauthAccessRequest.RedirectUri))
         {
@@ -46,13 +27,31 @@ internal class OAuthClient
             parameters.Add(new KeyValuePair<string, string>("client_secret", oauthAccessRequest.ClientSecret));
         }
 
-        return await _client.PostParametersAsForm<OAuthAccessV2Response>(parameters,"oauth.v2.access", s => _logger.LogInformation(s));
+        return await client.PostParametersAsForm<OAuthAccessV2Response>(parameters, "oauth.v2.access",
+            s => logger.LogInformation(s));
     }
+
+    internal record OauthAccessV2Request(string Code, string ClientId, string ClientSecret, string RedirectUri);
+
+    internal record OAuthAccessV2Response(
+        string Access_Token,
+        string Scope,
+        Team Team,
+        string App_Id,
+        OAuthUser Authed_User,
+        bool Ok,
+        string Error) : Response(Ok, Error);
+
+    internal record Team(string Id, string Name);
+
+    internal record OAuthUser(string User_Id, string App_Home);
 }
 
 internal static class HttpClientExtensions
 {
-    internal static async Task<T> PostParametersAsForm<T>(this HttpClient httpClient, IEnumerable<KeyValuePair<string, string>> parameters, string api, Action<string> logger = null) where T: Response
+    internal static async Task<T> PostParametersAsForm<T>(this HttpClient httpClient,
+        IEnumerable<KeyValuePair<string, string>> parameters, string api, Action<string> logger = null)
+        where T : Response
     {
         var request = new HttpRequestMessage(HttpMethod.Post, api);
 
@@ -65,7 +64,7 @@ internal static class HttpClientExtensions
             request.Content = httpContent;
         }
 
-        var response =  await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
@@ -75,23 +74,20 @@ internal static class HttpClientExtensions
 
         response.EnsureSuccessStatusCode();
 
-        var resObj = JsonSerializer.Deserialize<T>(responseContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var resObj =
+            JsonSerializer.Deserialize<T>(responseContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-        if(!resObj.Ok)
-            throw new SlackApiException(error: $"{resObj.Error}", responseContent:responseContent);
+        if (!resObj.Ok)
+        {
+            throw new SlackApiException($"{resObj.Error}", responseContent);
+        }
 
         return resObj;
     }
 }
 
-internal class SlackApiException : Exception
+internal class SlackApiException(string error, string responseContent) : Exception(responseContent)
 {
-    public string Error { get; }
-    public string ResponseContent { get; }
-
-    public SlackApiException(string error, string responseContent): base(responseContent)
-    {
-        Error = error;
-        ResponseContent = responseContent;
-    }
+    public string Error { get; } = error;
+    public string ResponseContent { get; } = responseContent;
 }

@@ -4,5 +4,6 @@ namespace Slackbot.Net.Endpoints.Abstractions;
 
 public interface ISelectAppMentionEventHandlers
 {
-    Task<IEnumerable<IHandleAppMentions>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata, AppMentionEvent slackEvent);
+    Task<IEnumerable<IHandleAppMentions>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata,
+        AppMentionEvent slackEvent);
 }

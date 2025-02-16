@@ -7,62 +7,42 @@ using Slackbot.Net.Tests.Helpers;
 
 namespace Slackbot.Net.Tests;
 
-public class ChatPostMessageTests : Setup
+public class ChatPostMessageTests(ITestOutputHelper helper) : Setup(helper)
 {
-
-    public ChatPostMessageTests(ITestOutputHelper helper) : base(helper)
-    {
-            
-    }
-        
     [Fact]
     public async Task PostMinimalWorks()
     {
         var response = await SlackClient.ChatPostMessage(Channel, Text);
         Assert.True(response.Ok);
     }
-        
+
     [Fact]
     public async Task PostWorks()
     {
-        var msg = new ChatPostMessageRequest
-        {
-            Channel = Channel,
-            Text = Text
-        };
+        var msg = new ChatPostMessageRequest { Channel = Channel, Text = Text };
         var response = await SlackClient.ChatPostMessage(msg);
         Assert.True(response.Ok);
     }
-    
+
     [Fact]
     public async Task PostEphemeralWorks()
     {
-        var msg = new ChatPostEphemeralMessageRequest()
-        {
-            Channel = Channel,
-            Text = Text,
-            User = "U0EBWMGG4"
-        };
+        var msg = new ChatPostEphemeralMessageRequest { Channel = Channel, Text = Text, User = "U0EBWMGG4" };
         var response = await SlackClient.ChatPostEphemeralMessage(msg);
         Assert.True(response.Ok);
     }
-    
+
     [Fact]
     public async Task PostEphemeralThreadWorks()
     {
         var initMsg = await SlackClient.ChatPostMessage(Channel, "Some thread starting text");
         var reply = await SlackClient.ChatPostMessage(new ChatPostMessageRequest
         {
-            Channel = Channel,
-            Text = "A threaded reply ",
-            thread_ts = initMsg.ts,
+            Channel = Channel, Text = "A threaded reply ", thread_ts = initMsg.ts
         });
-        var msg = new ChatPostEphemeralMessageRequest()
+        var msg = new ChatPostEphemeralMessageRequest
         {
-            Channel = Channel,
-            Text = "This is ephemeral to johnkors",
-            User = "U0EBWMGG4",
-            thread_ts = reply.ts
+            Channel = Channel, Text = "This is ephemeral to johnkors", User = "U0EBWMGG4", thread_ts = reply.ts
         };
         var response = await SlackClient.ChatPostEphemeralMessage(msg);
         Assert.True(response.Ok);
@@ -73,15 +53,12 @@ public class ChatPostMessageTests : Setup
     {
         var msg = new ChatPostMessageRequest
         {
-            Channel = "CTECR3J6M",
-            thread_ts = "1679186947.684479",
-            Text = "BROADCAST!",
-            Reply_Broadcast = true
+            Channel = "CTECR3J6M", thread_ts = "1679186947.684479", Text = "BROADCAST!", Reply_Broadcast = true
         };
         var response = await SlackClient.ChatPostMessage(msg);
         Assert.True(response.Ok);
     }
-        
+
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
@@ -89,24 +66,17 @@ public class ChatPostMessageTests : Setup
     {
         var msg = new ChatPostMessageRequest
         {
-            Channel = Channel,
-            Text = Text + " and @jarlelin",
-            Link_Names = link_names
+            Channel = Channel, Text = Text + " and @jarlelin", Link_Names = link_names
         };
         var response = await SlackClient.ChatPostMessage(msg);
         Assert.True(response.Ok);
     }
-        
+
     [Theory]
     [ClassData(typeof(AllBlocks))]
     public async Task PostBlocksWorks(IBlock blocks)
     {
-        var msg = new ChatPostMessageRequest
-        {
-            Channel = Channel,
-            Text = Text,
-            Blocks = new []{ blocks }
-        };
+        var msg = new ChatPostMessageRequest { Channel = Channel, Text = Text, Blocks = new[] { blocks } };
         var response = await SlackClient.ChatPostMessage(msg);
         Assert.True(response.Ok);
     }
@@ -125,35 +95,36 @@ public class AllBlocks : IEnumerable<object[]>
         yield return Scenario(new ActionsBlock { elements = Elements(ButtonElement()) });
         yield return Scenario(new ContextBlock { elements = Elements(TextElement()) });
         yield return Scenario(new DividerBlock());
-        yield return Scenario(new ImageBlock { image_url = "https://via.placeholder.com/150", alt_text = "some alt text"});
-        yield return Scenario(new InputBlock { label = TextElement(), element = new PlainTextInputElement()});
-        yield return Scenario(new SectionBlock { text = TextElement()});
+        yield return Scenario(new ImageBlock
+        {
+            image_url = "https://via.placeholder.com/150", alt_text = "some alt text"
+        });
+        yield return Scenario(new InputBlock { label = TextElement(), element = new PlainTextInputElement() });
+        yield return Scenario(new SectionBlock { text = TextElement() });
 
         object[] Scenario(IBlock block)
         {
-            return new object[]
-            {
-                block
-            };
+            return new object[] { block };
         }
 
         IElement[] Elements(IElement element)
         {
-            return new [] { element };
+            return new[] { element };
         }
 
         IElement ButtonElement()
         {
-            return new ButtonElement { text = TextElement()};
+            return new ButtonElement { text = TextElement() };
         }
-            
+
         Text TextElement()
         {
             return new Text { text = "TextElementText" };
         }
     }
-        
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

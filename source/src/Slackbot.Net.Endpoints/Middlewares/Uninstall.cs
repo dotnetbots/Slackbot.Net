@@ -10,14 +10,16 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 public class Uninstall
 {
     private readonly ILogger<Uninstall> _logger;
-    private readonly IUninstall _uninstaller;
     private readonly ITokenStore _tokenStore;
+    private readonly IUninstall _uninstaller;
 
     public Uninstall(RequestDelegate next, ILogger<Uninstall> logger, IServiceProvider provider)
     {
         _logger = logger;
-        _uninstaller = provider.GetService<IUninstall>() ?? new NoopUninstaller(provider.GetService<ILogger<NoopUninstaller>>());
-        _tokenStore = provider.GetService<ITokenStore>() ?? new NoopTokenStore(provider.GetService<ILogger<NoopTokenStore>>());
+        _uninstaller = provider.GetService<IUninstall>() ??
+                       new NoopUninstaller(provider.GetService<ILogger<NoopUninstaller>>());
+        _tokenStore = provider.GetService<ITokenStore>() ??
+                      new NoopTokenStore(provider.GetService<ILogger<NoopTokenStore>>());
     }
 
     public async Task Invoke(HttpContext context)
@@ -27,7 +29,9 @@ public class Uninstall
         var deleted = await _tokenStore.Delete(metadata.Team_Id);
         if (deleted is null)
         {
-            _logger.LogWarning("Token store returned null for '{TeamId}'. Will not trigger registered OnUninstalled handlers. ", metadata.Team_Id);
+            _logger.LogWarning(
+                "Token store returned null for '{TeamId}'. Will not trigger registered OnUninstalled handlers. ",
+                metadata.Team_Id);
         }
         else
         {

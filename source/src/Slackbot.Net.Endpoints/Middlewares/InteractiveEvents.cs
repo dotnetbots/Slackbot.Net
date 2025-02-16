@@ -8,32 +8,20 @@ using Slackbot.Net.Endpoints.Models.Interactive.ViewSubmissions;
 
 namespace Slackbot.Net.Endpoints.Middlewares;
 
-internal class InteractiveEvents
+internal class InteractiveEvents(
+    RequestDelegate next,
+    ILogger<InteractiveEvents> logger,
+    IEnumerable<IHandleViewSubmissions> responseHandlers,
+    IEnumerable<IHandleInteractiveBlockActions> blockActionHandlers,
+    IEnumerable<IHandleMessageActions> messageActionHandlers,
+    ILoggerFactory loggerFactory)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<InteractiveEvents> _logger;
-    private readonly IEnumerable<IHandleViewSubmissions> _responseHandlers;
-    private readonly IEnumerable<IHandleInteractiveBlockActions> _blockActionHandlers;
-    private readonly IEnumerable<IHandleMessageActions> _messageActionHandlers;
-    private readonly NoOpViewSubmissionHandler _noOp;
-
-    public InteractiveEvents(RequestDelegate next, ILogger<InteractiveEvents> logger, 
-        IEnumerable<IHandleViewSubmissions> responseHandlers, 
-        IEnumerable<IHandleInteractiveBlockActions> blockActionHandlers,
-        IEnumerable<IHandleMessageActions> messageActionHandlers,
-        ILoggerFactory loggerFactory)
-    {
-        _next = next;
-        _logger = logger;
-        _responseHandlers = responseHandlers;
-        _blockActionHandlers = blockActionHandlers;
-        _messageActionHandlers = messageActionHandlers;
-        _noOp = new NoOpViewSubmissionHandler(loggerFactory.CreateLogger<NoOpViewSubmissionHandler>());
-    }
+    private readonly RequestDelegate _next = next;
+    private readonly NoOpViewSubmissionHandler _noOp = new(loggerFactory.CreateLogger<NoOpViewSubmissionHandler>());
 
     public async Task Invoke(HttpContext context)
     {
-        var payload = (Interaction) context.Items[HttpItemKeys.InteractivePayloadKey];
+        var payload = (Interaction)context.Items[HttpItemKeys.InteractivePayloadKey];
 
         switch (payload.Type)
         {
@@ -61,79 +49,80 @@ internal class InteractiveEvents
 
     private async Task HandleMessageAction(MessageActionInteraction messageAction)
     {
-        var handler = _messageActionHandlers.FirstOrDefault();
-            
+        var handler = messageActionHandlers.FirstOrDefault();
+
         if (handler == null)
         {
-            _logger.LogError($"No handler registered for {nameof(MessageActionInteraction)} interactions");
+            logger.LogError($"No handler registered for {nameof(MessageActionInteraction)} interactions");
             await _noOp.Handle(messageAction);
         }
         else
         {
-            _logger.LogInformation($"Handling using {handler.GetType()}");
+            logger.LogInformation($"Handling using {handler.GetType()}");
             try
             {
-                _logger.LogInformation($"Handling using {handler.GetType()}");
+                logger.LogInformation($"Handling using {handler.GetType()}");
                 var response = await handler.Handle(messageAction);
-                _logger.LogInformation(response.Response);
+                logger.LogInformation(response.Response);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                logger.LogError(e, e.Message);
             }
-        }    
+        }
     }
 
     private async Task<EventHandledResponse> HandleBlockActions(BlockActionInteraction payload)
     {
-        var handler = _blockActionHandlers.FirstOrDefault();
-            
+        var handler = blockActionHandlers.FirstOrDefault();
+
         if (handler == null)
         {
-            _logger.LogError("No handler registered for BlockAction interactions");
+            logger.LogError("No handler registered for BlockAction interactions");
             return await _noOp.Handle(payload);
         }
-        else
+
+        try
         {
-            try
-            {
-                _logger.LogInformation($"Handling using {handler.GetType()}");
-                var response = await handler.Handle(payload);
-                _logger.LogInformation(response.Response);
-                return response;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return new EventHandledResponse("ERROR");
-            }
+            logger.LogInformation($"Handling using {handler.GetType()}");
+            var response = await handler.Handle(payload);
+            logger.LogInformation(response.Response);
+            return response;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, e.Message);
+            return new EventHandledResponse("ERROR");
         }
     }
 
     private async Task HandleViewSubmission(ViewSubmission payload)
     {
-        var handler = _responseHandlers.FirstOrDefault();
-            
+        var handler = responseHandlers.FirstOrDefault();
+
         if (handler == null)
         {
-            _logger.LogError("No handler registered for ViewSubmission interactions");
+            logger.LogError("No handler registered for ViewSubmission interactions");
             await _noOp.Handle(payload);
         }
         else
         {
-            _logger.LogInformation($"Handling using {handler.GetType()}");
+            logger.LogInformation($"Handling using {handler.GetType()}");
             try
             {
-                _logger.LogInformation($"Handling using {handler.GetType()}");
+                logger.LogInformation($"Handling using {handler.GetType()}");
                 var response = await handler.Handle(payload);
-                _logger.LogInformation(response.Response);
+                logger.LogInformation(response.Response);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                logger.LogError(e, e.Message);
             }
         }
     }
 
-    public static bool ShouldRun(HttpContext ctx) => ctx.Items.ContainsKey(HttpItemKeys.InteractivePayloadKey);
+    public static bool ShouldRun(HttpContext ctx)
+    {
+        return ctx.Items.ContainsKey(HttpItemKeys.InteractivePayloadKey);
+    }
 }
