@@ -38,7 +38,8 @@ public class ContextBlock : IBlock
 
 public class InputBlock : IBlock
 {
-    public string type { get; set;} = BlockTypes.Input;
+    public string block_id { get; set; }
+    public string type { get; set; } = BlockTypes.Input;
     public IElement element { get; set; }
     public Text label { get; set; }
     public bool dispatch_action { get; set; }
