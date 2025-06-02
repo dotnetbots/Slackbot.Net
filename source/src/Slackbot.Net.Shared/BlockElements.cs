@@ -176,16 +176,26 @@ public class OverflowElement : IElement
 
 public class DatePickerElement : IElement
 {
-    public string type { get; set;} = ElementTypes.DatePicker;
+    public string type { get; set; } = ElementTypes.DatePicker;
     public string action_id { get; set; }
     public Text placeholder { get; set; }
     public string initial_date { get; set; }
     public Confirm confirm { get; set; }
 }
 
+public class RadioButtonsElement : IElement
+{
+    public string type { get; set; } = ElementTypes.RadioButtons;
+    public string action_id { get; set; }
+    public Option[] options { get; set; }
+    public string initial_option { get; set; }
+    public Confirm confirm { get; set; }
+    public bool focus_on_load { get; set; }
+}
+
 public class PlainTextElement : IElement
 {
-    public string type { get; set;} = ElementTypes.PlainTextInput;
+    public string type { get; set; } = ElementTypes.PlainTextInput;
     public string action_id { get; set; }
     public Text placeholder { get; set; }
 }
@@ -224,8 +234,9 @@ public static class ElementTypes
     public const string Overflow = "overflow";
     public const string DatePicker = "datepicker";
     public const string PlainTextInput = "plain_text_input";
+    public const string RadioButtons = "radio_buttons";
 }
-    
+
 public interface IHaveType { string type { get; set; } }
 
 public interface IElement : IHaveType { }
