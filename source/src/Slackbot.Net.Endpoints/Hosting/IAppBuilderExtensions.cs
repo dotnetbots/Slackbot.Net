@@ -19,6 +19,7 @@ public static class IAppBuilderExtensions
         app.MapWhen(MemberJoinedEvents.ShouldRun, b => b.UseMiddleware<MemberJoinedEvents>());
         app.MapWhen(AppHomeOpenedEvents.ShouldRun, b => b.UseMiddleware<AppHomeOpenedEvents>());
         app.MapWhen(InteractiveEvents.ShouldRun, b => b.UseMiddleware<InteractiveEvents>());
+        app.MapWhen(TeamJoinEvents.ShouldRun, b => b.UseMiddleware<TeamJoinEvents>());
 
         return app;
     }

@@ -16,4 +16,5 @@ public interface ISlackbotHandlersBuilder
     public ISlackbotHandlersBuilder AddNoOpAppMentionHandler<T>() where T : class, INoOpAppMentions;
 
     public ISlackbotHandlersBuilder AddMessageActionsHandler<T>() where T : class, IHandleMessageActions;
+    public ISlackbotHandlersBuilder AddTeamJoinHandler<T>() where T : class, IHandleTeamJoin;
 }

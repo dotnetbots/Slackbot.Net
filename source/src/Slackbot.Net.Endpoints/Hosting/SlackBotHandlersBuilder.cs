@@ -53,4 +53,10 @@ public class SlackBotHandlersBuilder(IServiceCollection services) : ISlackbotHan
         services.AddSingleton<IHandleMessageActions, T>();
         return this;
     }
+
+    public ISlackbotHandlersBuilder AddTeamJoinHandler<T>() where T : class, IHandleTeamJoin
+    {
+        services.AddSingleton<IHandleTeamJoin, T>();
+        return this;
+    }
 }
