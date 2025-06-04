@@ -5,7 +5,8 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints.Middlewares;
 
-internal class TeamJoinEvents(
+public class TeamJoinEvents(
+    RequestDelegate next,
     ILogger<TeamJoinEvents> logger,
     IEnumerable<IHandleTeamJoin> responseHandlers
 )

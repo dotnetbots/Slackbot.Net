@@ -6,6 +6,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 namespace Slackbot.Net.Endpoints.Middlewares;
 
 public class EmojiChangedEvents(
+    RequestDelegate next,
     ILogger<EmojiChangedEvents> logger,
     IEnumerable<IHandleEmojiChanged> responseHandlers
 )
