@@ -59,4 +59,10 @@ public class SlackBotHandlersBuilder(IServiceCollection services) : ISlackbotHan
         services.AddSingleton<IHandleTeamJoin, T>();
         return this;
     }
+
+    public ISlackbotHandlersBuilder AddEmojiChangedHandler<T>() where T : class, IHandleEmojiChanged
+    {
+        services.AddSingleton<IHandleEmojiChanged, T>();
+        return this;
+    }
 }

@@ -4,5 +4,5 @@ namespace Slackbot.Net.Endpoints.Abstractions;
 
 public interface IHandleEmojiChanged
 {
-    Task<EventHandledResponse> Handle(EventMetaData eventMetadata, EmojiChangedEvent memberjoined);
+    Task<EventHandledResponse> Handle(EventMetaData eventMetadata, EmojiChangedEvent emojiChanged);
 }
