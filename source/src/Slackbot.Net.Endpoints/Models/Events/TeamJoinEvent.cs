@@ -10,7 +10,9 @@ public class JoiningUser
     public string Id { get; set; }
     public string Name { get; set; }
     public string Real_Name { get; set; }
-    public JoiningUserProfile? Profile { get; set; }
+    public bool Is_Bot { get; set; }
+    public bool Is_App_User { get; set; }
+    public JoiningUserProfile Profile { get; set; }
 }
 
 public class JoiningUserProfile
