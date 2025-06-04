@@ -8,4 +8,5 @@ public static class EventTypes
     public const string MemberJoinedChannel = "member_joined_channel";
     public const string AppHomeOpened = "app_home_opened";
     public const string TeamJoin = "team_join";
+    public const string EmojiChanged = "emoji_changed";
 }
