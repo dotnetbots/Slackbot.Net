@@ -75,6 +75,8 @@ public class HttpItemsManager(RequestDelegate next, ILogger<HttpItemsManager> lo
                 return JsonSerializer.Deserialize<MemberJoinedChannelEvent>(json, WebOptions);
             case EventTypes.AppHomeOpened:
                 return JsonSerializer.Deserialize<AppHomeOpenedEvent>(json, WebOptions);
+            case EventTypes.TeamJoin:
+                return JsonSerializer.Deserialize<TeamJoinEvent>(json, WebOptions);
             default:
                 var unknownSlackEvent = JsonSerializer.Deserialize<UnknownSlackEvent>(json, WebOptions);
                 unknownSlackEvent.RawJson = raw;
