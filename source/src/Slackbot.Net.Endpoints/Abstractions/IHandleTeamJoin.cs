@@ -4,5 +4,5 @@ namespace Slackbot.Net.Endpoints.Abstractions;
 
 public interface IHandleTeamJoin
 {
-    Task<EventHandledResponse> Handle(EventMetaData eventMetadata, TeamJoinEvent memberjoined);
+    Task<EventHandledResponse> Handle(EventMetaData eventMetadata, TeamJoinEvent teamJoined);
 }
