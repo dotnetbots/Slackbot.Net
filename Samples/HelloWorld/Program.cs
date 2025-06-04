@@ -7,15 +7,18 @@ using Slackbot.Net.Endpoints.Models.Events;
 using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
 
 // Needed in production to verify that incoming event payloads are from Slack
 builder.Services.AddAuthentication()
-                .AddSlackbotEvents(c => c.SigningSecret = Environment.GetEnvironmentVariable("CLIENT_SIGNING_SECRET"));
+                .AddSlackbotEvents(c => c.SigningSecret = "garbage");
 
 // Setup event handlers
 builder.Services.AddSlackBotEvents()
     .AddMessageActionsHandler<DoOtherStuff>()
-    .AddAppMentionHandler<DoStuff>();
+    .AddAppMentionHandler<DoStuff>()
+    .AddTeamJoinHandler<OnTeamJoins>()
+    .AddEmojiChangedHandler<OnEmojiChanged>();
 
 
 var app = builder.Build();
@@ -46,5 +49,26 @@ class DoOtherStuff : IHandleMessageActions
         });
         Console.WriteLine(str);
         return new EventHandledResponse("OK");
+    }
+}
+
+class OnTeamJoins : IHandleTeamJoin
+{
+    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, TeamJoinEvent @event)
+    {
+        var str = JsonSerializer.Serialize(@event);
+        Console.WriteLine(str);
+        return Task.FromResult(new EventHandledResponse("OK"));
+    }
+}
+
+class OnEmojiChanged : IHandleEmojiChanged
+{
+
+    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, EmojiChangedEvent @event)
+    {
+        var str = JsonSerializer.Serialize(@event);
+        Console.WriteLine(str);
+        return Task.FromResult(new EventHandledResponse("OK"));
     }
 }
