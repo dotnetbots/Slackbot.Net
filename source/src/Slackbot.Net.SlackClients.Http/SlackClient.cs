@@ -131,7 +131,7 @@ public class SlackClient : ISlackClient
         return await _client.PostParametersAsForm<ConversationsRepliesResponse>(parameters, "conversations.replies", s => _logger.LogTrace(s));
     }
 
-        /// <inheritdoc/>
+    /// <inheritdoc/>
     public async Task<ConversationsOpenResponse> ConversationsOpen(string[] users)
     {
         var parameters = new List<KeyValuePair<string, string>>
