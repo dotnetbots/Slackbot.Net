@@ -1,5 +1,6 @@
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatUpdate;
 using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
@@ -36,6 +37,12 @@ public interface ISlackClient
     /// </summary>
     /// <remarks>https://api.slack.com/methods/chat.postEphemeral</remarks>
     Task<ChatPostMessageResponse> ChatPostEphemeralMessage(ChatPostEphemeralMessageRequest postMessage);
+
+    /// <summary>
+    /// Scopes required: `chat:write`
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/chat.update</remarks>
+    Task<ChatPostMessageResponse> ChatUpdate(ChatUpdateRequest postMessage);
 
     /// <summary>
     /// Scopes required: no scopes required
@@ -75,6 +82,12 @@ public interface ISlackClient
     /// </summary>
     /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
     Task<ConversationsRepliesResponse> ConversationsReplies(string channel, string ts, int? limit = null, string cursor = null);
+
+    /// <summary>
+    /// Scopes required: channels:manage | groups:write | im:write | mpim:write
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/conversations.open</remarks>
+    Task<ConversationsOpenResponse> ConversationsOpen(string[] users);
 
 
     /// <summary>

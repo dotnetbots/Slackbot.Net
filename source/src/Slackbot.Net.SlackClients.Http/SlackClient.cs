@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatUpdate;
 using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
@@ -55,6 +56,12 @@ public class SlackClient : ISlackClient
     }
 
     /// <inheritdoc/>
+    public async Task<ChatPostMessageResponse> ChatUpdate(ChatUpdateRequest postMessage)
+    {
+        return await _client.PostJson<ChatPostMessageResponse>(postMessage, "chat.update", s => _logger.LogTrace(s));
+    }
+
+    /// <inheritdoc/>
     public async Task<ChatGetPermalinkResponse> ChatGetPermalink(string channel, string message_ts)
     {
         var parameters = new List<KeyValuePair<string, string>>
@@ -63,7 +70,7 @@ public class SlackClient : ISlackClient
             new KeyValuePair<string, string>("message_ts", message_ts)
         };
 
-        return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters,"chat.getPermalink", s => _logger.LogTrace(s));
+        return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters, "chat.getPermalink", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
@@ -76,13 +83,13 @@ public class SlackClient : ISlackClient
             new KeyValuePair<string, string>("timestamp", timestamp)
         };
 
-        return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters,"reactions.add", s => _logger.LogTrace(s));
+        return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters, "reactions.add", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
     public async Task<UsersListResponse> UsersList()
     {
-        return await _client.PostParametersAsForm<UsersListResponse>(null,"users.list", s => _logger.LogTrace(s));
+        return await _client.PostParametersAsForm<UsersListResponse>(null, "users.list", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
@@ -98,7 +105,7 @@ public class SlackClient : ISlackClient
         {
             parameters.Add(new KeyValuePair<string, string>("cursor", cursor));
         }
-        return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.list", s => _logger.LogTrace(s));
+        return await _client.PostParametersAsForm<ConversationsListResponse>(parameters, "conversations.list", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
@@ -108,7 +115,7 @@ public class SlackClient : ISlackClient
         {
             new KeyValuePair<string, string>("channel", channel)
         };
-        return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"conversations.members", s => _logger.LogTrace(s));
+        return await _client.PostParametersAsForm<ConversationsListResponse>(parameters, "conversations.members", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
@@ -121,8 +128,18 @@ public class SlackClient : ISlackClient
             new KeyValuePair<string, string>("limit", (limit ?? 1000).ToString()),
             new KeyValuePair<string, string>("include_all_metadata", "true"),
         };
-        return await _client.PostParametersAsForm<ConversationsRepliesResponse>(parameters,"conversations.replies", s => _logger.LogTrace(s));
-    }    
+        return await _client.PostParametersAsForm<ConversationsRepliesResponse>(parameters, "conversations.replies", s => _logger.LogTrace(s));
+    }
+
+    /// <inheritdoc/>
+    public async Task<ConversationsOpenResponse> ConversationsOpen(string[] users)
+    {
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("users", string.Join(",", users)),
+        };
+        return await _client.PostParametersAsForm<ConversationsOpenResponse>(parameters, "conversations.open", s => _logger.LogTrace(s));
+    }
 
     /// <inheritdoc/>
     public async Task<Response> AppsUninstall(string clientId, string clientSecret)
@@ -132,9 +149,9 @@ public class SlackClient : ISlackClient
             new KeyValuePair<string, string>("client_id", clientId),
             new KeyValuePair<string, string>("client_secret", clientSecret)
         };
-        return await _client.PostParametersAsForm<ConversationsListResponse>(parameters,"apps.uninstall", s => _logger.LogTrace(s));
+        return await _client.PostParametersAsForm<ConversationsListResponse>(parameters, "apps.uninstall", s => _logger.LogTrace(s));
     }
-        
+
     /// <inheritdoc/>
     public async Task<ViewPublishResponse> ViewPublish(ViewPublishRequest view)
     {
@@ -148,7 +165,7 @@ public class SlackClient : ISlackClient
         {
             new KeyValuePair<string, string>("user", user),
         };
-        return await _client.PostParametersAsForm<UserProfileResponse>(parameters,"users.profile.get", s => _logger.LogTrace(s));        
+        return await _client.PostParametersAsForm<UserProfileResponse>(parameters, "users.profile.get", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
@@ -166,7 +183,7 @@ public class SlackClient : ISlackClient
         };
         return await _client.PostParametersAsForm<FileUploadResponse>(parameters, "files.upload", s => _logger.LogTrace(s));
     }
-    
+
     /// <inheritdoc/>
     public async Task<FileUploadResponse> FilesUpload(FileUploadMultiPartRequest req)
     {
@@ -181,12 +198,14 @@ public class SlackClient : ISlackClient
         {
             parameters.Add(new KeyValuePair<string, string>("initial_comment", req.Initial_Comment));
         }
-        
+
         if (req.Thread_Ts is { })
         {
             parameters.Add(new KeyValuePair<string, string>("thread_ts", req.Thread_Ts));
         }
-        
+
         return await _client.PostParametersAsMultiPartFormData<FileUploadResponse>(parameters, req.File, "files.upload", s => _logger.LogTrace(s));
     }
+
+
 }

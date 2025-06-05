@@ -97,9 +97,10 @@ public class Element : IElement
 
 public class PlainTextInputElement : IElement
 {
-    public string type { get; set;} = ElementTypes.PlainTextInput;
-    public string initial_value { get; set;}
+    public string type { get; set; } = ElementTypes.PlainTextInput;
+    public string initial_value { get; set; }
     public string action_id { get; set; }
+    public Text placeholder { get; set; }
 }
 
 public class ImageElement : IElement
