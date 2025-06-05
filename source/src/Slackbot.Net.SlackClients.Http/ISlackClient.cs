@@ -86,7 +86,7 @@ public interface ISlackClient
     /// <summary>
     /// Scopes required: channels:manage | groups:write | im:write | mpim:write
     /// </summary>
-    /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
+    /// <remarks>https://api.slack.com/methods/conversations.open</remarks>
     Task<ConversationsOpenResponse> ConversationsOpen(string[] users);
 
 
