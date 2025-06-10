@@ -15,5 +15,12 @@ public class BlockActionInteraction : Interaction
 
 public class State
 {
-    public Dictionary<string, string> Values { get; set; } = [];
+    public Dictionary<string, Dictionary<string, SlackInputValue>> Values { get; set; }
+}
+
+public class SlackInputValue
+{
+    public string Type { get; set; }
+    public Option SelectedOption { get; set; }
+    public string Value { get; set; }
 }
