@@ -22,4 +22,5 @@ public class SlackInputValue
 {
     public string Type { get; set; }
     public Option Selected_option { get; set; }
+    public string Value { get; set; }
 }
