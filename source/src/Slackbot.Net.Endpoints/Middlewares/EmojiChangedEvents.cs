@@ -24,16 +24,9 @@ public class EmojiChangedEvents(
         else
         {
             logger.LogInformation("Handling using {HandlerType}", handler.GetType());
-            try
-            {
-                logger.LogInformation("Handling using {HandlerType}", handler.GetType());
-                var response = await handler.Handle(metadata, emojiChanged);
-                logger.LogInformation("Handler response: {Response}", response.Response);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-            }
+            logger.LogInformation("Handling using {HandlerType}", handler.GetType());
+            var response = await handler.Handle(metadata, emojiChanged);
+            logger.LogInformation("Handler response: {Response}", response.Response);
         }
 
         context.Response.StatusCode = 200;

@@ -24,16 +24,8 @@ public class TeamJoinEvents(
         else
         {
             logger.LogInformation("Handling using {HandlerType}", handler.GetType());
-            try
-            {
-                logger.LogInformation("Handling using {HandlerType}", handler.GetType());
-                var response = await handler.Handle(metadata, teamJoinEvent);
-                logger.LogInformation("Handler response: {Response}", response.Response);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-            }
+            var response = await handler.Handle(metadata, teamJoinEvent);
+            logger.LogInformation("Handler response: {Response}", response.Response);
         }
 
         context.Response.StatusCode = 200;

@@ -18,7 +18,8 @@ builder.Services.AddSlackBotEvents()
     .AddMessageActionsHandler<DoOtherStuff>()
     .AddAppMentionHandler<DoStuff>()
     .AddTeamJoinHandler<OnTeamJoins>()
-    .AddEmojiChangedHandler<OnEmojiChanged>();
+    .AddEmojiChangedHandler<OnEmojiChanged>()
+    .AddAppMentionHandler<IThrowExceptions>();
 
 
 var app = builder.Build();
@@ -70,5 +71,15 @@ class OnEmojiChanged : IHandleEmojiChanged
         var str = JsonSerializer.Serialize(@event);
         Console.WriteLine(str);
         return Task.FromResult(new EventHandledResponse("OK"));
+    }
+}
+
+class IThrowExceptions : IHandleAppMentions
+{
+    public bool ShouldHandle(AppMentionEvent slackEvent) => slackEvent.Text.Contains("throw-exception");
+
+    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
+    {
+        throw new Exception("Quack! Something went wrong!");
     }
 }

@@ -1,5 +1,5 @@
 # Mimicks a payload slack would send for app_mention events, like "@yourbot dostuff" in this case:
-GET http://localhost:1337/
+GET http://localhost:5000/
 X-Slack-Request-Timestamp: 12331231
 X-Slack-Signature: v0:abc123etcetc
 
@@ -8,14 +8,14 @@ X-Slack-Signature: v0:abc123etcetc
     "event": {
         "type": "app_mention",
         "user": "USRAR1YTV",
-        "text" : "<@BOT123> dostuff",
+        "text" : "<@BOT123> dostuff and throw-exception",
         "channel": "C92QZTVEF"
     }
 }
 
 ###
 # Verification request
-GET http://localhost:1337
+GET http://localhost:5000
 
 {
     "token": "Jhj5dZrVaK7ZwHHjRyZWjbDl",

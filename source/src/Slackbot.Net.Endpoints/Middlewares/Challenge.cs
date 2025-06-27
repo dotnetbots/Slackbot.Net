@@ -16,7 +16,6 @@ public class Challenge
     public async Task Invoke(HttpContext context)
     {
         var challenge = context.Items[HttpItemKeys.ChallengeKey];
-
         _logger.LogInformation($"Handling challenge request. Challenge: {challenge}");
         context.Response.StatusCode = 200;
         context.Response.ContentType = "application/json";

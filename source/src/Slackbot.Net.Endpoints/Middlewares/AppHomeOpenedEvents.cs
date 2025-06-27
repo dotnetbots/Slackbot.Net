@@ -23,16 +23,9 @@ internal class AppHomeOpenedEvents(
         else
         {
             logger.LogInformation($"Handling using {handler.GetType()}");
-            try
-            {
-                logger.LogInformation($"Handling using {handler.GetType()}");
-                var response = await handler.Handle(metadata, appHomeOpenedEvent);
-                logger.LogInformation(response.Response);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-            }
+            logger.LogInformation($"Handling using {handler.GetType()}");
+            var response = await handler.Handle(metadata, appHomeOpenedEvent);
+            logger.LogInformation(response.Response);
         }
 
         await next(context);
