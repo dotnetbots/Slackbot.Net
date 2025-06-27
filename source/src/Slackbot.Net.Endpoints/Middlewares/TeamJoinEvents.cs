@@ -6,7 +6,9 @@ using Slackbot.Net.Endpoints.Models.Events;
 namespace Slackbot.Net.Endpoints.Middlewares;
 
 public class TeamJoinEvents(
+#pragma warning disable CS9113 // Parameter is unread.
     RequestDelegate next,
+#pragma warning restore CS9113 // Parameter is unread.
     ILogger<TeamJoinEvents> logger,
     IEnumerable<IHandleTeamJoin> responseHandlers
 )
