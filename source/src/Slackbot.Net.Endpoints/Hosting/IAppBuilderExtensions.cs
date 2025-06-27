@@ -12,6 +12,7 @@ public static class IAppBuilderExtensions
             app.UseMiddleware<SlackbotEventAuthMiddleware>();
         }
 
+        app.UseMiddleware<ErrorHandlingMiddleware>();
         app.UseMiddleware<HttpItemsManager>();
         app.MapWhen(Challenge.ShouldRun, b => b.UseMiddleware<Challenge>());
         app.MapWhen(Uninstall.ShouldRun, b => b.UseMiddleware<Uninstall>());

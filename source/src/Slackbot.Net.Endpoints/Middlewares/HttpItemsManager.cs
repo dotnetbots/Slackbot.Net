@@ -35,7 +35,7 @@ public class HttpItemsManager(RequestDelegate next, ILogger<HttpItemsManager> lo
                 else
                 {
                     var metadata = JsonSerializer.Deserialize<EventMetaData>(body, WebOptions);
-                    if (jObject.RootElement.GetProperty("event") is JsonElement @event)
+                    if (jObject.RootElement.GetProperty("event") is var @event)
                     {
                         var slackEvent = ToEventType(@event, body);
                         context.Items.Add(HttpItemKeys.EventMetadataKey, metadata);
@@ -78,7 +78,7 @@ public class HttpItemsManager(RequestDelegate next, ILogger<HttpItemsManager> lo
             case EventTypes.TeamJoin:
                 return JsonSerializer.Deserialize<TeamJoinEvent>(json, WebOptions);
             case EventTypes.EmojiChanged:
-                return JsonSerializer.Deserialize<EmojiChangedEvent>(json, WebOptions);            
+                return JsonSerializer.Deserialize<EmojiChangedEvent>(json, WebOptions);
             default:
                 var unknownSlackEvent = JsonSerializer.Deserialize<UnknownSlackEvent>(json, WebOptions);
                 unknownSlackEvent.RawJson = raw;

@@ -11,15 +11,15 @@ public class EmojiChangedEvent : SlackEvent
     public string SubType { get; init; } = string.Empty; // subtype: add, remove, rename
     public string? Name { get; set; } // subtype: add
     public string[] Names { get; set; } = []; //subtype:  remove
-    public string OldName { get; set; } // subtype: rename
-    public string NewName { get; set; } // subtype: rename
+    public string? OldName { get; set; } // subtype: rename
+    public string? NewName { get; set; } // subtype: rename
     public Uri? Value { get; set; }// subtypes: add, rename
 
     public EmojiChange CreateSubType() => SubType switch
     {
         SubTypeAdd => new EmojiAdded { Name = Name!, Value = Value! },
         SubTypeRemove => new EmojiRemoved { Names = Names },
-        SubTypeRename => new EmojiRenamed { OldName = OldName, NewName = NewName, Value = Value },
+        SubTypeRename => new EmojiRenamed { OldName = OldName!, NewName = NewName!, Value = Value },
         _ => new UnknownEmojiChange()
     };
 }
@@ -29,7 +29,7 @@ public class EmojiChange();
 public class EmojiAdded : EmojiChange
 {
     public required string Name { get; init; }
-    public Uri Value { get; init; }
+    public required Uri Value { get; init; }
 }
 
 public class EmojiRemoved : EmojiChange
@@ -39,9 +39,9 @@ public class EmojiRemoved : EmojiChange
 
 public class EmojiRenamed : EmojiChange
 {
-    public string OldName { get; set; } // subtype: rename
-    public string NewName { get; set; } // subtype: rename
-    public Uri? Value { get; set; }// subtypes: add, rename
+    public required string OldName { get; init; } // subtype: rename
+    public required string NewName { get; init; } // subtype: rename
+    public required Uri? Value { get; init; }// subtypes: add, rename
 }
 
 public class UnknownEmojiChange() : EmojiChange;

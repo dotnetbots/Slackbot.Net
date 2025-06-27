@@ -6,7 +6,9 @@ using Slackbot.Net.Endpoints.Models.Events;
 namespace Slackbot.Net.Endpoints.Middlewares;
 
 public class TeamJoinEvents(
+#pragma warning disable CS9113 // Parameter is unread.
     RequestDelegate next,
+#pragma warning restore CS9113 // Parameter is unread.
     ILogger<TeamJoinEvents> logger,
     IEnumerable<IHandleTeamJoin> responseHandlers
 )
@@ -24,16 +26,8 @@ public class TeamJoinEvents(
         else
         {
             logger.LogInformation("Handling using {HandlerType}", handler.GetType());
-            try
-            {
-                logger.LogInformation("Handling using {HandlerType}", handler.GetType());
-                var response = await handler.Handle(metadata, teamJoinEvent);
-                logger.LogInformation("Handler response: {Response}", response.Response);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-            }
+            var response = await handler.Handle(metadata, teamJoinEvent);
+            logger.LogInformation("Handler response: {Response}", response.Response);
         }
 
         context.Response.StatusCode = 200;

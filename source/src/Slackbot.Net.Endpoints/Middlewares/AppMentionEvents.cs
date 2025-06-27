@@ -1,3 +1,4 @@
+using System.Runtime.ExceptionServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Abstractions;
@@ -24,6 +25,8 @@ public class AppMentionEvents(
             ["Slack_Channel"] = appMentionEvent?.Channel,
             ["Slack_User"] = appMentionEvent?.User
         });
+        ExceptionDispatchInfo capturedException = null;
+
         foreach (var handler in handlers)
         {
             try
@@ -33,12 +36,14 @@ public class AppMentionEvents(
             }
             catch (Exception e)
             {
-                logger.LogError(e, e.Message);
+                capturedException = ExceptionDispatchInfo.Capture(e);
             }
         }
 
-
-        context.Response.StatusCode = 200;
+        if (capturedException != null)
+        {
+            capturedException?.Throw();
+        }
     }
 
     public static bool ShouldRun(HttpContext ctx)

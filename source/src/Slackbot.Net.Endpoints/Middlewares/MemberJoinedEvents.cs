@@ -32,19 +32,9 @@ internal class MemberJoinedEvents
         else
         {
             _logger.LogInformation($"Handling using {handler.GetType()}");
-            try
-            {
-                _logger.LogInformation($"Handling using {handler.GetType()}");
-                var response = await handler.Handle(metadata, memberJoinedChannelEvent);
-                _logger.LogInformation(response.Response);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-            }
+            var response = await handler.Handle(metadata, memberJoinedChannelEvent);
+            _logger.LogInformation(response.Response);
         }
-
-        context.Response.StatusCode = 200;
     }
 
     public static bool ShouldRun(HttpContext ctx)
