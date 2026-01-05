@@ -65,4 +65,10 @@ public class SlackBotHandlersBuilder(IServiceCollection services) : ISlackbotHan
         services.AddSingleton<IHandleEmojiChanged, T>();
         return this;
     }
+
+    public ISlackbotHandlersBuilder AddMessageAppHomeHandler<T>() where T : class, IHandleMessageAppHome
+    {
+        services.AddSingleton<IHandleMessageAppHome, T>();
+        return this;
+    }
 }
