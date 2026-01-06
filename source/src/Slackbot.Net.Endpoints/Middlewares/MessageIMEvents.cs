@@ -5,21 +5,21 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints.Middlewares;
 
-public class MessageAppHomeEvents(
+public class MessageIMEvents(
     RequestDelegate next,
-    ILogger<MessageAppHomeEvents> logger,
-    IEnumerable<IHandleMessageAppHome> responseHandlers
+    ILogger<MessageIMEvents> logger,
+    IEnumerable<IHandleMessageIM> responseHandlers
 )
 {
     public async Task Invoke(HttpContext context)
     {
-        var messageAppHomeEvent = (MessageAppHomeEvent)context.Items[HttpItemKeys.SlackEventKey];
+        var messageIMEvent = (MessageIMEvent)context.Items[HttpItemKeys.SlackEventKey];
         var metadata = (EventMetaData)context.Items[HttpItemKeys.EventMetadataKey];
         var handler = responseHandlers.FirstOrDefault();
 
         if (handler == null)
         {
-            logger.LogError("No handler registered for IHandleMessageAppHome");
+            logger.LogError("No handler registered for IHandleMessageIM");
         }
         else
         {
@@ -27,7 +27,7 @@ public class MessageAppHomeEvents(
             try
             {
                 logger.LogInformation("Handling using {HandlerType}", handler.GetType());
-                var response = await handler.Handle(metadata, messageAppHomeEvent);
+                var response = await handler.Handle(metadata, messageIMEvent);
                 logger.LogInformation("Handler response: {Response}", response.Response);
             }
             catch (Exception e)
@@ -42,6 +42,6 @@ public class MessageAppHomeEvents(
     public static bool ShouldRun(HttpContext ctx)
     {
         return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey)
-               && ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.MessageAppHome;
+            && ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.MessageIM;
     }
 }
