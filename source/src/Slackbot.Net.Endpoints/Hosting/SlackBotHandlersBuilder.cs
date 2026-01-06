@@ -66,9 +66,9 @@ public class SlackBotHandlersBuilder(IServiceCollection services) : ISlackbotHan
         return this;
     }
 
-    public ISlackbotHandlersBuilder AddMessageAppHomeHandler<T>() where T : class, IHandleMessageAppHome
+    public ISlackbotHandlersBuilder AddMessageIMHandler<T>() where T : class, IHandleMessageIM
     {
-        services.AddSingleton<IHandleMessageAppHome, T>();
+        services.AddSingleton<IHandleMessageIM, T>();
         return this;
     }
 }
