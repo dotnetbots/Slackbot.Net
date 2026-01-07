@@ -18,5 +18,5 @@ public interface ISlackbotHandlersBuilder
     public ISlackbotHandlersBuilder AddMessageActionsHandler<T>() where T : class, IHandleMessageActions;
     public ISlackbotHandlersBuilder AddTeamJoinHandler<T>() where T : class, IHandleTeamJoin;
     public ISlackbotHandlersBuilder AddEmojiChangedHandler<T>() where T : class, IHandleEmojiChanged;
-    public ISlackbotHandlersBuilder AddMessageIMHandler<T>() where T : class, IHandleMessageIM;
+    public ISlackbotHandlersBuilder AddMessageHandler<T>() where T : class, IHandleMessage;
 }

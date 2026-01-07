@@ -1,6 +1,6 @@
 namespace Slackbot.Net.Endpoints.Models.Events;
 
-public class MessageIMEvent : SlackEvent
+public class MessageEvent : SlackEvent
 {
     public string Channel { get; set; }
     public string User { get; set; }
