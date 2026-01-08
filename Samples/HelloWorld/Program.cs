@@ -19,7 +19,7 @@ builder.Services.AddSlackBotEvents()
     .AddAppMentionHandler<DoStuff>()
     .AddTeamJoinHandler<OnTeamJoins>()
     .AddEmojiChangedHandler<OnEmojiChanged>()
-    .AddMessageIMHandler<OnMessageIM>();
+    .AddMessageHandler<OnMessage>();
 
 
 var app = builder.Build();
@@ -74,9 +74,9 @@ class OnEmojiChanged : IHandleEmojiChanged
     }
 }
 
-class OnMessageIM : IHandleMessageIM
+class OnMessage : IHandleMessage
 {
-    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, MessageIMEvent @event)
+    public Task<EventHandledResponse> Handle(EventMetaData eventMetadata, MessageEvent @event)
     {
         var str = JsonSerializer.Serialize(@event);
         Console.WriteLine(str);

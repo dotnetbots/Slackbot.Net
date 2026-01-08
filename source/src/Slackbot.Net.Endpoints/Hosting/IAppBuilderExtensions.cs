@@ -5,7 +5,10 @@ namespace Slackbot.Net.Endpoints.Hosting;
 
 public static class IAppBuilderExtensions
 {
-    public static IApplicationBuilder UseSlackbot(this IApplicationBuilder app, bool enableAuth = true)
+    public static IApplicationBuilder UseSlackbot(
+        this IApplicationBuilder app,
+        bool enableAuth = true
+    )
     {
         if (enableAuth)
         {
@@ -21,7 +24,7 @@ public static class IAppBuilderExtensions
         app.MapWhen(InteractiveEvents.ShouldRun, b => b.UseMiddleware<InteractiveEvents>());
         app.MapWhen(TeamJoinEvents.ShouldRun, b => b.UseMiddleware<TeamJoinEvents>());
         app.MapWhen(EmojiChangedEvents.ShouldRun, b => b.UseMiddleware<EmojiChangedEvents>());
-        app.MapWhen(MessageIMEvents.ShouldRun, b => b.UseMiddleware<MessageIMEvents>());
+        app.MapWhen(MessageEvents.ShouldRun, b => b.UseMiddleware<MessageEvents>());
 
         return app;
     }

@@ -9,5 +9,5 @@ public static class EventTypes
     public const string AppHomeOpened = "app_home_opened";
     public const string TeamJoin = "team_join";
     public const string EmojiChanged = "emoji_changed";
-    public const string MessageIM = "message.im";
+    public const string Message = "message";
 }
