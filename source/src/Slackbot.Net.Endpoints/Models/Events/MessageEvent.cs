@@ -7,6 +7,7 @@ public class MessageEvent : SlackEvent
     public string Text { get; set; }
     public string Ts { get; set; }
     public string Event_Ts { get; set; }
+    public string Thread_Ts { get; set; }
     public string Channel_Type { get; set; }
 
     public string? Bot_id { get; set; }
