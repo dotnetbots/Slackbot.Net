@@ -9,9 +9,10 @@ public class MessageEvent : SlackEvent
     public string Event_Ts { get; set; }
     public string Thread_Ts { get; set; }
     public string Channel_Type { get; set; }
+    public string SubType { get; set; }
 
     public string? Bot_id { get; set; }
-    public BotProfile Bot_Profile { get; set; }
+    public BotProfile? Bot_Profile { get; set; }
 }
 
 public class BotProfile

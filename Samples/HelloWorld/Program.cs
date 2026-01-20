@@ -80,6 +80,9 @@ class OnMessage : IHandleMessage
     {
         var str = JsonSerializer.Serialize(@event);
         Console.WriteLine(str);
+
+        var str2 = JsonSerializer.Serialize(eventMetadata);
+        Console.WriteLine(str2);
         return Task.FromResult(new EventHandledResponse("OK"));
     }
 }
