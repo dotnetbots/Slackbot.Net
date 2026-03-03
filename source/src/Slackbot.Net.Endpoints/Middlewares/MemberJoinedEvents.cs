@@ -5,42 +5,37 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints.Middlewares;
 
-internal class MemberJoinedEvents
+internal class MemberJoinedEvents(
+    RequestDelegate next,
+    ILogger<MemberJoinedEvents> logger,
+    IEnumerable<IHandleMemberJoinedChannel> responseHandlers
+)
 {
-    private readonly ILogger<MemberJoinedEvents> _logger;
-    private readonly RequestDelegate _next;
-    private readonly IEnumerable<IHandleMemberJoinedChannel> _responseHandlers;
-
-    public MemberJoinedEvents(RequestDelegate next, ILogger<MemberJoinedEvents> logger,
-        IEnumerable<IHandleMemberJoinedChannel> responseHandlers, ILoggerFactory loggerFactory)
-    {
-        _next = next;
-        _logger = logger;
-        _responseHandlers = responseHandlers;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task Invoke(HttpContext context)
     {
-        var memberJoinedChannelEvent = (MemberJoinedChannelEvent)context.Items[HttpItemKeys.SlackEventKey];
+        var memberJoinedChannelEvent = (MemberJoinedChannelEvent)
+            context.Items[HttpItemKeys.SlackEventKey];
         var metadata = (EventMetaData)context.Items[HttpItemKeys.EventMetadataKey];
-        var handler = _responseHandlers.FirstOrDefault();
 
-        if (handler == null)
+        if (responseHandlers == null)
         {
-            _logger.LogError("No handler registered for IHandleMemberJoinedChannelEvents");
+            logger.LogError("No handler registered for IHandleMemberJoinedChannelEvents");
+            return;
         }
-        else
+        foreach (var handler in responseHandlers)
         {
-            _logger.LogInformation($"Handling using {handler.GetType()}");
+            logger.LogInformation($"Handling using {handler.GetType()}");
             try
             {
-                _logger.LogInformation($"Handling using {handler.GetType()}");
+                logger.LogInformation($"Handling using {handler.GetType()}");
                 var response = await handler.Handle(metadata, memberJoinedChannelEvent);
-                _logger.LogInformation(response.Response);
+                logger.LogInformation(response.Response);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                logger.LogError(e, e.Message);
             }
         }
 
@@ -49,7 +44,7 @@ internal class MemberJoinedEvents
 
     public static bool ShouldRun(HttpContext ctx)
     {
-        return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey) &&
-               ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.MemberJoinedChannel;
+        return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey)
+            && ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.MemberJoinedChannel;
     }
 }
