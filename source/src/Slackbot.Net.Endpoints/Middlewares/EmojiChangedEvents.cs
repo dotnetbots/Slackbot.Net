@@ -15,13 +15,12 @@ public class EmojiChangedEvents(
     {
         var emojiChanged = (EmojiChangedEvent)context.Items[HttpItemKeys.SlackEventKey];
         var metadata = (EventMetaData)context.Items[HttpItemKeys.EventMetadataKey];
-        var handler = responseHandlers.FirstOrDefault();
 
-        if (handler == null)
+        if (responseHandlers == null || !responseHandlers.Any())
         {
             logger.LogError("No handler registered for IHandleEmojiChanged");
         }
-        else
+        foreach (var handler in responseHandlers)
         {
             logger.LogInformation("Handling using {HandlerType}", handler.GetType());
             try
@@ -42,6 +41,6 @@ public class EmojiChangedEvents(
     public static bool ShouldRun(HttpContext ctx)
     {
         return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey)
-               && ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.EmojiChanged;
+            && ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.EmojiChanged;
     }
 }

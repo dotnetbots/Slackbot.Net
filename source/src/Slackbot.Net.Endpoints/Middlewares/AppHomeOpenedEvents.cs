@@ -8,19 +8,20 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 internal class AppHomeOpenedEvents(
     RequestDelegate next,
     ILogger<AppHomeOpenedEvents> logger,
-    IEnumerable<IHandleAppHomeOpened> responseHandlers)
+    IEnumerable<IHandleAppHomeOpened> responseHandlers
+)
 {
     public async Task Invoke(HttpContext context)
     {
         var appHomeOpenedEvent = (AppHomeOpenedEvent)context.Items[HttpItemKeys.SlackEventKey];
         var metadata = (EventMetaData)context.Items[HttpItemKeys.EventMetadataKey];
-        var handler = responseHandlers.FirstOrDefault();
 
-        if (handler == null)
+        if (responseHandlers == null || !responseHandlers.Any())
         {
             logger.LogError("No handler registered for IHandleAppHomeOpened");
+            return;
         }
-        else
+        foreach (var handler in responseHandlers)
         {
             logger.LogInformation($"Handling using {handler.GetType()}");
             try
@@ -35,12 +36,12 @@ internal class AppHomeOpenedEvents(
             }
         }
 
-        await next(context);
+        context.Response.StatusCode = 200;
     }
 
     public static bool ShouldRun(HttpContext ctx)
     {
-        return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey) &&
-               ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.AppHomeOpened;
+        return ctx.Items.ContainsKey(HttpItemKeys.EventTypeKey)
+            && ctx.Items[HttpItemKeys.EventTypeKey].ToString() == EventTypes.AppHomeOpened;
     }
 }

@@ -15,13 +15,12 @@ public class TeamJoinEvents(
     {
         var teamJoinEvent = (TeamJoinEvent)context.Items[HttpItemKeys.SlackEventKey];
         var metadata = (EventMetaData)context.Items[HttpItemKeys.EventMetadataKey];
-        var handler = responseHandlers.FirstOrDefault();
 
-        if (handler == null)
+        if (responseHandlers == null || !responseHandlers.Any())
         {
             logger.LogError("No handler registered for IHandleTeamJoinEvents");
         }
-        else
+        foreach (var handler in responseHandlers)
         {
             logger.LogInformation("Handling using {HandlerType}", handler.GetType());
             try
