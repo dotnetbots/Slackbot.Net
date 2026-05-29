@@ -81,6 +81,8 @@ public class HttpItemsManager(RequestDelegate next, ILogger<HttpItemsManager> lo
                 return JsonSerializer.Deserialize<EmojiChangedEvent>(json, WebOptions);
             case EventTypes.Message:
                 return JsonSerializer.Deserialize<MessageEvent>(json, WebOptions);
+            case EventTypes.ReactionAdded:
+                return JsonSerializer.Deserialize<ReactionAddedEvent>(json, WebOptions);
             default:
                 var unknownSlackEvent = JsonSerializer.Deserialize<UnknownSlackEvent>(json, WebOptions);
                 unknownSlackEvent.RawJson = raw;

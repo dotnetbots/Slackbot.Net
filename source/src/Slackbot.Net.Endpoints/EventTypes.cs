@@ -10,4 +10,5 @@ public static class EventTypes
     public const string TeamJoin = "team_join";
     public const string EmojiChanged = "emoji_changed";
     public const string Message = "message";
+    public const string ReactionAdded = "reaction_added";
 }

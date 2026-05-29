@@ -8,6 +8,7 @@ using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsHistoryResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.FileUpload;
@@ -128,7 +129,27 @@ public class SlackClient : ISlackClient
             new KeyValuePair<string, string>("limit", (limit ?? 1000).ToString()),
             new KeyValuePair<string, string>("include_all_metadata", "true"),
         };
+        if (cursor != null)
+        {
+            parameters.Add(new KeyValuePair<string, string>("cursor", cursor));
+        }
         return await _client.PostParametersAsForm<ConversationsRepliesResponse>(parameters, "conversations.replies", s => _logger.LogTrace(s));
+    }
+
+    /// <inheritdoc/>
+    public async Task<ConversationsHistoryResponse> ConversationsHistory(string channel, int? limit = null, string cursor = null)
+    {
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("channel", channel),
+            new KeyValuePair<string, string>("limit", (limit ?? 100).ToString()),
+            new KeyValuePair<string, string>("include_all_metadata", "true"),
+        };
+        if (cursor != null)
+        {
+            parameters.Add(new KeyValuePair<string, string>("cursor", cursor));
+        }
+        return await _client.PostParametersAsForm<ConversationsHistoryResponse>(parameters, "conversations.history", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
