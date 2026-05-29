@@ -14,9 +14,10 @@ public class Message
     public string Parent_User_id { get; set; }
     public string Ts { get; set; }
 
-    // Present on bot/app-authored messages. See https://docs.slack.dev/reference/events/message/bot_message
-    public string SubType { get; set; }
+    // Populated on bot/app-authored messages. Reliable bot detection: Bot_Id != null.
+    // See https://docs.slack.dev/reference/events/message/bot_message
     public string Bot_Id { get; set; }
+    public string App_Id { get; set; }
     public BotProfile Bot_Profile { get; set; }
 }
 

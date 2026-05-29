@@ -42,15 +42,42 @@ public class ConversationsBotMessageDeserializationTests(ITestOutputHelper helpe
 
         var bot = Assert.Single(response.Messages, m => m.Bot_Id != null);
         Assert.Equal("BB12033", bot.Bot_Id);
-        Assert.Equal("bot_message", bot.SubType);
         Assert.NotNull(bot.Bot_Profile);
         Assert.Equal("github", bot.Bot_Profile.Name);
         Assert.Equal("A123ABC456", bot.Bot_Profile.App_Id);
 
         var human = Assert.Single(response.Messages, m => m.User == "U123ABC456");
         Assert.Null(human.Bot_Id);
-        Assert.Null(human.SubType);
         Assert.Null(human.Bot_Profile);
+    }
+
+    // Real conversations.replies shape for an app/bot user: bot_id + app_id set,
+    // user present, no bot_profile. Bot_Id is the reliable detector.
+    [Fact]
+    public async Task ConversationsReplies_AppBotMessage_PopulatesBotIdAndAppId()
+    {
+        var json = """
+            {
+                "ok": true,
+                "messages": [
+                    { "user": "U8TRAM5DF", "bot_id": null, "app_id": null, "subtype": null, "ts": "1780072138.186269", "text": "<@U08SS4D12PQ> this is an app mention" },
+                    { "user": "U08SS4D12PQ", "bot_id": "B08SS4CUV0E", "app_id": "A08SX23BHS9", "subtype": null, "ts": "1780072145.328429", "text": "Hei! :wave:" }
+                ]
+            }
+            """;
+        var response = await ClientReturning(json).ConversationsReplies("C0EC3DG5N", "1780072138.186269");
+
+        Assert.True(response.Ok);
+
+        var bot = Assert.Single(response.Messages, m => m.Bot_Id != null);
+        Assert.Equal("B08SS4CUV0E", bot.Bot_Id);
+        Assert.Equal("A08SX23BHS9", bot.App_Id);
+        Assert.Equal("U08SS4D12PQ", bot.User); // app-bot users still carry a user id
+        Assert.Null(bot.Bot_Profile);
+
+        var human = Assert.Single(response.Messages, m => m.Bot_Id == null);
+        Assert.Equal("U8TRAM5DF", human.User);
+        Assert.Null(human.App_Id);
     }
 
     [Fact]
@@ -72,7 +99,6 @@ public class ConversationsBotMessageDeserializationTests(ITestOutputHelper helpe
 
         var bot = Assert.Single(response.Messages, m => m.Bot_Id != null);
         Assert.Equal("BB12033", bot.Bot_Id);
-        Assert.Equal("bot_message", bot.SubType);
         Assert.Equal("github", bot.Bot_Profile.Name);
     }
 }
