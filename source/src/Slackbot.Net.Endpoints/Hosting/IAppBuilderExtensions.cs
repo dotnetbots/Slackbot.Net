@@ -25,6 +25,7 @@ public static class IAppBuilderExtensions
         app.MapWhen(TeamJoinEvents.ShouldRun, b => b.UseMiddleware<TeamJoinEvents>());
         app.MapWhen(EmojiChangedEvents.ShouldRun, b => b.UseMiddleware<EmojiChangedEvents>());
         app.MapWhen(MessageEvents.ShouldRun, b => b.UseMiddleware<MessageEvents>());
+        app.MapWhen(ReactionAddedEvents.ShouldRun, b => b.UseMiddleware<ReactionAddedEvents>());
 
         return app;
     }

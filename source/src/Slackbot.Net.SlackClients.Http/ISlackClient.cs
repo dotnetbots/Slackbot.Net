@@ -6,6 +6,7 @@ using Slackbot.Net.SlackClients.Http.Models.Requests.ViewPublish;
 using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsHistoryResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.FileUpload;
@@ -82,6 +83,13 @@ public interface ISlackClient
     /// </summary>
     /// <remarks>https://api.slack.com/methods/conversations.list</remarks>
     Task<ConversationsRepliesResponse> ConversationsReplies(string channel, string ts, int? limit = null, string cursor = null);
+
+    /// <summary>
+    /// Scopes required: channels:history/groups:history/im:history or mpim:history
+    /// Fetches a conversation's message history. Bot/app-authored messages carry Bot_Id and SubType.
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/conversations.history</remarks>
+    Task<ConversationsHistoryResponse> ConversationsHistory(string channel, int? limit = null, string cursor = null);
 
     /// <summary>
     /// Scopes required: channels:manage | groups:write | im:write | mpim:write

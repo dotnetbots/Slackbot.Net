@@ -71,4 +71,10 @@ public class SlackBotHandlersBuilder(IServiceCollection services) : ISlackbotHan
         services.AddSingleton<IHandleMessage, T>();
         return this;
     }
+
+    public ISlackbotHandlersBuilder AddReactionAddedHandler<T>() where T : class, IHandleReactionAdded
+    {
+        services.AddSingleton<IHandleReactionAdded, T>();
+        return this;
+    }
 }
