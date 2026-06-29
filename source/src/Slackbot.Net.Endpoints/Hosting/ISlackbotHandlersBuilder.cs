@@ -20,4 +20,6 @@ public interface ISlackbotHandlersBuilder
     public ISlackbotHandlersBuilder AddEmojiChangedHandler<T>() where T : class, IHandleEmojiChanged;
     public ISlackbotHandlersBuilder AddMessageHandler<T>() where T : class, IHandleMessage;
     public ISlackbotHandlersBuilder AddReactionAddedHandler<T>() where T : class, IHandleReactionAdded;
+    public ISlackbotHandlersBuilder AddAssistantThreadStartedHandler<T>() where T : class, IHandleAssistantThreadStarted;
+    public ISlackbotHandlersBuilder AddAssistantThreadContextChangedHandler<T>() where T : class, IHandleAssistantThreadContextChanged;
 }

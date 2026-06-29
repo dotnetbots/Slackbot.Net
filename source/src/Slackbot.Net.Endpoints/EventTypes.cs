@@ -11,4 +11,6 @@ public static class EventTypes
     public const string EmojiChanged = "emoji_changed";
     public const string Message = "message";
     public const string ReactionAdded = "reaction_added";
+    public const string AssistantThreadStarted = "assistant_thread_started";
+    public const string AssistantThreadContextChanged = "assistant_thread_context_changed";
 }

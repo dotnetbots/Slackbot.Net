@@ -77,4 +77,18 @@ public class SlackBotHandlersBuilder(IServiceCollection services) : ISlackbotHan
         services.AddSingleton<IHandleReactionAdded, T>();
         return this;
     }
+
+    public ISlackbotHandlersBuilder AddAssistantThreadStartedHandler<T>()
+        where T : class, IHandleAssistantThreadStarted
+    {
+        services.AddSingleton<IHandleAssistantThreadStarted, T>();
+        return this;
+    }
+
+    public ISlackbotHandlersBuilder AddAssistantThreadContextChangedHandler<T>()
+        where T : class, IHandleAssistantThreadContextChanged
+    {
+        services.AddSingleton<IHandleAssistantThreadContextChanged, T>();
+        return this;
+    }
 }
