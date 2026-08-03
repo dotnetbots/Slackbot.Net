@@ -83,6 +83,10 @@ public class HttpItemsManager(RequestDelegate next, ILogger<HttpItemsManager> lo
                 return JsonSerializer.Deserialize<MessageEvent>(json, WebOptions);
             case EventTypes.ReactionAdded:
                 return JsonSerializer.Deserialize<ReactionAddedEvent>(json, WebOptions);
+            case EventTypes.AssistantThreadStarted:
+                return JsonSerializer.Deserialize<AssistantThreadStartedEvent>(json, WebOptions);
+            case EventTypes.AssistantThreadContextChanged:
+                return JsonSerializer.Deserialize<AssistantThreadContextChangedEvent>(json, WebOptions);
             default:
                 var unknownSlackEvent = JsonSerializer.Deserialize<UnknownSlackEvent>(json, WebOptions);
                 unknownSlackEvent.RawJson = raw;

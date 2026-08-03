@@ -26,6 +26,8 @@ public static class IAppBuilderExtensions
         app.MapWhen(EmojiChangedEvents.ShouldRun, b => b.UseMiddleware<EmojiChangedEvents>());
         app.MapWhen(MessageEvents.ShouldRun, b => b.UseMiddleware<MessageEvents>());
         app.MapWhen(ReactionAddedEvents.ShouldRun, b => b.UseMiddleware<ReactionAddedEvents>());
+        app.MapWhen(AssistantThreadStartedEvents.ShouldRun, b => b.UseMiddleware<AssistantThreadStartedEvents>());
+        app.MapWhen(AssistantThreadContextChangedEvents.ShouldRun, b => b.UseMiddleware<AssistantThreadContextChangedEvents>());
 
         return app;
     }

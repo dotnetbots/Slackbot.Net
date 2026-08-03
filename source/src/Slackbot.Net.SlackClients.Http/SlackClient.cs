@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients.Http.Extensions;
+using Slackbot.Net.SlackClients.Http.Models.Requests.AssistantThreadsSetStatus;
+using Slackbot.Net.SlackClients.Http.Models.Requests.AssistantThreadsSetSuggestedPrompts;
+using Slackbot.Net.SlackClients.Http.Models.Requests.AssistantThreadsSetTitle;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatUpdate;
@@ -228,5 +231,21 @@ public class SlackClient : ISlackClient
         return await _client.PostParametersAsMultiPartFormData<FileUploadResponse>(parameters, req.File, "files.upload", s => _logger.LogTrace(s));
     }
 
+    /// <inheritdoc/>
+    public async Task<Response> AssistantThreadsSetStatus(AssistantThreadsSetStatusRequest request)
+    {
+        return await _client.PostJson<Response>(request, "assistant.threads.setStatus", s => _logger.LogTrace(s));
+    }
 
+    /// <inheritdoc/>
+    public async Task<Response> AssistantThreadsSetTitle(AssistantThreadsSetTitleRequest request)
+    {
+        return await _client.PostJson<Response>(request, "assistant.threads.setTitle", s => _logger.LogTrace(s));
+    }
+
+    /// <inheritdoc/>
+    public async Task<Response> AssistantThreadsSetSuggestedPrompts(AssistantThreadsSetSuggestedPromptsRequest request)
+    {
+        return await _client.PostJson<Response>(request, "assistant.threads.setSuggestedPrompts", s => _logger.LogTrace(s));
+    }
 }

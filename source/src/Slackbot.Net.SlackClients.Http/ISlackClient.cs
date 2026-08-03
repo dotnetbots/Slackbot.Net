@@ -1,3 +1,6 @@
+using Slackbot.Net.SlackClients.Http.Models.Requests.AssistantThreadsSetStatus;
+using Slackbot.Net.SlackClients.Http.Models.Requests.AssistantThreadsSetSuggestedPrompts;
+using Slackbot.Net.SlackClients.Http.Models.Requests.AssistantThreadsSetTitle;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatUpdate;
@@ -127,4 +130,25 @@ public interface ISlackClient
     Task<FileUploadResponse> FilesUpload(FileUploadRequest fileupload);
 
     Task<FileUploadResponse> FilesUpload(FileUploadMultiPartRequest req);
+
+    /// <summary>
+    /// Scopes required: `assistant:write`
+    /// Sets the status of the assistant (e.g. "is thinking...") shown in the assistant pane.
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/assistant.threads.setStatus</remarks>
+    Task<Response> AssistantThreadsSetStatus(AssistantThreadsSetStatusRequest request);
+
+    /// <summary>
+    /// Scopes required: `assistant:write`
+    /// Sets the title of the assistant thread, shown in the History/Chat tabs.
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/assistant.threads.setTitle</remarks>
+    Task<Response> AssistantThreadsSetTitle(AssistantThreadsSetTitleRequest request);
+
+    /// <summary>
+    /// Scopes required: `assistant:write`
+    /// Sets suggested prompts for the assistant thread.
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/assistant.threads.setSuggestedPrompts</remarks>
+    Task<Response> AssistantThreadsSetSuggestedPrompts(AssistantThreadsSetSuggestedPromptsRequest request);
 }
