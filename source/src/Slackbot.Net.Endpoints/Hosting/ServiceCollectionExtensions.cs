@@ -9,6 +9,7 @@ public static class ServiceCollectionExtensions
 {
     public static ISlackbotHandlersBuilder AddSlackBotEvents(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
         services.AddSingleton<ISelectAppMentionEventHandlers, AppMentionEventHandlerSelector>();
         return new SlackBotHandlersBuilder(services);
     }

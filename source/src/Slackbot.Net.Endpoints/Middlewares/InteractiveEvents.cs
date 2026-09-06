@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Interactive;
@@ -11,9 +12,6 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 internal class InteractiveEvents(
     RequestDelegate next,
     ILogger<InteractiveEvents> logger,
-    IEnumerable<IHandleViewSubmissions> responseHandlers,
-    IEnumerable<IHandleInteractiveBlockActions> blockActionHandlers,
-    IEnumerable<IHandleMessageActions> messageActionHandlers,
     ILoggerFactory loggerFactory)
 {
     private readonly RequestDelegate _next = next;
@@ -22,14 +20,17 @@ internal class InteractiveEvents(
     public async Task Invoke(HttpContext context)
     {
         var payload = (Interaction)context.Items[HttpItemKeys.InteractivePayloadKey];
+        var responseHandlers = context.RequestServices.GetServices<IHandleViewSubmissions>();
+        var blockActionHandlers = context.RequestServices.GetServices<IHandleInteractiveBlockActions>();
+        var messageActionHandlers = context.RequestServices.GetServices<IHandleMessageActions>();
 
         switch (payload.Type)
         {
             case InteractionTypes.ViewSubmission:
-                await HandleViewSubmission(payload as ViewSubmission);
+                await HandleViewSubmission(payload as ViewSubmission, responseHandlers);
                 break;
             case InteractionTypes.BlockActions:
-                var res = await HandleBlockActions(payload as BlockActionInteraction);
+                var res = await HandleBlockActions(payload as BlockActionInteraction, blockActionHandlers);
                 context.Response.StatusCode = res.Response switch
                 {
                     "ERROR" => 500,
@@ -39,7 +40,7 @@ internal class InteractiveEvents(
                 await context.Response.WriteAsync(res.Response);
                 break;
             case InteractionTypes.MessageAction:
-                await HandleMessageAction(payload as MessageActionInteraction);
+                await HandleMessageAction(payload as MessageActionInteraction, messageActionHandlers);
                 break;
             default:
                 await _noOp.Handle(payload);
@@ -47,7 +48,7 @@ internal class InteractiveEvents(
         }
     }
 
-    private async Task HandleMessageAction(MessageActionInteraction messageAction)
+    private async Task HandleMessageAction(MessageActionInteraction messageAction, IEnumerable<IHandleMessageActions> messageActionHandlers)
     {
         var handler = messageActionHandlers.FirstOrDefault();
 
@@ -72,7 +73,7 @@ internal class InteractiveEvents(
         }
     }
 
-    private async Task<EventHandledResponse> HandleBlockActions(BlockActionInteraction payload)
+    private async Task<EventHandledResponse> HandleBlockActions(BlockActionInteraction payload, IEnumerable<IHandleInteractiveBlockActions> blockActionHandlers)
     {
         var handler = blockActionHandlers.FirstOrDefault();
 
@@ -96,7 +97,7 @@ internal class InteractiveEvents(
         }
     }
 
-    private async Task HandleViewSubmission(ViewSubmission payload)
+    private async Task HandleViewSubmission(ViewSubmission payload, IEnumerable<IHandleViewSubmissions> responseHandlers)
     {
         var handler = responseHandlers.FirstOrDefault();
 
