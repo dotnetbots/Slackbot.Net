@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="5.5.0"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
@@ -19,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj"/>
     <ProjectReference Include="..\..\src\Slackbot.Net.Shared\Slackbot.Net.Shared.csproj"/>
+    <ProjectReference Include="..\..\src\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

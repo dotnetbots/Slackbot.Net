@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Abstractions;
@@ -5,12 +6,13 @@ using Slackbot.Net.Endpoints.Models.Events;
 
 namespace Slackbot.Net.Endpoints;
 
-internal class AppMentionEventHandlerSelector(ILoggerFactory loggerFactory, IServiceProvider provider)
+internal class AppMentionEventHandlerSelector(ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor)
     : ISelectAppMentionEventHandlers
 {
     public async Task<IEnumerable<IHandleAppMentions>> GetAppMentionEventHandlerFor(EventMetaData eventMetadata,
         AppMentionEvent slackEvent)
     {
+        var provider = httpContextAccessor.HttpContext!.RequestServices;
         var allHandlers = provider.GetServices<IHandleAppMentions>();
         var shortCutter = provider.GetService<IShortcutAppMentions>();
         var noopHandler = provider.GetService<INoOpAppMentions>();

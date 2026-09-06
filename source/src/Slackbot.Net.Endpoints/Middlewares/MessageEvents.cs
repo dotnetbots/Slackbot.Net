@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
@@ -7,12 +8,14 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 
 public class MessageEvents(
     RequestDelegate next,
-    ILogger<MessageEvents> logger,
-    IEnumerable<IHandleMessage> responseHandlers
+    ILogger<MessageEvents> logger
 )
 {
+    private readonly RequestDelegate _next = next;
+
     public async Task Invoke(HttpContext context)
     {
+        var responseHandlers = context.RequestServices.GetServices<IHandleMessage>();
         var messageEvent = (MessageEvent)context.Items[HttpItemKeys.SlackEventKey];
         var metadata = (EventMetaData)context.Items[HttpItemKeys.EventMetadataKey];
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
@@ -10,23 +11,22 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 public class Uninstall
 {
     private readonly ILogger<Uninstall> _logger;
-    private readonly ITokenStore _tokenStore;
-    private readonly IUninstall _uninstaller;
-
-    public Uninstall(RequestDelegate next, ILogger<Uninstall> logger, IServiceProvider provider)
+    public Uninstall(RequestDelegate next, ILogger<Uninstall> logger)
     {
         _logger = logger;
-        _uninstaller = provider.GetService<IUninstall>() ??
-                       new NoopUninstaller(provider.GetService<ILogger<NoopUninstaller>>());
-        _tokenStore = provider.GetService<ITokenStore>() ??
-                      new NoopTokenStore(provider.GetService<ILogger<NoopTokenStore>>());
     }
 
     public async Task Invoke(HttpContext context)
     {
+        var tokenStore = context.RequestServices.GetService<ITokenStore>() ??
+                         new NoopTokenStore(context.RequestServices.GetService<ILogger<NoopTokenStore>>() ??
+                                            NullLogger<NoopTokenStore>.Instance);
+        var uninstaller = context.RequestServices.GetService<IUninstall>() ??
+                          new NoopUninstaller(context.RequestServices.GetService<ILogger<NoopUninstaller>>() ??
+                                              NullLogger<NoopUninstaller>.Instance);
         var metadata = context.Items[HttpItemKeys.EventMetadataKey] as EventMetaData;
         _logger.LogInformation($"Deleting team with TeamId: `{metadata.Team_Id}`");
-        var deleted = await _tokenStore.Delete(metadata.Team_Id);
+        var deleted = await tokenStore.Delete(metadata.Team_Id);
         if (deleted is null)
         {
             _logger.LogWarning(
@@ -35,7 +35,7 @@ public class Uninstall
         }
         else
         {
-            await _uninstaller.OnUninstalled(deleted?.TeamId, deleted?.TeamName);
+            await uninstaller.OnUninstalled(deleted?.TeamId, deleted?.TeamName);
             _logger.LogInformation($"Deleted team with TeamId: `{metadata.Team_Id}`");
         }
 
