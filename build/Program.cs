@@ -15,7 +15,7 @@ Target(Restore, () => RunAsync("dotnet", $"restore {solution}"));
 
 Target(Build, new[] { Restore }, () => RunAsync("dotnet", $"build {solution} --no-restore"));
 
-Target(Test, new[] { Build }, () => RunAsync("dotnet", $"test {solution} --no-build"));
+Target(Test, new[] { Build }, () => RunAsync("dotnet", $"test {solution} --no-build -- --report-gh"));
 
 Target(Pack, new[] { Build }, async () =>
 {
