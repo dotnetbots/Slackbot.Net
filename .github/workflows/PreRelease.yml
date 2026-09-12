@@ -27,7 +27,10 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0
         with:
           useConfigFile: true
-      - name: Pack
-        run: dotnet pack source /p:Version=${{ steps.gitversion.outputs.NuGetVersionV2 }}-${{ steps.gitversion.outputs.ShortSha }} /p:InformationalVersion=${{ steps.gitversion.outputs.informationalVersion }} /p:PackageReleaseNotes="https://github.com/$GITHUB_REPOSITORY/releases/tag/${{ steps.gitversion.outputs.NuGetVersionV2 }}" -o ./releases
-      - name: Publish
-        run: dotnet nuget push ./releases/**/*.nupkg -k=${{ secrets.NUGETORGAPIKEY }} -s=nuget.org
+      - name: Pack & Publish
+        run: dotnet run --project build -- publish
+        env:
+          BUILD_VERSION: ${{ steps.gitversion.outputs.NuGetVersionV2 }}-${{ steps.gitversion.outputs.ShortSha }}
+          BUILD_INFORMATIONAL_VERSION: ${{ steps.gitversion.outputs.informationalVersion }}
+          BUILD_RELEASE_NOTES: https://github.com/${{ github.repository }}/releases/tag/${{ steps.gitversion.outputs.NuGetVersionV2 }}
+          NUGET_API_KEY: ${{ secrets.NUGETORGAPIKEY }}

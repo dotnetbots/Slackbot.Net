@@ -27,10 +27,13 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0
         with:
           useConfigFile: true
-      - name: Pack
-        run: dotnet pack source /p:Version=${{ steps.gitversion.outputs.majorMinorPatch }} /p:InformationalVersion=${{ steps.gitversion.outputs.informationalVersion }} /p:PackageReleaseNotes="https://github.com/$GITHUB_REPOSITORY/releases/tag/${{ steps.gitversion.outputs.majorMinorPatch }}" -o ./releases
-      - name: Publish
-        run: dotnet nuget push ./releases/**/*.nupkg -k=${{ secrets.NUGETORGAPIKEY }} -s=nuget.org
+      - name: Pack & Publish
+        run: dotnet run --project build -- publish
+        env:
+          BUILD_VERSION: ${{ steps.gitversion.outputs.majorMinorPatch }}
+          BUILD_INFORMATIONAL_VERSION: ${{ steps.gitversion.outputs.informationalVersion }}
+          BUILD_RELEASE_NOTES: https://github.com/${{ github.repository }}/releases/tag/${{ steps.gitversion.outputs.majorMinorPatch }}
+          NUGET_API_KEY: ${{ secrets.NUGETORGAPIKEY }}
       - run: git log $(git describe --tags --abbrev=0)..HEAD --oneline
       - name: Generate CHANGELOG.md
         id: releasenotes

@@ -23,12 +23,8 @@ jobs:
           dotnet-version: |
             10.0.x
             11.0.x
-      - name: Restore dependencies
-        run: dotnet restore source
-      - name: Build
-        run: dotnet build --no-restore source
-      - name: Test
-        run: dotnet test --no-build source
+      - name: Build & Test
+        run: dotnet run --project build -- test
         env:
           Slackbot_SlackApiKey_BotUser: ${{ secrets.SLACKBOT_SLACKAPIKEY_BOTUSER }}
           Slackbot_SlackApiKey_SlackApp: ${{ secrets.SLACKBOT_SLACKAPIKEY_SLACKAPP }}
