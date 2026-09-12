@@ -3,11 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - "*"
+      - "**"
     paths-ignore:
     - '**/*.md'
   pull_request:
-    branches: [master]
+    branches: [main]
     paths-ignore:
     - '**/*.md'
 
@@ -16,11 +16,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: |
+            10.0.x
+            11.0.x
       - name: Restore dependencies
         run: dotnet restore source
       - name: Build
