@@ -1,12 +1,12 @@
 namespace Slackbot.Net.Abstractions.Hosting;
 
 /// <summary>
-///     Provider of tokens from all workspaces that have installed your distributed Slack app
+///     Obsolete: renamed to <see cref="ITokenManager"/> since "store" implied a persistence
+///     mechanism this interface never actually required. Kept for backwards compatibility -
+///     it inherits <see cref="ITokenManager"/>, so any existing implementation of this
+///     interface already satisfies the new one.
 /// </summary>
-public interface ITokenStore
+[Obsolete("ITokenStore has been renamed to ITokenManager to avoid implying a persistence mechanism. Implement ITokenManager instead. This interface will be removed in a future version.")]
+public interface ITokenStore : ITokenManager
 {
-    Task<Workspace> Delete(string teamId);
-    Task Insert(Workspace slackTeam);
 }
-
-public record Workspace(string TeamId, string TeamName, string Token);

@@ -18,9 +18,9 @@ public class Uninstall
 
     public async Task Invoke(HttpContext context)
     {
-        var tokenStore = context.RequestServices.GetService<ITokenStore>() ??
-                         new NoopTokenStore(context.RequestServices.GetService<ILogger<NoopTokenStore>>() ??
-                                            NullLogger<NoopTokenStore>.Instance);
+        var tokenStore = context.RequestServices.GetService<ITokenManager>() ??
+                         new NoopTokenManager(context.RequestServices.GetService<ILogger<NoopTokenManager>>() ??
+                                            NullLogger<NoopTokenManager>.Instance);
         var uninstaller = context.RequestServices.GetService<IUninstall>() ??
                           new NoopUninstaller(context.RequestServices.GetService<ILogger<NoopUninstaller>>() ??
                                               NullLogger<NoopUninstaller>.Instance);
@@ -59,7 +59,7 @@ public class NoopUninstaller(ILogger<NoopUninstaller> logger) : IUninstall
     }
 }
 
-public class NoopTokenStore(ILogger<NoopTokenStore> logger) : ITokenStore
+public class NoopTokenManager(ILogger<NoopTokenManager> logger) : ITokenManager
 {
     public Task<Workspace> Delete(string teamId)
     {

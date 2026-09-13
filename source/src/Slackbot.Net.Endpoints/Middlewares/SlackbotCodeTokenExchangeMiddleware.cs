@@ -10,7 +10,7 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
 {
     public async Task Invoke(HttpContext ctx, OAuthClient oAuthAccessClient, IServiceProvider provider,
-        IOptions<OAuthOptions> options, ITokenStore slackTeamRepository,
+        IOptions<OAuthOptions> options, ITokenManager slackTeamRepository,
         ILogger<SlackbotCodeTokenExchangeMiddleware> logger)
     {
         logger.LogInformation("Installing!");
