@@ -70,13 +70,13 @@ public class NoopUninstaller(ILogger<NoopUninstaller> logger) : IUninstall
 
 public class NoopWorkspaceInstallationHandler(ILogger<NoopWorkspaceInstallationHandler> logger) : IWorkspaceInstallationHandler
 {
-    public Task<Workspace> Uninstall(string teamId)
+    public Task<Workspace?> Uninstall(string teamId)
     {
         logger.LogDebug("No-op. Returning null for uninstalling workspace!");
-        return Task.FromResult<Workspace>(null);
+        return Task.FromResult<Workspace?>(null);
     }
 
-    public Task Install(Workspace slackTeam)
+    public Task Install(Workspace workspace)
     {
         logger.LogDebug("No-op. Not storing workspace!");
         return Task.CompletedTask;
