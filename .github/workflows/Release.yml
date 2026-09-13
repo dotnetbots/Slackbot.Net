@@ -4,50 +4,30 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  publish:
+    permissions:
+      id-token: write
+    uses: ./.github/workflows/publish.yml
+    with:
+      prerelease: false
+    secrets: inherit
+
+  release:
+    needs: publish
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
 
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: "5.x"
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: |
-            10.0.x
-            11.0.x
-      - name: Determine Version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0
-        with:
-          useConfigFile: true
-      - name: NuGet login (OIDC → temp API key)
-        uses: NuGet/login@v1
-        id: nuget_login
-        with:
-          user: ${{ secrets.NUGET_USER }}
-      - name: Pack & Publish
-        run: dotnet run --project build -- publish
-        env:
-          BUILD_VERSION: ${{ steps.gitversion.outputs.majorMinorPatch }}
-          BUILD_INFORMATIONAL_VERSION: ${{ steps.gitversion.outputs.informationalVersion }}
-          BUILD_RELEASE_NOTES: https://github.com/${{ github.repository }}/releases/tag/${{ steps.gitversion.outputs.majorMinorPatch }}
-          NUGET_API_KEY: ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
       - run: git log $(git describe --tags --abbrev=0)..HEAD --oneline
       - name: Generate CHANGELOG.md
         id: releasenotes
         run: |
           gh api repos/$GITHUB_REPOSITORY/releases/generate-notes \
-          -f tag_name="${{ steps.gitversion.outputs.majorMinorPatch }}" \
+          -f tag_name="${{ needs.publish.outputs.version }}" \
           -q .body > CHANGELOG.md
           echo -e "\n\n" >> CHANGELOG.md
           git log $(git describe --tags --abbrev=0)..HEAD --oneline >> CHANGELOG.md
@@ -59,8 +39,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}
-          release_name: Release ${{ steps.gitversion.outputs.majorMinorPatch }}
+          tag_name: ${{ needs.publish.outputs.version }}
+          release_name: Release ${{ needs.publish.outputs.version }}
           body_path: CHANGELOG.md
           draft: false
           prerelease: false
