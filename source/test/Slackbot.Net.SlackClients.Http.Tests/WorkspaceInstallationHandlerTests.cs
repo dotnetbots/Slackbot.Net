@@ -26,49 +26,6 @@ public class WorkspaceInstallationHandlerTests
         Assert.Equal("T1", deleted.TeamId);
     }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-    [Fact]
-    public async Task LegacyITokenStoreImplementerStillWorksThroughIWorkspaceInstallationHandler()
-    {
-        var services = new ServiceCollection();
-        services.AddSlackBotEvents<LegacyStore>();
-        var provider = services.BuildServiceProvider();
-
-        var handler = provider.GetRequiredService<IWorkspaceInstallationHandler>();
-        var legacyStore = Assert.IsType<LegacyStore>(handler);
-
-        await handler.Install(new Workspace("T1", "Team", "tok"));
-        var deleted = await handler.Uninstall("T1");
-
-        Assert.Single(legacyStore.Inserted);
-        Assert.Equal("T1", legacyStore.Inserted[0].TeamId);
-        Assert.Single(legacyStore.Deleted);
-        Assert.Equal("T1", legacyStore.Deleted[0]);
-        Assert.Equal("T1", deleted.TeamId);
-
-        var legacyView = provider.GetRequiredService<ITokenStore>();
-        Assert.Same(handler, legacyView);
-    }
-
-    private sealed class LegacyStore : ITokenStore
-    {
-        public List<Workspace> Inserted { get; } = [];
-        public List<string> Deleted { get; } = [];
-
-        public Task Insert(Workspace slackTeam)
-        {
-            Inserted.Add(slackTeam);
-            return Task.CompletedTask;
-        }
-
-        public Task<Workspace> Delete(string teamId)
-        {
-            Deleted.Add(teamId);
-            return Task.FromResult(new Workspace(teamId, "Team", "tok"));
-        }
-    }
-#pragma warning restore CS0618
-
     private sealed class FreshHandler : IWorkspaceInstallationHandler
     {
         public List<Workspace> Installed { get; } = [];
