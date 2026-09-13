@@ -18,13 +18,12 @@ public class WorkspaceInstallationHandlerTests
         var freshHandler = Assert.IsType<FreshHandler>(handler);
 
         await handler.Install(new Workspace("T1", "Team", "tok"));
-        var deleted = await handler.Uninstall("T1");
+        await handler.Uninstall("T1");
 
         Assert.Single(freshHandler.Installed);
         Assert.Equal("T1", freshHandler.Installed[0].TeamId);
         Assert.Single(freshHandler.Uninstalled);
         Assert.Equal("T1", freshHandler.Uninstalled[0]);
-        Assert.Equal("T1", deleted.TeamId);
     }
 
     private sealed class FreshHandler : IWorkspaceInstallationHandler
@@ -38,10 +37,10 @@ public class WorkspaceInstallationHandlerTests
             return Task.CompletedTask;
         }
 
-        public Task<Workspace> Uninstall(string teamId)
+        public Task Uninstall(string teamId)
         {
             Uninstalled.Add(teamId);
-            return Task.FromResult(new Workspace(teamId, "Team", "tok"));
+            return Task.CompletedTask;
         }
     }
 }
