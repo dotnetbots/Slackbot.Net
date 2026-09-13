@@ -23,18 +23,7 @@ public class Uninstall
                                             NullLogger<NoopWorkspaceInstallationHandler>.Instance);
         var metadata = context.Items[HttpItemKeys.EventMetadataKey] as EventMetaData;
         _logger.LogInformation($"Uninstalling team with TeamId: `{metadata.Team_Id}`");
-        var deleted = await installationHandler.Uninstall(metadata.Team_Id);
-        if (deleted is null)
-        {
-            _logger.LogWarning(
-                "Workspace installation handler returned null for '{TeamId}'.",
-                metadata.Team_Id);
-        }
-        else
-        {
-            _logger.LogInformation($"Uninstalled team with TeamId: `{metadata.Team_Id}`");
-        }
-
+        await installationHandler.Uninstall(metadata.Team_Id);
         context.Response.StatusCode = 200;
     }
 
@@ -48,10 +37,10 @@ public class Uninstall
 
 public class NoopWorkspaceInstallationHandler(ILogger<NoopWorkspaceInstallationHandler> logger) : IWorkspaceInstallationHandler
 {
-    public Task<Workspace?> Uninstall(string teamId)
+    public Task Uninstall(string teamId)
     {
-        logger.LogDebug("No-op. Returning null for uninstalling workspace!");
-        return Task.FromResult<Workspace?>(null);
+        logger.LogDebug("No-op. Not removing workspace!");
+        return Task.CompletedTask;
     }
 
     public Task Install(Workspace workspace)
