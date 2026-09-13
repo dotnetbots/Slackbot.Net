@@ -18,25 +18,32 @@ public class Uninstall
 
     public async Task Invoke(HttpContext context)
     {
-        var tokenStore = context.RequestServices.GetService<ITokenStore>() ??
-                         new NoopTokenStore(context.RequestServices.GetService<ILogger<NoopTokenStore>>() ??
-                                            NullLogger<NoopTokenStore>.Instance);
+        var installationHandler = context.RequestServices.GetService<IWorkspaceInstallationHandler>() ??
+                         new NoopWorkspaceInstallationHandler(context.RequestServices.GetService<ILogger<NoopWorkspaceInstallationHandler>>() ??
+                                            NullLogger<NoopWorkspaceInstallationHandler>.Instance);
+
+        // Backwards compatibility: IUninstall is obsolete in favor of putting this logic
+        // directly in IWorkspaceInstallationHandler.Uninstall, but keep invoking it if registered.
+#pragma warning disable CS0618 // Type or member is obsolete
         var uninstaller = context.RequestServices.GetService<IUninstall>() ??
                           new NoopUninstaller(context.RequestServices.GetService<ILogger<NoopUninstaller>>() ??
                                               NullLogger<NoopUninstaller>.Instance);
+#pragma warning restore CS0618
         var metadata = context.Items[HttpItemKeys.EventMetadataKey] as EventMetaData;
-        _logger.LogInformation($"Deleting team with TeamId: `{metadata.Team_Id}`");
-        var deleted = await tokenStore.Delete(metadata.Team_Id);
+        _logger.LogInformation($"Uninstalling team with TeamId: `{metadata.Team_Id}`");
+        var deleted = await installationHandler.Uninstall(metadata.Team_Id);
         if (deleted is null)
         {
             _logger.LogWarning(
-                "Token store returned null for '{TeamId}'. Will not trigger registered OnUninstalled handlers. ",
+                "Workspace installation handler returned null for '{TeamId}'. Will not trigger registered OnUninstalled handlers. ",
                 metadata.Team_Id);
         }
         else
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             await uninstaller.OnUninstalled(deleted?.TeamId, deleted?.TeamName);
-            _logger.LogInformation($"Deleted team with TeamId: `{metadata.Team_Id}`");
+#pragma warning restore CS0618
+            _logger.LogInformation($"Uninstalled team with TeamId: `{metadata.Team_Id}`");
         }
 
         context.Response.StatusCode = 200;
@@ -50,6 +57,7 @@ public class Uninstall
     }
 }
 
+#pragma warning disable CS0618 // Type or member is obsolete
 public class NoopUninstaller(ILogger<NoopUninstaller> logger) : IUninstall
 {
     public Task OnUninstalled(string teamId, string teamName)
@@ -58,16 +66,17 @@ public class NoopUninstaller(ILogger<NoopUninstaller> logger) : IUninstall
         return Task.CompletedTask;
     }
 }
+#pragma warning restore CS0618
 
-public class NoopTokenStore(ILogger<NoopTokenStore> logger) : ITokenStore
+public class NoopWorkspaceInstallationHandler(ILogger<NoopWorkspaceInstallationHandler> logger) : IWorkspaceInstallationHandler
 {
-    public Task<Workspace> Delete(string teamId)
+    public Task<Workspace> Uninstall(string teamId)
     {
-        logger.LogDebug("No-op. Returning null for deleting workspace!");
+        logger.LogDebug("No-op. Returning null for uninstalling workspace!");
         return Task.FromResult<Workspace>(null);
     }
 
-    public Task Insert(Workspace slackTeam)
+    public Task Install(Workspace slackTeam)
     {
         logger.LogDebug("No-op. Not storing workspace!");
         return Task.CompletedTask;

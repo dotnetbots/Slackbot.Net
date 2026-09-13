@@ -10,7 +10,7 @@ namespace Slackbot.Net.Endpoints.Middlewares;
 internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
 {
     public async Task Invoke(HttpContext ctx, OAuthClient oAuthAccessClient, IServiceProvider provider,
-        IOptions<OAuthOptions> options, ITokenStore slackTeamRepository,
+        IOptions<OAuthOptions> options, IWorkspaceInstallationHandler installationHandler,
         ILogger<SlackbotCodeTokenExchangeMiddleware> logger)
     {
         logger.LogInformation("Installing!");
@@ -32,13 +32,18 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
         if (response.Ok)
         {
             logger.LogInformation($"Oauth response! ok:{response.Ok}");
-            await slackTeamRepository.Insert(new Workspace
+            await installationHandler.Install(new Workspace
             (
                 response.Team.Id,
                 response.Team.Name,
                 response.Access_Token
             ));
+
+            // Backwards compatibility: OnSuccess is obsolete in favor of putting this logic
+            // directly in IWorkspaceInstallationHandler.Install, but keep invoking it if set.
+#pragma warning disable CS0618 // Type or member is obsolete
             await options.Value.OnSuccess(response.Team.Id, response.Team.Name, provider);
+#pragma warning restore CS0618
 
             ctx.Response.Redirect(options.Value.SuccessRedirectUri);
         }
