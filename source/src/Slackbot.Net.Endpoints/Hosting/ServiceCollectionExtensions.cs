@@ -17,14 +17,14 @@ public static class ServiceCollectionExtensions
     public static ISlackbotHandlersBuilder AddSlackBotEvents<T>(this IServiceCollection services)
         where T : class, IWorkspaceInstallationHandler
     {
-        services.AddSingleton<IWorkspaceInstallationHandler, T>();
+        services.AddScoped<IWorkspaceInstallationHandler, T>();
 
         // Backwards compatibility: if T still implements the obsolete ITokenStore interface,
         // make it resolvable that way too, so existing code depending on ITokenStore keeps working.
 #pragma warning disable CS0618 // Type or member is obsolete
         if (typeof(ITokenStore).IsAssignableFrom(typeof(T)))
         {
-            services.AddSingleton<ITokenStore>(sp => (ITokenStore)sp.GetRequiredService<IWorkspaceInstallationHandler>());
+            services.AddScoped<ITokenStore>(sp => (ITokenStore)sp.GetRequiredService<IWorkspaceInstallationHandler>());
         }
 #pragma warning restore CS0618
 
