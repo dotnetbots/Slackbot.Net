@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
     public static ISlackbotHandlersBuilder AddSlackBotEvents<T>(this IServiceCollection services)
         where T : class, IWorkspaceInstallationHandler
     {
-        services.AddSingleton<IWorkspaceInstallationHandler, T>();
+        services.AddScoped<IWorkspaceInstallationHandler, T>();
         return services.AddSlackBotEvents();
     }
 

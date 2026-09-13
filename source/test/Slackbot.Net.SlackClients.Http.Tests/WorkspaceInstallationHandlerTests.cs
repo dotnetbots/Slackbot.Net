@@ -11,9 +11,10 @@ public class WorkspaceInstallationHandlerTests
     {
         var services = new ServiceCollection();
         services.AddSlackBotEvents<FreshHandler>();
-        var provider = services.BuildServiceProvider();
+        var provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
+        using var scope = provider.CreateScope();
 
-        var handler = provider.GetRequiredService<IWorkspaceInstallationHandler>();
+        var handler = scope.ServiceProvider.GetRequiredService<IWorkspaceInstallationHandler>();
         var freshHandler = Assert.IsType<FreshHandler>(handler);
 
         await handler.Install(new Workspace("T1", "Team", "tok"));
