@@ -15,16 +15,16 @@ public static class ServiceCollectionExtensions
     }
 
     public static ISlackbotHandlersBuilder AddSlackBotEvents<T>(this IServiceCollection services)
-        where T : class, ITokenManager
+        where T : class, IWorkspaceInstallationHandler
     {
-        services.AddSingleton<ITokenManager, T>();
+        services.AddSingleton<IWorkspaceInstallationHandler, T>();
 
         // Backwards compatibility: if T still implements the obsolete ITokenStore interface,
         // make it resolvable that way too, so existing code depending on ITokenStore keeps working.
 #pragma warning disable CS0618 // Type or member is obsolete
         if (typeof(ITokenStore).IsAssignableFrom(typeof(T)))
         {
-            services.AddSingleton<ITokenStore>(sp => (ITokenStore)sp.GetRequiredService<ITokenManager>());
+            services.AddSingleton<ITokenStore>(sp => (ITokenStore)sp.GetRequiredService<IWorkspaceInstallationHandler>());
         }
 #pragma warning restore CS0618
 
@@ -49,5 +49,7 @@ public class OAuthOptions
     public string CLIENT_ID { get; set; }
     public string CLIENT_SECRET { get; set; }
     public string SuccessRedirectUri { get; set; } = "/success?default=1";
+
+    [Obsolete("Put post-install logic directly in your IWorkspaceInstallationHandler.Install implementation instead. OnSuccess will be removed in a future version.")]
     public Func<string, string, IServiceProvider, Task> OnSuccess { get; set; } = (_, _, _) => Task.CompletedTask;
 }
