@@ -2,10 +2,21 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: Publish a prerelease package (skips creating a GitHub release)
+        type: boolean
+        default: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    outputs:
+      version: ${{ steps.version.outputs.value }}
 
     steps:
       - uses: actions/checkout@v7
@@ -27,19 +38,44 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0
         with:
           useConfigFile: true
+      - name: Resolve package version
+        id: version
+        run: |
+          if [ "${{ inputs.prerelease }}" = "true" ]; then
+            echo "value=${{ steps.gitversion.outputs.NuGetVersionV2 }}-${{ steps.gitversion.outputs.ShortSha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${{ steps.gitversion.outputs.majorMinorPatch }}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: nuget_login
+        with:
+          user: ${{ secrets.NUGET_USER }}
       - name: Pack & Publish
         run: dotnet run --project build -- publish
         env:
-          BUILD_VERSION: ${{ steps.gitversion.outputs.majorMinorPatch }}
+          BUILD_VERSION: ${{ steps.version.outputs.value }}
           BUILD_INFORMATIONAL_VERSION: ${{ steps.gitversion.outputs.informationalVersion }}
-          BUILD_RELEASE_NOTES: https://github.com/${{ github.repository }}/releases/tag/${{ steps.gitversion.outputs.majorMinorPatch }}
-          NUGET_API_KEY: ${{ secrets.NUGETORGAPIKEY }}
+          BUILD_RELEASE_NOTES: https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.value }}
+          NUGET_API_KEY: ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
+
+  release:
+    needs: build
+    if: ${{ !inputs.prerelease }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - run: git log $(git describe --tags --abbrev=0)..HEAD --oneline
       - name: Generate CHANGELOG.md
         id: releasenotes
         run: |
           gh api repos/$GITHUB_REPOSITORY/releases/generate-notes \
-          -f tag_name="${{ steps.gitversion.outputs.majorMinorPatch }}" \
+          -f tag_name="${{ needs.build.outputs.version }}" \
           -q .body > CHANGELOG.md
           echo -e "\n\n" >> CHANGELOG.md
           git log $(git describe --tags --abbrev=0)..HEAD --oneline >> CHANGELOG.md
@@ -51,8 +87,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.gitversion.outputs.majorMinorPatch }}
-          release_name: Release ${{ steps.gitversion.outputs.majorMinorPatch }}
+          tag_name: ${{ needs.build.outputs.version }}
+          release_name: Release ${{ needs.build.outputs.version }}
           body_path: CHANGELOG.md
           draft: false
           prerelease: false
