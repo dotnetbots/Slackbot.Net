@@ -38,5 +38,10 @@ public class OAuthOptions
 {
     public string CLIENT_ID { get; set; }
     public string CLIENT_SECRET { get; set; }
+    /// <summary>
+    ///     Where the user ends up after a successful install. If the install was started with an
+    ///     OAuth <c>state</c> parameter, that value is appended here as <c>?state=</c> so the page
+    ///     can pick it up — this library never interprets it.
+    /// </summary>
     public string SuccessRedirectUri { get; set; } = "/success?default=1";
 }
