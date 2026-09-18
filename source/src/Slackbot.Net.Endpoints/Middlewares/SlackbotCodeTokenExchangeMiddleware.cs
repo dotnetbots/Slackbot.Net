@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slackbot.Net.Abstractions.Hosting;
@@ -39,7 +40,8 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
                 response.Access_Token
             ));
 
-            ctx.Response.Redirect(options.Value.SuccessRedirectUri);
+            var stateTheAppSent = ctx.Request.Query["state"].FirstOrDefault();
+            ctx.Response.Redirect(SuccessRedirect(options.Value.SuccessRedirectUri, stateTheAppSent));
         }
         else
         {
@@ -48,4 +50,11 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
             await ctx.Response.WriteAsync(response.Error);
         }
     }
+
+    // `state` is opaque to this library — only the app that sent it knows what it means, so it
+    // rides back to that app's own success page untouched rather than being interpreted here.
+    internal static string SuccessRedirect(string successRedirectUri, string state) =>
+        string.IsNullOrEmpty(state)
+            ? successRedirectUri
+            : QueryHelpers.AddQueryString(successRedirectUri, "state", state);
 }
