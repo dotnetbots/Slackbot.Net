@@ -36,6 +36,9 @@ public static class IAppBuilderExtensions
     ///     NB! The path you run this middleware must:
     ///     - match redirect_uri in your 1st redirect to Slack
     ///     - be a valid redirect_uri in your Slack app configuration
+    ///     On a successful install the user is sent to the OAuth `state` parameter when it holds a
+    ///     site-relative path (so an install can return to where it started), and to
+    ///     <see cref="OAuthOptions.SuccessRedirectUri" /> otherwise.
     /// </summary>
     /// <param name="app"></param>
     /// <returns></returns>

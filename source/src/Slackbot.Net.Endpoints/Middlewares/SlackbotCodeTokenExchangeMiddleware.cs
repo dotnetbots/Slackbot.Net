@@ -39,7 +39,8 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
                 response.Access_Token
             ));
 
-            ctx.Response.Redirect(options.Value.SuccessRedirectUri);
+            var state = ctx.Request.Query["state"].FirstOrDefault();
+            ctx.Response.Redirect(ResolveRedirectUri(state, options.Value.SuccessRedirectUri));
         }
         else
         {
@@ -47,5 +48,46 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
             ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await ctx.Response.WriteAsync(response.Error);
         }
+    }
+
+    /// <summary>
+    ///     Slack round-trips the OAuth `state` parameter untouched, so an app can use it to carry
+    ///     the page the install was started from. Only site-relative paths are honored, and they are
+    ///     resolved against <see cref="OAuthOptions.SuccessRedirectUri" />'s origin so the user stays
+    ///     on the same site. Anything else falls back to <see cref="OAuthOptions.SuccessRedirectUri" />.
+    /// </summary>
+    private static string ResolveRedirectUri(string state, string successRedirectUri)
+    {
+        if (!IsSiteRelative(state))
+        {
+            return successRedirectUri;
+        }
+
+        if (Uri.TryCreate(successRedirectUri, UriKind.Absolute, out var successUri) &&
+            (successUri.Scheme == Uri.UriSchemeHttp || successUri.Scheme == Uri.UriSchemeHttps))
+        {
+            return new Uri(successUri, state).AbsoluteUri;
+        }
+
+        return state;
+    }
+
+    /// <summary>
+    ///     Accepts `/foo` but not absolute (`https://host/foo`) or protocol-relative (`//host`,
+    ///     `/\host`) values, which would turn the callback into an open redirect.
+    /// </summary>
+    private static bool IsSiteRelative(string state)
+    {
+        if (string.IsNullOrEmpty(state) || state[0] != '/')
+        {
+            return false;
+        }
+
+        if (state.Length > 1 && (state[1] == '/' || state[1] == '\\'))
+        {
+            return false;
+        }
+
+        return !state.Any(char.IsControl);
     }
 }

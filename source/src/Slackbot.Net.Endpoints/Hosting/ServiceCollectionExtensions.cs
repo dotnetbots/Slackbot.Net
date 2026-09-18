@@ -38,5 +38,11 @@ public class OAuthOptions
 {
     public string CLIENT_ID { get; set; }
     public string CLIENT_SECRET { get; set; }
+
+    /// <summary>
+    ///     Where the user ends up after a successful install. Used as-is unless the install was
+    ///     started with a site-relative path in the OAuth `state` parameter, in which case that path
+    ///     wins - resolved against this uri's origin when it is absolute.
+    /// </summary>
     public string SuccessRedirectUri { get; set; } = "/success?default=1";
 }
