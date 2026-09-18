@@ -58,7 +58,7 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
     /// </summary>
     private static string ResolveRedirectUri(string state, string successRedirectUri)
     {
-        if (!IsSiteRelative(state))
+        if (!IsLocalUrl(state))
         {
             return successRedirectUri;
         }
@@ -73,21 +73,22 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
     }
 
     /// <summary>
-    ///     Accepts `/foo` but not absolute (`https://host/foo`) or protocol-relative (`//host`,
-    ///     `/\host`) values, which would turn the callback into an open redirect.
+    ///     Accepts site-relative urls like `/foo`, but not absolute (`https://host/foo`) or
+    ///     protocol-relative (`//host`, `/\host`) ones, which would turn the callback into an open
+    ///     redirect.
     /// </summary>
-    private static bool IsSiteRelative(string state)
+    private static bool IsLocalUrl(string url)
     {
-        if (string.IsNullOrEmpty(state) || state[0] != '/')
+        if (string.IsNullOrEmpty(url) || url[0] != '/')
         {
             return false;
         }
 
-        if (state.Length > 1 && (state[1] == '/' || state[1] == '\\'))
+        if (url.Length > 1 && (url[1] == '/' || url[1] == '\\'))
         {
             return false;
         }
 
-        return !state.Any(char.IsControl);
+        return !url.Any(char.IsControl);
     }
 }
