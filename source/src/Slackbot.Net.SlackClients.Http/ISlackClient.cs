@@ -10,7 +10,9 @@ using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsHistoryResponse;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsInfo;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsMembers;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
@@ -75,12 +77,18 @@ public interface ISlackClient
 
     /// <summary>
     /// Scopes required: channels:read | groups:read | im:read
-    /// Only requests `public_channel` types of conversations
+    /// Returns the member user ids of a conversation.
     /// </summary>
     /// <remarks>https://api.slack.com/methods/conversations.members</remarks>
-    Task<ConversationsListResponse> ConversationsMembers(string channel);
-    
-    
+    Task<ConversationsMembersResponse> ConversationsMembers(string channel);
+
+    /// <summary>
+    /// Scopes required: channels:read | groups:read | im:read | mpim:read
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/conversations.info</remarks>
+    Task<ConversationsInfoResponse> ConversationsInfo(string channel, bool includeNumMembers = false);
+
+
     /// <summary>
     /// Scopes required: channels:history/groups:history/im:history or mpim:history
     /// </summary>

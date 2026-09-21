@@ -12,7 +12,9 @@ using Slackbot.Net.SlackClients.Http.Models.Responses;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsHistoryResponse;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsInfo;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsMembers;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse;
 using Slackbot.Net.SlackClients.Http.Models.Responses.FileUpload;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UserProfile;
@@ -113,13 +115,24 @@ public class SlackClient : ISlackClient
     }
 
     /// <inheritdoc/>
-    public async Task<ConversationsListResponse> ConversationsMembers(string channel)
+    public async Task<ConversationsMembersResponse> ConversationsMembers(string channel)
     {
         var parameters = new List<KeyValuePair<string, string>>
         {
             new KeyValuePair<string, string>("channel", channel)
         };
-        return await _client.PostParametersAsForm<ConversationsListResponse>(parameters, "conversations.members", s => _logger.LogTrace(s));
+        return await _client.PostParametersAsForm<ConversationsMembersResponse>(parameters, "conversations.members", s => _logger.LogTrace(s));
+    }
+
+    /// <inheritdoc/>
+    public async Task<ConversationsInfoResponse> ConversationsInfo(string channel, bool includeNumMembers = false)
+    {
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("channel", channel),
+            new KeyValuePair<string, string>("include_num_members", includeNumMembers ? "true" : "false")
+        };
+        return await _client.PostParametersAsForm<ConversationsInfoResponse>(parameters, "conversations.info", s => _logger.LogTrace(s));
     }
 
     /// <inheritdoc/>
