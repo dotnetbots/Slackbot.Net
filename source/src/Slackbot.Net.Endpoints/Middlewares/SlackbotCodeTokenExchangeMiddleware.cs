@@ -38,7 +38,7 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
                 response.Team.Id,
                 response.Team.Name,
                 response.Access_Token,
-                response.Authed_User?.Id
+                await Installer(oAuthAccessClient, response.Authed_User, logger)
             ));
 
             var stateTheAppSent = ctx.Request.Query["state"].FirstOrDefault();
@@ -50,6 +50,37 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
             ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await ctx.Response.WriteAsync(response.Error);
         }
+    }
+
+    private static async Task<WorkspaceInstaller> Installer(OAuthClient client, OAuthClient.OAuthUser installer,
+        ILogger logger)
+    {
+        if (installer?.Id is null)
+        {
+            return null;
+        }
+
+        if (installer.Access_Token is null || !(installer.Scope ?? "").Split(',').Contains("openid"))
+        {
+            return new WorkspaceInstaller(installer.Id);
+        }
+
+        try
+        {
+            var userInfo = await client.OpenIdUserInfo(installer.Access_Token);
+            if (userInfo is { Ok: true })
+            {
+                return new WorkspaceInstaller(installer.Id, userInfo.Email, userInfo.Email_Verified, userInfo.Name);
+            }
+
+            logger.LogWarning("openid.connect.userInfo failed for installer {InstallerUserId}: {Error}", installer.Id, userInfo?.Error);
+        }
+        catch (Exception e)
+        {
+            logger.LogWarning(e, "openid.connect.userInfo failed for installer {InstallerUserId}", installer.Id);
+        }
+
+        return new WorkspaceInstaller(installer.Id);
     }
 
     // `state` is opaque to this library — only the app that sent it knows what it means, so it
