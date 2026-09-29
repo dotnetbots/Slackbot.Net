@@ -16,4 +16,4 @@ public interface IWorkspaceInstallationHandler
     Task Uninstall(string teamId);
 }
 
-public record Workspace(string TeamId, string TeamName, string Token);
+public record Workspace(string TeamId, string TeamName, string Token, string InstallerUserId = null);

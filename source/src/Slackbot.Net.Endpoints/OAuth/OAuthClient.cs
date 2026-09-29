@@ -44,7 +44,7 @@ internal class OAuthClient(HttpClient client, ILogger<OAuthClient> logger)
 
     internal record Team(string Id, string Name);
 
-    internal record OAuthUser(string User_Id, string App_Home);
+    internal record OAuthUser(string Id);
 }
 
 internal static class HttpClientExtensions
