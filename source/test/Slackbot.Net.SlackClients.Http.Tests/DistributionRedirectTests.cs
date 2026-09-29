@@ -25,6 +25,23 @@ public class DistributionRedirectTests
     }
 
     [Fact]
+    public async Task TheInstallingUserIsCarriedToTheInstallationHandler()
+    {
+        var (_, handler) = await Install(state: null, successRedirectUri: "/success",
+            """{"ok":true,"access_token":"xoxb-token","scope":"chat:write","team":{"id":"T1","name":"Team"},"app_id":"A1","authed_user":{"id":"U1"}}""");
+
+        Assert.Equal("U1", Assert.Single(handler.Installed).InstallerUserId);
+    }
+
+    [Fact]
+    public async Task WithoutAnAuthedUser_TheWorkspaceIsInstalledWithNoInstaller()
+    {
+        var (_, handler) = await Install(state: null, successRedirectUri: "/success");
+
+        Assert.Null(Assert.Single(handler.Installed).InstallerUserId);
+    }
+
+    [Fact]
     public async Task StateRidesBackToTheSuccessPageAsAQueryParameter()
     {
         var (ctx, _) = await Install("/admin/slack", "/success?default=1");
@@ -45,7 +62,7 @@ public class DistributionRedirectTests
     }
 
     private static async Task<(HttpContext Context, RecordingInstallationHandler Handler)> Install(
-        string state, string successRedirectUri)
+        string state, string successRedirectUri, string oauthAccessResponse = OauthAccessResponse)
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -57,7 +74,7 @@ public class DistributionRedirectTests
             o.SuccessRedirectUri = successRedirectUri;
         });
         services.ConfigureHttpClientDefaults(b =>
-            b.ConfigurePrimaryHttpMessageHandler(() => new StubHttpMessageHandler(OauthAccessResponse)));
+            b.ConfigurePrimaryHttpMessageHandler(() => new StubHttpMessageHandler(oauthAccessResponse)));
 
         await using var provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
         await using var scope = provider.CreateAsyncScope();

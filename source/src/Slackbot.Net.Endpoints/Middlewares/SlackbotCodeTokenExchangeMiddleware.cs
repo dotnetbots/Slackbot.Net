@@ -37,7 +37,8 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
             (
                 response.Team.Id,
                 response.Team.Name,
-                response.Access_Token
+                response.Access_Token,
+                response.Authed_User?.Id
             ));
 
             var stateTheAppSent = ctx.Request.Query["state"].FirstOrDefault();
