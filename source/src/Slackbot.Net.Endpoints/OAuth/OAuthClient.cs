@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,19 @@ internal class OAuthClient(HttpClient client, ILogger<OAuthClient> logger)
             s => logger.LogInformation(s));
     }
 
+    public async Task<OpenIdUserInfoResponse> OpenIdUserInfo(string userToken)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "openid.connect.userInfo");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<OpenIdUserInfoResponse>(body, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+    }
+
+    internal record OpenIdUserInfoResponse(bool Ok, string Error, string Email, bool Email_Verified, string Name)
+        : Response(Ok, Error);
+
     internal record OauthAccessV2Request(string Code, string ClientId, string ClientSecret, string RedirectUri);
 
     internal record OAuthAccessV2Response(
@@ -44,7 +58,7 @@ internal class OAuthClient(HttpClient client, ILogger<OAuthClient> logger)
 
     internal record Team(string Id, string Name);
 
-    internal record OAuthUser(string Id);
+    internal record OAuthUser(string Id, string Scope, string Access_Token);
 }
 
 internal static class HttpClientExtensions

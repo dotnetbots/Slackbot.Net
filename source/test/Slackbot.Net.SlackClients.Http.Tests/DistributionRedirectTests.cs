@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Endpoints.Hosting;
-using Slackbot.Net.Tests.Helpers;
 
 namespace Slackbot.Net.Tests;
 
@@ -42,6 +41,38 @@ public class DistributionRedirectTests
     }
 
     [Fact]
+    public async Task AnInstallerGrantingOpenId_IsIdentifiedByTheirSlackProfile()
+    {
+        var (_, handler) = await Install(state: null, successRedirectUri: "/success",
+            OauthAccessResponseWithUserScope("openid,email,profile"),
+            """{"ok":true,"sub":"U1","email":"installer@example.com","email_verified":true,"name":"Ina Installer"}""");
+
+        Assert.Equal(new InstallerIdentity("installer@example.com", true, "Ina Installer"), Assert.Single(handler.Installed).Installer);
+    }
+
+    [Fact]
+    public async Task AnInstallerNotGrantingOpenId_HasNoIdentity()
+    {
+        var (_, handler) = await Install(state: null, successRedirectUri: "/success",
+            OauthAccessResponseWithUserScope("search:read"),
+            """{"ok":true,"sub":"U1","email":"installer@example.com","email_verified":true,"name":"Ina Installer"}""");
+
+        Assert.Null(Assert.Single(handler.Installed).Installer);
+    }
+
+    [Fact]
+    public async Task AFailedProfileLookup_StillInstallsTheWorkspace()
+    {
+        var (_, handler) = await Install(state: null, successRedirectUri: "/success",
+            OauthAccessResponseWithUserScope("openid,email,profile"),
+            """{"ok":false,"error":"invalid_auth"}""");
+
+        var workspace = Assert.Single(handler.Installed);
+        Assert.Equal("U1", workspace.InstallerUserId);
+        Assert.Null(workspace.Installer);
+    }
+
+    [Fact]
     public async Task StateRidesBackToTheSuccessPageAsAQueryParameter()
     {
         var (ctx, _) = await Install("/admin/slack", "/success?default=1");
@@ -62,7 +93,8 @@ public class DistributionRedirectTests
     }
 
     private static async Task<(HttpContext Context, RecordingInstallationHandler Handler)> Install(
-        string state, string successRedirectUri, string oauthAccessResponse = OauthAccessResponse)
+        string state, string successRedirectUri, string oauthAccessResponse = OauthAccessResponse,
+        string userInfoResponse = null)
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -74,7 +106,7 @@ public class DistributionRedirectTests
             o.SuccessRedirectUri = successRedirectUri;
         });
         services.ConfigureHttpClientDefaults(b =>
-            b.ConfigurePrimaryHttpMessageHandler(() => new StubHttpMessageHandler(oauthAccessResponse)));
+            b.ConfigurePrimaryHttpMessageHandler(() => new SlackApiStub(oauthAccessResponse, userInfoResponse)));
 
         await using var provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
         await using var scope = provider.CreateAsyncScope();
@@ -97,6 +129,23 @@ public class DistributionRedirectTests
         var handler = (RecordingInstallationHandler)scope.ServiceProvider
             .GetRequiredService<IWorkspaceInstallationHandler>();
         return (ctx, handler);
+    }
+
+    private static string OauthAccessResponseWithUserScope(string userScope) =>
+        $$$"""{"ok":true,"access_token":"xoxb-token","scope":"chat:write","team":{"id":"T1","name":"Team"},"app_id":"A1","authed_user":{"id":"U1","scope":"{{{userScope}}}","access_token":"xoxp-token","token_type":"user"}}""";
+
+    private sealed class SlackApiStub(string oauthAccessResponse, string userInfoResponse) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var json = request.RequestUri!.AbsolutePath.EndsWith("openid.connect.userInfo")
+                ? userInfoResponse ?? """{"ok":false,"error":"not_stubbed"}"""
+                : oauthAccessResponse;
+            return Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+            });
+        }
     }
 
     private sealed class RecordingInstallationHandler : IWorkspaceInstallationHandler

@@ -16,4 +16,10 @@ public interface IWorkspaceInstallationHandler
     Task Uninstall(string teamId);
 }
 
-public record Workspace(string TeamId, string TeamName, string Token, string InstallerUserId = null);
+/// <param name="Installer">
+///     The installing user's Slack profile. Only set when the install requested the <c>openid</c> user scope
+///     (together with <c>email</c> and <c>profile</c> for those claims).
+/// </param>
+public record Workspace(string TeamId, string TeamName, string Token, string InstallerUserId = null, InstallerIdentity Installer = null);
+
+public record InstallerIdentity(string Email, bool EmailVerified, string Name);
