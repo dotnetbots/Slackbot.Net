@@ -1,8 +1,12 @@
+using Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsList;
+
 namespace Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
 public class UsersListResponse : Response
 {
     public User[] Members { get; set; }
+
+    public ResponseMetadata Response_Metadata { get; set; }
 }
     
 public class User

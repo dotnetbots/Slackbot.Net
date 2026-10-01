@@ -99,6 +99,20 @@ public class SlackClient : ISlackClient
     }
 
     /// <inheritdoc/>
+    public async Task<UsersListResponse> UsersList(string cursor, int limit = 200)
+    {
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("limit", limit.ToString()),
+        };
+        if (!string.IsNullOrEmpty(cursor))
+        {
+            parameters.Add(new KeyValuePair<string, string>("cursor", cursor));
+        }
+        return await _client.PostParametersAsForm<UsersListResponse>(parameters, "users.list", s => _logger.LogTrace(s));
+    }
+
+    /// <inheritdoc/>
     public async Task<ConversationsListResponse> ConversationsListPublicChannels(int? limit = null, string cursor = null)
     {
         var parameters = new List<KeyValuePair<string, string>>
