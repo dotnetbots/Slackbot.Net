@@ -69,6 +69,13 @@ public interface ISlackClient
     Task<UsersListResponse> UsersList();
 
     /// <summary>
+    /// Scopes required: `users:read`
+    /// Returns one page of users. Pass the previous page's `response_metadata.next_cursor` to fetch the next page.
+    /// </summary>
+    /// <remarks>https://api.slack.com/methods/users.list</remarks>
+    Task<UsersListResponse> UsersList(string cursor, int limit = 200);
+
+    /// <summary>
     /// Scopes required: channels:read
     /// Only requests `public_channel` types of conversations
     /// </summary>

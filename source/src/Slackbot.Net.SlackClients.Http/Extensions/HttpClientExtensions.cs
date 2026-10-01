@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -40,6 +41,7 @@ internal static class HttpClientExtensions
             logger?.Invoke(responseContent);
         }
 
+        ThrowIfRateLimited(response, responseContent);
         response.EnsureSuccessStatusCode();
             
         var resObj = JsonSerializer.Deserialize<T>(responseContent, JsonSerializerSettings);
@@ -75,6 +77,7 @@ internal static class HttpClientExtensions
             logger?.Invoke($"{response.StatusCode} \n {responseContent}");
         }
         
+        ThrowIfRateLimited(response, responseContent);
         response.EnsureSuccessStatusCode();
 
         var resObj = JsonSerializer.Deserialize<T>(responseContent, JsonSerializerSettings);
@@ -109,6 +112,7 @@ internal static class HttpClientExtensions
             logger?.Invoke($"{response.StatusCode} \n {responseContent}");
         }
         
+        ThrowIfRateLimited(response, responseContent);
         response.EnsureSuccessStatusCode();
 
         var resObj = JsonSerializer.Deserialize<T>(responseContent, JsonSerializerSettings);
@@ -117,6 +121,17 @@ internal static class HttpClientExtensions
             throw new WellKnownSlackApiException(error: $"{resObj.Error}", responseContent:responseContent);
             
         return resObj;        
+    }
+
+    private static readonly TimeSpan DefaultRetryAfter = TimeSpan.FromSeconds(60);
+
+    private static void ThrowIfRateLimited(HttpResponseMessage response, string responseContent)
+    {
+        if (response.StatusCode != HttpStatusCode.TooManyRequests)
+            return;
+
+        var retryAfter = response.Headers.RetryAfter?.Delta ?? DefaultRetryAfter;
+        throw new SlackRateLimitedException(retryAfter, responseContent);
     }
 }
 
