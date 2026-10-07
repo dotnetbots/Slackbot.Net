@@ -9,6 +9,7 @@ public class BlockActionInteraction : Interaction
     public User User { get; set; }
     public Channel Channel { get; set; }
     public Message Message { get; set; }
+    public string Response_Url { get; set; }
     public State State { get; set; }
     public IEnumerable<ActionsBlock> Actions { get; set; }
 }
