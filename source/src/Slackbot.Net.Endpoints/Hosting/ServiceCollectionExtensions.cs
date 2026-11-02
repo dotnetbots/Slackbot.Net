@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Endpoints.Abstractions;
@@ -44,4 +45,25 @@ public class OAuthOptions
     ///     can pick it up — this library never interprets it.
     /// </summary>
     public string SuccessRedirectUri { get; set; } = "/success?default=1";
+
+    /// <summary>
+    ///     Where the user ends up when the callback carries no <c>code</c>, as when they cancel on Slack's install
+    ///     screen (<c>?error=access_denied</c>). The <c>state</c> is appended as for <see cref="SuccessRedirectUri"/>,
+    ///     and Slack's <c>error</c>, when it sent one, as <c>?error=</c>, so the page can tell a cancel from a failure.
+    ///     Left null, the request goes on to the next middleware, as before.
+    /// </summary>
+    public string CancelledRedirectUri { get; set; }
+
+    /// <summary>
+    ///     Where the user ends up when <see cref="ValidateState"/> refuses the callback or Slack refuses the code
+    ///     exchange. Left null, the response is a bare 403 or 500.
+    /// </summary>
+    public string FailedRedirectUri { get; set; }
+
+    /// <summary>
+    ///     Checks the callback's <c>state</c> (null when there is none) against the one the app sent, before the code
+    ///     is exchanged and before <see cref="IWorkspaceInstallationHandler.Install"/> runs. Return false to refuse
+    ///     the callback: nothing is exchanged and nothing installed. Left null, every callback is accepted, as before.
+    /// </summary>
+    public Func<HttpContext, string, Task<bool>> ValidateState { get; set; }
 }

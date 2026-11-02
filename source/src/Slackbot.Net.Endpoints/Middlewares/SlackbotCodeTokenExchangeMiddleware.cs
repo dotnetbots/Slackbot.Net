@@ -14,41 +14,85 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
         IOptions<OAuthOptions> options, IWorkspaceInstallationHandler installationHandler,
         ILogger<SlackbotCodeTokenExchangeMiddleware> logger)
     {
-        logger.LogInformation("Installing!");
-        var redirect_uri = new Uri($"{ctx.Request.Scheme}://{ctx.Request.Host.Value}{ctx.Request.PathBase.Value}");
+        var settings = options.Value;
         var code = ctx.Request.Query["code"].FirstOrDefault();
+        var stateTheAppSent = ctx.Request.Query["state"].FirstOrDefault();
 
-        if (code == null)
+        if (string.IsNullOrEmpty(code))
         {
+            var error = ctx.Request.Query["error"].FirstOrDefault();
+            logger.LogInformation("Install callback without a code: {Error}", error);
+            if (settings.CancelledRedirectUri is { } cancelled)
+            {
+                var page = SuccessRedirect(cancelled, stateTheAppSent);
+                ctx.Response.Redirect(string.IsNullOrEmpty(error) ? page : QueryHelpers.AddQueryString(page, "error", error));
+                return;
+            }
+
             await next(ctx);
+            return;
         }
 
-        var response = await oAuthAccessClient.OAuthAccessV2(new OAuthClient.OauthAccessV2Request(
-            code,
-            options.Value.CLIENT_ID,
-            options.Value.CLIENT_SECRET,
-            redirect_uri.ToString()
+        if (settings.ValidateState is { } validate && !await validate(ctx, stateTheAppSent))
+        {
+            logger.LogWarning("Install callback refused: the app didn't accept its state");
+            await Fail(ctx, settings, StatusCodes.Status403Forbidden, null);
+            return;
+        }
+
+        OAuthClient.OAuthAccessV2Response response;
+        try
+        {
+            response = await oAuthAccessClient.OAuthAccessV2(new OAuthClient.OauthAccessV2Request(
+                code,
+                settings.CLIENT_ID,
+                settings.CLIENT_SECRET,
+                RedirectUri(ctx.Request)
+            ));
+        }
+        catch (Exception e) when (settings.FailedRedirectUri is not null && e is HttpRequestException or SlackApiException or System.Text.Json.JsonException)
+        {
+            logger.LogError(e, "Slack refused to exchange the install's code");
+            await Fail(ctx, settings, StatusCodes.Status500InternalServerError, null);
+            return;
+        }
+
+        if (!response.Ok)
+        {
+            logger.LogError("Bad Oauth response! {Error}", response.Error);
+            await Fail(ctx, settings, StatusCodes.Status500InternalServerError, response.Error);
+            return;
+        }
+
+        logger.LogInformation("Oauth response! ok:{Ok}", response.Ok);
+        await installationHandler.Install(new Workspace
+        (
+            response.Team.Id,
+            response.Team.Name,
+            response.Access_Token,
+            await Installer(oAuthAccessClient, response.Authed_User, logger)
         ));
 
-        if (response.Ok)
-        {
-            logger.LogInformation($"Oauth response! ok:{response.Ok}");
-            await installationHandler.Install(new Workspace
-            (
-                response.Team.Id,
-                response.Team.Name,
-                response.Access_Token,
-                await Installer(oAuthAccessClient, response.Authed_User, logger)
-            ));
+        ctx.Response.Redirect(SuccessRedirect(settings.SuccessRedirectUri, stateTheAppSent));
+    }
 
-            var stateTheAppSent = ctx.Request.Query["state"].FirstOrDefault();
-            ctx.Response.Redirect(SuccessRedirect(options.Value.SuccessRedirectUri, stateTheAppSent));
-        }
-        else
+    // Slack requires the exchange's redirect_uri to equal the one the install started with: the callback's
+    // full URL without its query, whether it's mounted with app.Map (PathBase) or as an endpoint (Path).
+    internal static string RedirectUri(HttpRequest request) =>
+        $"{request.Scheme}://{request.Host.Value}{request.PathBase.Value}{request.Path.Value}";
+
+    private static async Task Fail(HttpContext ctx, OAuthOptions settings, int status, string error)
+    {
+        if (settings.FailedRedirectUri is { } failed)
         {
-            logger.LogError($"Bad Oauth response! {response}");
-            ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            await ctx.Response.WriteAsync(response.Error);
+            ctx.Response.Redirect(failed);
+            return;
+        }
+
+        ctx.Response.StatusCode = status;
+        if (error is not null)
+        {
+            await ctx.Response.WriteAsync(error);
         }
     }
 
