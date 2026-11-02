@@ -34,7 +34,7 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
         if (settings.ValidateState is { } validate && !await validate(ctx, stateTheAppSent))
         {
             logger.LogWarning("Install callback refused: the app didn't accept its state");
-            Fail(ctx, settings, StatusCodes.Status403Forbidden, null);
+            await Fail(ctx, settings, StatusCodes.Status403Forbidden, null);
             return;
         }
 
@@ -51,14 +51,14 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
         catch (Exception e) when (settings.FailedRedirectUri is not null && e is HttpRequestException or SlackApiException or System.Text.Json.JsonException)
         {
             logger.LogError(e, "Slack refused to exchange the install's code");
-            Fail(ctx, settings, StatusCodes.Status500InternalServerError, null);
+            await Fail(ctx, settings, StatusCodes.Status500InternalServerError, null);
             return;
         }
 
         if (!response.Ok)
         {
             logger.LogError("Bad Oauth response! {Error}", response.Error);
-            Fail(ctx, settings, StatusCodes.Status500InternalServerError, response.Error);
+            await Fail(ctx, settings, StatusCodes.Status500InternalServerError, response.Error);
             return;
         }
 
@@ -79,7 +79,7 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
     internal static string RedirectUri(HttpRequest request) =>
         $"{request.Scheme}://{request.Host.Value}{request.PathBase.Value}{request.Path.Value}";
 
-    private static void Fail(HttpContext ctx, OAuthOptions settings, int status, string error)
+    private static async Task Fail(HttpContext ctx, OAuthOptions settings, int status, string error)
     {
         if (settings.FailedRedirectUri is { } failed)
         {
@@ -90,7 +90,7 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
         ctx.Response.StatusCode = status;
         if (error is not null)
         {
-            ctx.Response.WriteAsync(error);
+            await ctx.Response.WriteAsync(error);
         }
     }
 
