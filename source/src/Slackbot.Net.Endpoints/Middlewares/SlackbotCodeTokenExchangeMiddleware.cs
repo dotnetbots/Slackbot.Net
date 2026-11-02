@@ -20,10 +20,12 @@ internal class SlackbotCodeTokenExchangeMiddleware(RequestDelegate next)
 
         if (string.IsNullOrEmpty(code))
         {
-            logger.LogInformation("Install callback without a code: {Error}", ctx.Request.Query["error"].FirstOrDefault());
+            var error = ctx.Request.Query["error"].FirstOrDefault();
+            logger.LogInformation("Install callback without a code: {Error}", error);
             if (settings.CancelledRedirectUri is { } cancelled)
             {
-                ctx.Response.Redirect(SuccessRedirect(cancelled, stateTheAppSent));
+                var page = SuccessRedirect(cancelled, stateTheAppSent);
+                ctx.Response.Redirect(string.IsNullOrEmpty(error) ? page : QueryHelpers.AddQueryString(page, "error", error));
                 return;
             }
 

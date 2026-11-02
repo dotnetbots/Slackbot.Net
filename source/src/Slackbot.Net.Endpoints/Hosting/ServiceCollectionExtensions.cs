@@ -48,7 +48,8 @@ public class OAuthOptions
 
     /// <summary>
     ///     Where the user ends up when the callback carries no <c>code</c>, as when they cancel on Slack's install
-    ///     screen (<c>?error=access_denied</c>). The <c>state</c> is appended as for <see cref="SuccessRedirectUri"/>.
+    ///     screen (<c>?error=access_denied</c>). The <c>state</c> is appended as for <see cref="SuccessRedirectUri"/>,
+    ///     and Slack's <c>error</c>, when it sent one, as <c>?error=</c>, so the page can tell a cancel from a failure.
     ///     Left null, the request goes on to the next middleware, as before.
     /// </summary>
     public string CancelledRedirectUri { get; set; }

@@ -24,13 +24,21 @@ public class OAuthCallbackTests
     }
 
     [Fact]
-    public async Task ADeclinedInstall_GoesToTheCancelledPageWithItsState_AndExchangesNothing()
+    public async Task ADeclinedInstall_GoesToTheCancelledPageWithItsStateAndSlacksError_AndExchangesNothing()
     {
         var callback = await CallbackAsync("?error=access_denied&state=s1", o => o.CancelledRedirectUri = "/cancelled");
 
-        Assert.Equal("/cancelled?state=s1", callback.Context.Response.Headers.Location.ToString());
+        Assert.Equal("/cancelled?state=s1&error=access_denied", callback.Context.Response.Headers.Location.ToString());
         Assert.Empty(callback.Exchanges);
         Assert.Empty(callback.Handler.Installed);
+    }
+
+    [Fact]
+    public async Task ACallbackWithNeitherCodeNorError_GoesToTheCancelledPageWithJustItsState()
+    {
+        var callback = await CallbackAsync("?state=s1", o => o.CancelledRedirectUri = "/cancelled");
+
+        Assert.Equal("/cancelled?state=s1", callback.Context.Response.Headers.Location.ToString());
     }
 
     [Fact]
