@@ -88,39 +88,19 @@ internal static class HttpClientExtensions
         return resObj;        
     }
     
-    public static async Task<T> PostParametersAsMultiPartFormData<T>(this HttpClient httpClient, IEnumerable<KeyValuePair<string, string>> parameters, Byte[] bytes, string api, Action<string> logger = null) where T: Response
+    // Slack's upload_url answers with plain text ("OK - <bytes>"), so only the status code matters.
+    public static async Task PostBytes(this HttpClient httpClient, string url, byte[] bytes, Action<string> logger = null)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, api);
-
-        if (parameters != null && parameters.Any())
-        {
-            var formData = new MultipartFormDataContent();
-            foreach (KeyValuePair<string,string> param in parameters)
-            {
-                formData.Add(new StringContent(param.Value), param.Key);
-            }
-            formData.Add(new ByteArrayContent(bytes), "file", parameters.First(p => p.Key == "filename").Value);
-
-            request.Content = formData;
-        }
-
-        var response =  await httpClient.SendAsync(request);
+        var response = await httpClient.PostAsync(url, new ByteArrayContent(bytes));
         var responseContent = await response.Content.ReadAsStringAsync();
-            
+
         if (!response.IsSuccessStatusCode)
         {
             logger?.Invoke($"{response.StatusCode} \n {responseContent}");
         }
-        
+
         ThrowIfRateLimited(response, responseContent);
         response.EnsureSuccessStatusCode();
-
-        var resObj = JsonSerializer.Deserialize<T>(responseContent, JsonSerializerSettings);
-            
-        if(!resObj.Ok)
-            throw new WellKnownSlackApiException(error: $"{resObj.Error}", responseContent:responseContent);
-            
-        return resObj;        
     }
 
     private static readonly TimeSpan DefaultRetryAfter = TimeSpan.FromSeconds(60);
