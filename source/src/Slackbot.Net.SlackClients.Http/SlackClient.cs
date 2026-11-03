@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Slackbot.Net.SlackClients.Http.Models.Requests.AssistantThreadsSetStatus;
@@ -222,40 +224,49 @@ public class SlackClient : ISlackClient
     /// <inheritdoc/>
     public async Task<FileUploadResponse> FilesUpload(FileUploadRequest req)
     {
-        var parameters = new List<KeyValuePair<string, string>>
-        {
-            new KeyValuePair<string, string>("channels", req.Channels),
-            new KeyValuePair<string, string>("title", req.Title),
-            new KeyValuePair<string, string>("content", req.Content),
-            new KeyValuePair<string, string>("filename", req.Filename),
-            new KeyValuePair<string, string>("filetype", req.Filetype),
-            new KeyValuePair<string, string>("initial_comment", req.Initial_Comment),
-            new KeyValuePair<string, string>("thread_ts", req.Thread_Ts),
-        };
-        return await _client.PostParametersAsForm<FileUploadResponse>(parameters, "files.upload", s => _logger.LogTrace(s));
+        return await UploadExternal(Encoding.UTF8.GetBytes(req.Content), req.Filename, req.Title, req.Channels, req.Initial_Comment, req.Thread_Ts);
     }
 
     /// <inheritdoc/>
     public async Task<FileUploadResponse> FilesUpload(FileUploadMultiPartRequest req)
     {
+        return await UploadExternal(req.File, req.Filename, req.Title, req.Channels, req.Initial_Comment, req.Thread_Ts);
+    }
+
+    private async Task<FileUploadResponse> UploadExternal(byte[] bytes, string filename, string title, string channels, string initialComment, string threadTs)
+    {
+        var uploadUrlParameters = new List<KeyValuePair<string, string>>
+        {
+            new KeyValuePair<string, string>("filename", filename),
+            new KeyValuePair<string, string>("length", bytes.Length.ToString()),
+        };
+        var uploadUrl = await _client.PostParametersAsForm<FilesGetUploadUrlExternalResponse>(uploadUrlParameters, "files.getUploadURLExternal", s => _logger.LogTrace(s));
+
+        await _client.PostBytes(uploadUrl.Upload_Url, bytes, s => _logger.LogTrace(s));
+
         var parameters = new List<KeyValuePair<string, string>>
         {
-            new KeyValuePair<string, string>("channels", req.Channels),
-            new KeyValuePair<string, string>("title", req.Title),
-            new KeyValuePair<string, string>("filename", req.Filename),
+            new KeyValuePair<string, string>("files", JsonSerializer.Serialize(new[] { new { id = uploadUrl.File_Id, title = title ?? filename } })),
         };
 
-        if (req.Initial_Comment is { })
+        if (channels is { })
         {
-            parameters.Add(new KeyValuePair<string, string>("initial_comment", req.Initial_Comment));
+            parameters.Add(new KeyValuePair<string, string>("channels", channels));
         }
 
-        if (req.Thread_Ts is { })
+        if (initialComment is { })
         {
-            parameters.Add(new KeyValuePair<string, string>("thread_ts", req.Thread_Ts));
+            parameters.Add(new KeyValuePair<string, string>("initial_comment", initialComment));
         }
 
-        return await _client.PostParametersAsMultiPartFormData<FileUploadResponse>(parameters, req.File, "files.upload", s => _logger.LogTrace(s));
+        if (threadTs is { })
+        {
+            parameters.Add(new KeyValuePair<string, string>("thread_ts", threadTs));
+        }
+
+        var response = await _client.PostParametersAsForm<FileUploadResponse>(parameters, "files.completeUploadExternal", s => _logger.LogTrace(s));
+        response.File = response.Files?.FirstOrDefault();
+        return response;
     }
 
     /// <inheritdoc/>

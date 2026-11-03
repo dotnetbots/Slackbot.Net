@@ -3,6 +3,13 @@ namespace Slackbot.Net.SlackClients.Http.Models.Responses.FileUpload;
 public class FileUploadResponse : Response
 {
     public FileUploadFile File { get; set; }
+    public FileUploadFile[] Files { get; set; }
+}
+
+internal class FilesGetUploadUrlExternalResponse : Response
+{
+    public string Upload_Url { get; set; }
+    public string File_Id { get; set; }
 }
 
 public class FileUploadFile

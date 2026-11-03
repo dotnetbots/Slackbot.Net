@@ -138,12 +138,19 @@ public interface ISlackClient
     Task<UserProfileResponse> UserProfile(string user);
     
     /// <summary>
-    /// Scopes required: files.write 
-    /// Uploads a file
+    /// Scopes required: files:write
+    /// Uploads text content as a file via files.getUploadURLExternal + files.completeUploadExternal.
+    /// Channels must be channel IDs (comma-separated). Only File.Id and File.Title are populated.
     /// </summary>
-    /// <remarks>https://api.slack.com/methods/files.upload</remarks>
+    /// <remarks>https://docs.slack.dev/reference/methods/files.completeUploadExternal</remarks>
     Task<FileUploadResponse> FilesUpload(FileUploadRequest fileupload);
 
+    /// <summary>
+    /// Scopes required: files:write
+    /// Uploads a file via files.getUploadURLExternal + files.completeUploadExternal.
+    /// Channels must be channel IDs (comma-separated). Only File.Id and File.Title are populated.
+    /// </summary>
+    /// <remarks>https://docs.slack.dev/reference/methods/files.completeUploadExternal</remarks>
     Task<FileUploadResponse> FilesUpload(FileUploadMultiPartRequest req);
 
     /// <summary>
